@@ -1,5 +1,4 @@
 inazumatv
 =========
 
-my JavaScript library
-for my private projects
+JavaScript library for my private projects
