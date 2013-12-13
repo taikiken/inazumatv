@@ -62,7 +62,7 @@ module.exports = function(grunt) {
                     linkNatives: true,
                     attributesEmit: true,
                     selleck: true,
-                    helpers: ["./path.js"],
+                    helpers: ["./path.js"]
 //                    themedir: "createjsTheme/"
                 }
             }
@@ -194,7 +194,7 @@ module.exports = function(grunt) {
      *
      */
     grunt.registerTask('build', [
-        "setVersion", "coreBuild", "copy:docsSite"
+        "setVersion", "combine", "coreBuild", "copy:docsSite"
     ]);
 
     /**
@@ -218,7 +218,7 @@ module.exports = function(grunt) {
      * Task for exporting combined view.
      *
      */
-    grunt.registerTask('min', 'Combine all source into a single, minified file.', [
-        "uglify", "copy:src"
+    grunt.registerTask('test', 'Combine all source into a single, minified file.', [
+        "setVersion", "combine", "uglify", "copy:src"
     ]);
 };
