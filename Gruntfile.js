@@ -43,7 +43,7 @@ module.exports = function(grunt) {
             },
             build: {
                 files: {
-                    'output/<%= pkg.name.toLowerCase() %>-<%= version %>.combined.js': getCombinedSource()
+                    'output/<%= pkg.name.toLowerCase() %>-<%= version %>.js': getCombinedSource()
                 }
             }
         },
@@ -63,7 +63,6 @@ module.exports = function(grunt) {
                     attributesEmit: true,
                     selleck: true,
                     helpers: ["./path.js"]
-//                    themedir: "createjsTheme/"
                 }
             }
         },
@@ -202,7 +201,7 @@ module.exports = function(grunt) {
      *
      */
     grunt.registerTask('coreBuild', [
-        "uglify", "docs", "copy:src"
+        "updateversion", "uglify", "docs", "copy:src"
     ]);
 
 

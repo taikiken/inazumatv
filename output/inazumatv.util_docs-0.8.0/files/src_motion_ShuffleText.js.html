@@ -63,6 +63,8 @@
             
                 <li><a href="../classes/EventObject.html">EventObject</a></li>
             
+                <li><a href="../classes/external.ExternalJQ.html">external.ExternalJQ</a></li>
+            
                 <li><a href="../classes/FPSManager.html">FPSManager</a></li>
             
                 <li><a href="../classes/ImageLoader.html">ImageLoader</a></li>
@@ -309,19 +311,19 @@
 
     };
 
-    /**
-     * @private
-     * @static
-     * @property Delegate
-     * @type {{create: Function}}
-     */
+//    /**
+//     * @private
+//     * @static
+//     * @type {{create: Function}}
+//     */
     var Delegate = {
         /**
          * スコープを移譲した関数を作成します。
-         * @method create
          * @param {Function} func 実行したい関数
          * @param {*} thisObj 移譲したいスコープ
          * @return {Function} 移譲済みの関数
+         * @private
+         * @static
          */
         create:function ( func, thisObj ) {
             var del = function () {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/net/ImageLoader.js - inazumatv.util</title>
+    <title>src/external/jq/ExternalJQ.js - inazumatv.util</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -120,14 +120,14 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/net/ImageLoader.js</h1>
+                        <h1 class="file-heading">File: src/external/jq/ExternalJQ.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 /**
  * license inazumatv.com
  * author (at)taikiken / htp://inazumatv.com
- * date 2013/12/13 - 17:17
+ * date 2013/12/13 - 21:12
  *
  * Copyright (c) 2011-2013 inazumatv.com, inc.
  *
@@ -135,104 +135,36 @@
  * http://www.opensource.org/licenses/mit-license.html
  *
  * This notice shall be included in all copies or substantial portions of the Software.
- *
- * require LoadManager, EventDispatcher, EventObject
  */
 ( function ( inazumatv ){
     &quot;use strict&quot;;
 
-    var EventObject = inazumatv.EventObject,
-        EventDispatcher = inazumatv.EventDispatcher,
-        LoadManager = inazumatv.LoadManager;
+    var ExternalJQ = inazumatv.external.ExternalJQ  = inazumatv.external.ExternalJQ || {};
 
     /**
-     * 画像ロードヘルパークラスです
-     * @class ImageLoader
-     * @param {Array} imageList [pathToImage,...]
-     * @constructor
-     */
-    function ImageLoader ( imageList ) {
-        /**
-         * LoadManager instance
-         * @type {LoadManager}
-         * @private
-         */
-        this._manager = new LoadManager();
-        /**
-         * 画像パスリスト
-         * @type {Array}
-         * @private
-         */
-        this._imageList = imageList;
-    }
-
-    /**
-     * @const COMPLETE
-     * @type {string}
+     * jQuery Object 設定します
+     * @for external.ExternalJQ
+     * @method save
+     * @param {jQuery} jQuery global jQuery Object
      * @static
      */
-    ImageLoader.COMPLETE = &quot;imageLoaderComplete&quot;;
-    /**
-     * @const COMPLETE
-     * @type {string}
-     * @static
-     */
-    ImageLoader.PROGRESS = &quot;imageLoaderProgress&quot;;
-    /**
-     * @const ERROR
-     * @type {string}
-     * @static
-     */
-    ImageLoader.ERROR = &quot;imageLoaderError&quot;;
-    /**
-     * @const Start
-     * @type {string}
-     * @static
-     */
-    ImageLoader.START = &quot;imageLoaderStart&quot;;
-
-    var p = ImageLoader.prototype;
-
-    // mixin
-    EventDispatcher.initialize( p );
-
-    /**
-     * 画像ロードを開始します
-     */
-    p.start = function (){
-        var manager = this._manager,
-            imageList = this._imageList,
-            i, limit,
-            _this = this
-            ;
-
-        for ( i = 0, limit = imageList.length; i &lt; limit; i++ ) {
-
-            var img = imageList[ i ];
-            manager.add( img );
-        }
-
-        // progress
-        manager.onProgress = function ( e ) {
-            _this.dispatchEvent( new EventObject( ImageLoader.PROGRESS, e ), this );
-        };
-
-        // error
-        manager.onError = function ( e ) {
-            _this.dispatchEvent( new EventObject( ImageLoader.ERROR, e ), this );
-        };
-
-        // complete
-        manager.onComplete = function ( e ) {
-            _this.dispatchEvent( new EventObject( ImageLoader.COMPLETE, e ), this );
-        };
-
-        // start
-        manager.start();
-        _this.dispatchEvent( new EventObject( ImageLoader.START ), this );
+    ExternalJQ.save = function ( jQuery ){
+        this._$ = jQuery;
     };
 
-    inazumatv.ImageLoader = ImageLoader;
+    /**
+     * @for external.ExternalJQ
+     * @method export
+     * @returns {jQuery} jQuery Object
+     * @static
+     */
+    ExternalJQ.export = function (){
+        if ( typeof this._$ === &quot;undefined&quot; ) {
+            throw &quot;set first global jQuery object&quot;;
+        }
+
+        return this._$;
+    };
 
 }( this.inazumatv ) );
     </pre>

@@ -18,6 +18,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "LoopManager",
         "PollingManager",
         "ShuffleText",
+        "external.ExternalJQ",
         "inazumatv"
     ],
     "modules": [

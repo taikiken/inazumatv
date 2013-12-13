@@ -53,6 +53,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/external/jq/ExternalJQ.js": {
+            "name": "src/external/jq/ExternalJQ.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "external.ExternalJQ": 1
+            },
+            "namespaces": {}
+        },
         "src/motion/ShuffleText.js": {
             "name": "src/motion/ShuffleText.js",
             "modules": {},
@@ -156,6 +165,7 @@
                 "CookieUtil": 1,
                 "EventDispatcher": 1,
                 "EventObject": 1,
+                "external.ExternalJQ": 1,
                 "ShuffleText": 1,
                 "ImageLoader": 1,
                 "LoadManager": 1,
@@ -300,6 +310,16 @@
                 }
             ],
             "is_constructor": 1
+        },
+        "external.ExternalJQ": {
+            "name": "external.ExternalJQ",
+            "shortname": "external.ExternalJQ",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "inazumatv"
         },
         "ShuffleText": {
             "name": "ShuffleText",
@@ -1020,6 +1040,40 @@
             "class": "EventObject"
         },
         {
+            "file": "src/external/jq/ExternalJQ.js",
+            "line": 1,
+            "description": "license inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/13 - 21:12\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "class": "external.ExternalJQ"
+        },
+        {
+            "file": "src/external/jq/ExternalJQ.js",
+            "line": 18,
+            "description": "jQuery Object 設定します",
+            "itemtype": "method",
+            "name": "save",
+            "params": [
+                {
+                    "name": "jQuery",
+                    "description": "global jQuery Object",
+                    "type": "JQuery"
+                }
+            ],
+            "static": 1,
+            "class": "external.ExternalJQ"
+        },
+        {
+            "file": "src/external/jq/ExternalJQ.js",
+            "line": 29,
+            "itemtype": "method",
+            "name": "export",
+            "return": {
+                "description": "jQuery Object",
+                "type": "JQuery"
+            },
+            "static": 1,
+            "class": "external.ExternalJQ"
+        },
+        {
             "file": "src/motion/ShuffleText.js",
             "line": 1,
             "description": "license inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/13 - 16:58\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
@@ -1152,21 +1206,8 @@
         },
         {
             "file": "src/motion/ShuffleText.js",
-            "line": 188,
-            "access": "private",
-            "tagname": "",
-            "static": 1,
-            "itemtype": "property",
-            "name": "Delegate",
-            "type": "{{create: Function}}",
-            "class": "ShuffleText"
-        },
-        {
-            "file": "src/motion/ShuffleText.js",
-            "line": 195,
+            "line": 194,
             "description": "スコープを移譲した関数を作成します。",
-            "itemtype": "method",
-            "name": "create",
             "params": [
                 {
                     "name": "func",
@@ -1183,6 +1224,9 @@
                 "description": "移譲済みの関数",
                 "type": "Function"
             },
+            "access": "private",
+            "tagname": "",
+            "static": 1,
             "class": "ShuffleText"
         },
         {
@@ -1926,6 +1970,12 @@
         },
         {
             "file": "src/inazumatv.js",
+            "line": 1,
+            "description": "license inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/12 - 16:17\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.\n\ninspired by three.js / http://threejs.org and CreateJS / http://createjs.com/",
+            "class": "inazumatv"
+        },
+        {
+            "file": "src/inazumatv.js",
             "line": 162,
             "description": "Top Level\n継承に使用します",
             "itemtype": "method",
@@ -2093,6 +2143,10 @@
             "line": " src/events/EventObject.js:39"
         },
         {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " src/external/jq/ExternalJQ.js:29"
+        },
+        {
             "message": "unknown tag: version",
             "line": " src/net/LoadManager.js:153"
         },
@@ -2177,8 +2231,16 @@
             "line": " src/events/EventObject.js:39"
         },
         {
+            "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/13 - 21:12\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "line": " src/external/jq/ExternalJQ.js:1"
+        },
+        {
             "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/13 - 16:58\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
             "line": " src/motion/ShuffleText.js:1"
+        },
+        {
+            "message": "Missing item type\nスコープを移譲した関数を作成します。",
+            "line": " src/motion/ShuffleText.js:194"
         },
         {
             "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/13 - 17:17\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.\n\nrequire LoadManager, EventDispatcher, EventObject",
@@ -2303,6 +2365,10 @@
         {
             "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/13 - 17:42\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.\n\nrequire EventDispatcher, EventObject",
             "line": " src/util/PollingManager.js:1"
+        },
+        {
+            "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/12 - 16:17\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.\n\ninspired by three.js / http://threejs.org and CreateJS / http://createjs.com/",
+            "line": " src/inazumatv.js:1"
         }
     ]
 }

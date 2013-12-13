@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/net/ImageLoader.js - inazumatv.util</title>
+    <title>inazumatv.external - inazumatv.util</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -85,6 +85,8 @@
             
                 <li><a href="../modules/inazumatv.html">inazumatv</a></li>
             
+                <li><a href="../modules/inazumatv.external.html">inazumatv.external</a></li>
+            
             </ul>
         </div>
     </div>
@@ -120,122 +122,151 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/net/ImageLoader.js</h1>
+                        <h1>inazumatv.external Module</h1>
+<div class="box clearfix meta">
+    
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-/**
- * license inazumatv.com
- * author (at)taikiken / htp://inazumatv.com
- * date 2013/12/13 - 17:17
- *
- * Copyright (c) 2011-2013 inazumatv.com, inc.
- *
- * Distributed under the terms of the MIT license.
- * http://www.opensource.org/licenses/mit-license.html
- *
- * This notice shall be included in all copies or substantial portions of the Software.
- *
- * require LoadManager, EventDispatcher, EventObject
- */
-( function ( inazumatv ){
-    &quot;use strict&quot;;
+    
 
-    var EventObject = inazumatv.EventObject,
-        EventDispatcher = inazumatv.EventDispatcher,
-        LoadManager = inazumatv.LoadManager;
+    
+        <div class="foundat">
+            Defined in: <a href="../files/src_util_PollingManager.js.html#l21"><code>src&#x2F;util&#x2F;PollingManager.js:21</code></a>
+        </div>
+    
 
-    /**
-     * 画像ロードヘルパークラスです
-     * @class ImageLoader
-     * @param {Array} imageList [pathToImage,...]
-     * @constructor
-     */
-    function ImageLoader ( imageList ) {
-        /**
-         * LoadManager instance
-         * @type {LoadManager}
-         * @private
-         */
-        this._manager = new LoadManager();
-        /**
-         * 画像パスリスト
-         * @type {Array}
-         * @private
-         */
-        this._imageList = imageList;
-    }
+    
+</div>
 
-    /**
-     * @const COMPLETE
-     * @type {string}
-     * @static
-     */
-    ImageLoader.COMPLETE = &quot;imageLoaderComplete&quot;;
-    /**
-     * @const COMPLETE
-     * @type {string}
-     * @static
-     */
-    ImageLoader.PROGRESS = &quot;imageLoaderProgress&quot;;
-    /**
-     * @const ERROR
-     * @type {string}
-     * @static
-     */
-    ImageLoader.ERROR = &quot;imageLoaderError&quot;;
-    /**
-     * @const Start
-     * @type {string}
-     * @static
-     */
-    ImageLoader.START = &quot;imageLoaderStart&quot;;
 
-    var p = ImageLoader.prototype;
 
-    // mixin
-    EventDispatcher.initialize( p );
+<div class="box intro">
+    
+</div>
 
-    /**
-     * 画像ロードを開始します
-     */
-    p.start = function (){
-        var manager = this._manager,
-            imageList = this._imageList,
-            i, limit,
-            _this = this
-            ;
 
-        for ( i = 0, limit = imageList.length; i &lt; limit; i++ ) {
 
-            var img = imageList[ i ];
-            manager.add( img );
-        }
+<div class="yui3-g">
+    <div class="yui3-u-1-2">
+        
+            <p>This module provides the following classes:</p>
 
-        // progress
-        manager.onProgress = function ( e ) {
-            _this.dispatchEvent( new EventObject( ImageLoader.PROGRESS, e ), this );
-        };
+            <ul class="module-classes">
+            
+                <li class="module-class">
+                    <a href="../classes/Browser.html">
+                        Browser
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/Browser.Android.html">
+                        Browser.Android
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/Browser.Chrome.html">
+                        Browser.Chrome
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/Browser.Firefox.html">
+                        Browser.Firefox
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/Browser.IE.html">
+                        Browser.IE
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/Browser.iOS.html">
+                        Browser.iOS
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/Browser.Safari.html">
+                        Browser.Safari
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/CheckList.html">
+                        CheckList
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/CookieUtil.html">
+                        CookieUtil
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/EventDispatcher.html">
+                        EventDispatcher
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/EventObject.html">
+                        EventObject
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/external.ExternalJQ.html">
+                        external.ExternalJQ
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/FPSManager.html">
+                        FPSManager
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/ImageLoader.html">
+                        ImageLoader
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/LoadManager.html">
+                        LoadManager
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/LoopManager.html">
+                        LoopManager
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/PollingManager.html">
+                        PollingManager
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/ShuffleText.html">
+                        ShuffleText
+                    </a>
+                </li>
+            
+            </ul>
+        
+    </div>
 
-        // error
-        manager.onError = function ( e ) {
-            _this.dispatchEvent( new EventObject( ImageLoader.ERROR, e ), this );
-        };
-
-        // complete
-        manager.onComplete = function ( e ) {
-            _this.dispatchEvent( new EventObject( ImageLoader.COMPLETE, e ), this );
-        };
-
-        // start
-        manager.start();
-        _this.dispatchEvent( new EventObject( ImageLoader.START ), this );
-    };
-
-    inazumatv.ImageLoader = ImageLoader;
-
-}( this.inazumatv ) );
-    </pre>
+    <div class="yui3-u-1-2">
+        
+    </div>
 </div>
 
                     </div>

@@ -1,4 +1,4 @@
-/*
+/**
  * license inazumatv.com
  * author (at)taikiken / htp://inazumatv.com
  * date 2013/12/12 - 16:17
@@ -13,7 +13,7 @@
  * inspired by three.js / http://threejs.org and CreateJS / http://createjs.com/
  */
 
-var inazumatv = { REVISION: "0.8.0" };
+var inazumatv = {};
 
 // polyfill
 ( function ( self ){
@@ -2214,19 +2214,19 @@ var inazumatv = { REVISION: "0.8.0" };
 
     };
 
-    /**
-     * @private
-     * @static
-     * @property Delegate
-     * @type {{create: Function}}
-     */
+//    /**
+//     * @private
+//     * @static
+//     * @type {{create: Function}}
+//     */
     var Delegate = {
         /**
          * スコープを移譲した関数を作成します。
-         * @method create
          * @param {Function} func 実行したい関数
          * @param {*} thisObj 移譲したいスコープ
          * @return {Function} 移譲済みの関数
+         * @private
+         * @static
          */
         create:function ( func, thisObj ) {
             var del = function () {
@@ -2240,5 +2240,47 @@ var inazumatv = { REVISION: "0.8.0" };
     };
 
     inazumatv.ShuffleText = ShuffleText;
+
+}( this.inazumatv ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / htp://inazumatv.com
+ * date 2013/12/13 - 21:12
+ *
+ * Copyright (c) 2011-2013 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+( function ( inazumatv ){
+    "use strict";
+
+    var ExternalJQ = inazumatv.external.ExternalJQ  = inazumatv.external.ExternalJQ || {};
+
+    /**
+     * jQuery Object 設定します
+     * @for external.ExternalJQ
+     * @method save
+     * @param {jQuery} jQuery global jQuery Object
+     * @static
+     */
+    ExternalJQ.save = function ( jQuery ){
+        this._$ = jQuery;
+    };
+
+    /**
+     * @for external.ExternalJQ
+     * @method export
+     * @returns {jQuery} jQuery Object
+     * @static
+     */
+    ExternalJQ.export = function (){
+        if ( typeof this._$ === "undefined" ) {
+            throw "set first global jQuery object";
+        }
+
+        return this._$;
+    };
 
 }( this.inazumatv ) );

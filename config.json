@@ -16,7 +16,9 @@
         "./src/util/PollingManager.js",
         "./src/util/FPSManager.js",
 
-        "./src/motion/ShuffleText.js"
+        "./src/motion/ShuffleText.js",
+
+        "./src/external/jq/ExternalJQ.js"
     ],
 
     "docs_out_path": "./out/inazumatvUtilDocs/"
