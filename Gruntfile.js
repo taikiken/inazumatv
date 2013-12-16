@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 
         // Setup Uglify for JS minification.
         uglify: {
-            options: {  
+            options: {
                 banner: grunt.file.read('LICENSE'),
                 preserveComments: "some",
                 compress: {

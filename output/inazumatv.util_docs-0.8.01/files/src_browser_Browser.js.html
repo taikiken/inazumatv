@@ -160,7 +160,7 @@
         ie8 = !!ua.match(/msie [8]/i),
         ie9 = !!ua.match(/msie [9]/i),
         ie10 = !!ua.match(/msie [10]/i),
-        ie11 = !!ua.match(/trident\/[7]/i),
+        ie11 = !!ua.match(/trident\/[7]/i) &amp;&amp; !!ua.match(/rv:[11]/i),
         ie = !!ua.match(/msie/i) || ie11,
         legacy = ie6 || ie7|| ie8,
 

@@ -184,11 +184,11 @@
 
     /**
      * @for jq.ExternalJQ
-     * @method export
+     * @method exports
      * @returns {jQuery} jQuery Object
      * @static
      */
-    ExternalJQ.export = function (){
+    ExternalJQ.exports = function (){
         return this._$;
     };
 
@@ -211,13 +211,13 @@
     /**
      * 拡張機能を取得します
      * @for jq.ExternalJQ
-     * @method import
+     * @method imports
      * @param {String} extensionName 拡張機能名称(Class名)
      * @param {jQuery} [jQuery] jQuery Object
      * @returns {*} 拡張機能を返します
      * @static
      */
-    ExternalJQ.import = function ( extensionName, jQuery ){
+    ExternalJQ.imports = function ( extensionName, jQuery ){
         if ( typeof jQuery !== &quot;undefined&quot; &amp;&amp; jQuery !== null ) {
             //  defined
             this.save( jQuery );

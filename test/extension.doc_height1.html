@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Extension DocumentHeight 1</title>
     <script type="text/javascript" src="library/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="../libs/inazumatv.util-0.8.0.js"></script>
+    <script type="text/javascript" src="../libs/inazumatv.util-0.8.01.js"></script>
 </head>
 <body>
 <div id="box1" style="position: absolute; top: 0; left: 0; background-color: red; width: 100px; height: 100px;"></div>
@@ -18,7 +18,7 @@
 
         ExternalJQ.save( window.jQuery );
 
-        var FitDocumentHeight = ExternalJQ.import( "FitDocumentHeight" );
+        var FitDocumentHeight = ExternalJQ.imports( "FitDocumentHeight" );
 
         var box1 = new FitDocumentHeight( $( "#box1" ), 300 );
         var box2 = new FitDocumentHeight( $( "#box2" ), 300 );

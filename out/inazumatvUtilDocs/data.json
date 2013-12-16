@@ -1975,7 +1975,7 @@
             "file": "src/external/jq/ExternalJQ.js",
             "line": 45,
             "itemtype": "method",
-            "name": "export",
+            "name": "exports",
             "return": {
                 "description": "jQuery Object",
                 "type": "JQuery"
@@ -2010,7 +2010,7 @@
             "line": 71,
             "description": "拡張機能を取得します",
             "itemtype": "method",
-            "name": "import",
+            "name": "imports",
             "params": [
                 {
                     "name": "extensionName",

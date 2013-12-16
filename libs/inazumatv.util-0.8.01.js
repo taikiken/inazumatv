@@ -227,7 +227,7 @@ var inazumatv = {};
         ie8 = !!ua.match(/msie [8]/i),
         ie9 = !!ua.match(/msie [9]/i),
         ie10 = !!ua.match(/msie [10]/i),
-        ie11 = !!ua.match(/trident\/[7]/i),
+        ie11 = !!ua.match(/trident\/[7]/i) && !!ua.match(/rv:[11]/i),
         ie = !!ua.match(/msie/i) || ie11,
         legacy = ie6 || ie7|| ie8,
 
@@ -2463,11 +2463,11 @@ var inazumatv = {};
 
     /**
      * @for jq.ExternalJQ
-     * @method export
+     * @method exports
      * @returns {jQuery} jQuery Object
      * @static
      */
-    ExternalJQ.export = function (){
+    ExternalJQ.exports = function (){
         return this._$;
     };
 
@@ -2490,13 +2490,13 @@ var inazumatv = {};
     /**
      * 拡張機能を取得します
      * @for jq.ExternalJQ
-     * @method import
+     * @method imports
      * @param {String} extensionName 拡張機能名称(Class名)
      * @param {jQuery} [jQuery] jQuery Object
      * @returns {*} 拡張機能を返します
      * @static
      */
-    ExternalJQ.import = function ( extensionName, jQuery ){
+    ExternalJQ.imports = function ( extensionName, jQuery ){
         if ( typeof jQuery !== "undefined" && jQuery !== null ) {
             //  defined
             this.save( jQuery );
