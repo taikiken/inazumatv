@@ -10,7 +10,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         // Default values
-        version: '0.8.0',
+//        version: '0.8.01',
         name: 'inazumatv.util',
         docsZip: "<%= pkg.name %>_docs-<%= version %>.zip",
 
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 
         // Setup Uglify for JS minification.
         uglify: {
-            options: {
+            options: {  
                 banner: grunt.file.read('LICENSE'),
                 preserveComments: "some",
                 compress: {

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Browser class test</title>
+<script type="text/javascript" src="../libs/inazumatv.util-0.8.0.js"></script>
+</head>
+<body>
+<div id="output"></div>
+<script type="text/javascript">
+    ( function ( window ){
+        "use strict";
+        var document = window.document,
+            inazumatv = window.inazumatv
+        ;
+
+        var output = document.getElementById( "output" ),
+            insert = "";
+
+        var Browser = inazumatv.Browser;
+
+        insert += "<strong>iOS</strong>";
+        insert += "<ul>";
+
+        insert += "<li>" + Browser.iOS.is()  + "</li>";
+        insert += "<li>version: " + Browser.iOS.version()  + "</li>";
+        insert += "<li>major: " + Browser.iOS.major()  + "</li>";
+        insert += "<li>number: " + Browser.iOS.number()  + "</li>";
+        insert += "<li>iPhone: " + Browser.iOS.iPhone()  + "</li>";
+        insert += "<li>iPad: " + Browser.iOS.iPad()  + "</li>";
+        insert += "<li>iPod: " + Browser.iOS.iPod()  + "</li>";
+
+        insert += "</ul>";
+
+        insert += "<strong>Android</strong>";
+        insert += "<ul>";
+
+        insert += "<li>" + Browser.Android.is()  + "</li>";
+        insert += "<li>version: " + Browser.Android.version()  + "</li>";
+        insert += "<li>major: " + Browser.Android.major()  + "</li>";
+        insert += "<li>number: " + Browser.Android.number()  + "</li>";
+        insert += "<li>Phone: " + Browser.Android.phone()  + "</li>";
+        insert += "<li>Tablet: " + Browser.Android.tablet()  + "</li>";
+
+        insert += "</ul>";
+
+        insert += "<strong>Chrome</strong>";
+        insert += "<ul>";
+        insert += "<li>" + Browser.Chrome.is()  + "</li>";
+        insert += "</ul>";
+
+        insert += "<strong>Firefox</strong>";
+        insert += "<ul>";
+        insert += "<li>" + Browser.Firefox.is()  + "</li>";
+        insert += "</ul>";
+
+        insert += "<strong>Safari</strong>";
+        insert += "<ul>";
+        insert += "<li>" + Browser.Safari.is()  + "</li>";
+        insert += "</ul>";
+
+        insert += "<strong>IE</strong>";
+        insert += "<ul>";
+        insert += "<li>" + Browser.IE.is()  + "</li>";
+        insert += "<li>version: " + Browser.IE.version()  + "</li>";
+        insert += "<li>IE 6: " + Browser.IE.is6()  + "</li>";
+        insert += "<li>IE 6, 7, 8: " + Browser.IE.legacy()  + "</li>";
+        insert += "</ul>";
+
+        output.innerHTML = insert;
+    }( window ) );
+</script>
+</body>
+</html>

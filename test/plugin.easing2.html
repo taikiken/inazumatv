@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Plugin install test 2</title>
+    <script type="text/javascript" src="library/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../libs/inazumatv.util-0.8.0.js"></script>
+</head>
+<body>
+<div id="box" style="position: absolute; top: 10px; left: 10px; background-color: red; width: 100px; height: 100px;"></div>
+<script type="text/javascript">
+    ( function ( window ){
+        "use strict";
+        var document = window.document,
+
+            inazumatv = window.inazumatv,
+            ExternalJQ = inazumatv.jq.ExternalJQ
+        ;
+
+//        ExternalJQ.save( window.jQuery );
+        ExternalJQ.install( "Easing", window.jQuery );
+
+        $( "#box" ).animate(
+                { top: "100px", left: "400px" },
+                {
+                    delay: 5000,
+                    duration: 2000,
+                    easing: "easeInOutBack"
+                }
+        );
+    }( window ) );
+</script>
+</body>
+</html>
