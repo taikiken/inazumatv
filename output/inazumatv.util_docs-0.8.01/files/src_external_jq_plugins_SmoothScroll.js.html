@@ -160,7 +160,7 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-/*!
+/**
  * Smooth Scroll - v1.4.13 - 2013-11-02
  * https://github.com/kswedberg/jquery-smooth-scroll
  * Copyright (c) 2013 Karl Swedberg
@@ -267,12 +267,14 @@
 
         $.fn.extend({
             scrollable: function(dir) {
-                var scrl = getScrollable.call(this, {dir: dir});
-                return this.pushStack(scrl);
+//                var scrl = getScrollable.call(this, {dir: dir});
+//                return this.pushStack(scrl);
+                return this.pushStack(getScrollable.call(this, {dir: dir}));
             },
             firstScrollable: function(dir) {
-                var scrl = getScrollable.call(this, {el: &#x27;first&#x27;, dir: dir});
-                return this.pushStack(scrl);
+//                var scrl = getScrollable.call(this, {el: &#x27;first&#x27;, dir: dir});
+//                return this.pushStack(scrl);
+                return this.pushStack(getScrollable.call(this, {el: &#x27;first&#x27;, dir: dir}));
             },
 
             smoothScroll: function(options, extra) {
