@@ -69,6 +69,12 @@
             
                 <li><a href="../classes/FitDocumentHeight.html">FitDocumentHeight</a></li>
             
+                <li><a href="../classes/FitWindow.html">FitWindow</a></li>
+            
+                <li><a href="../classes/FitWindowAspect.html">FitWindowAspect</a></li>
+            
+                <li><a href="../classes/FitWindowHeight.html">FitWindowHeight</a></li>
+            
                 <li><a href="../classes/FPSManager.html">FPSManager</a></li>
             
                 <li><a href="../classes/HTMLLoader.html">HTMLLoader</a></li>
@@ -87,9 +93,13 @@
             
                 <li><a href="../classes/ShuffleText.html">ShuffleText</a></li>
             
+                <li><a href="../classes/SmoothScroll.html">SmoothScroll</a></li>
+            
                 <li><a href="../classes/TXTLoader.html">TXTLoader</a></li>
             
                 <li><a href="../classes/WatchDocumentHeight.html">WatchDocumentHeight</a></li>
+            
+                <li><a href="../classes/WatchWindowSize.html">WatchWindowSize</a></li>
             
                 <li><a href="../classes/XMLLoader.html">XMLLoader</a></li>
             
@@ -153,7 +163,7 @@
 ( function ( inazumatv ){
     &quot;use strict&quot;;
     var _prevHeight = 0,
-        _$document,
+        _$watchTarget,
         _instance,
         _fps,
         _isStart = false,
@@ -198,7 +208,14 @@
      */
     WatchDocumentHeight.activate = function ( jQuery ){
         $ = jQuery;
-        _$document = $( document );
+        var $document = $( document ),
+            $window = $( window );
+
+        if ( $window.height() &gt; $document.height() ) {
+            _$watchTarget = $window;
+        } else {
+            _$watchTarget = $document;
+        }
     };
 
     /**
@@ -224,14 +241,6 @@
     WatchDocumentHeight.RESIZE = &quot;watchDocumentResizeHeight&quot;;
 
     var p = WatchDocumentHeight.prototype;
-
-    /**
-     * @method getFPSManager
-     * @returns {FPSManager} FPSManager instance
-     */
-    p.getFPSManager = function (){
-        return this._fps;
-    };
 
     /**
      * Adds the specified event listener.
@@ -277,10 +286,10 @@
 
     /**
      * FPSManager instance を取得します
-     * @method getFPSInstance
+     * @method getFPSManager
      * @returns {FPSManager} FPSManager instance を返します
      */
-    p.getFPSInstance = function (){
+    p.getFPSManager = function (){
         return this._fps;
     };
 
@@ -293,7 +302,7 @@
      * @returns {boolean} true: 高さ変更
      */
     p.update = function ( strong ){
-        var h = _$document.height(),
+        var h = _$watchTarget.height(),
             isChange = h !== _prevHeight,
 
             params = {

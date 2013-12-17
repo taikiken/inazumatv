@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Plugin install SmoothScroll 1</title>
+<script type="text/javascript" src="library/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="../libs/inazumatv.util-0.8.01.js"></script>
+<style type="text/css">
+body {
+    margin: 0; padding: 0;
+    background-color: #4fdd33;
+}
+html, body {
+    width: 100%; height: 100%;
+}
+.border {
+    background-color: #79e0ff;
+    width: 100%;
+    height: 10px;
+    position: absolute;
+    left: 0;
+}
+</style>
+</head>
+<body>
+<div id="pageTop"></div>
+<div id="box" style="background-color: red; width: 100px; height: 1000px;"></div>
+<div class="border" style="top: 50px"></div>
+<div class="border" style="top: 100px"></div>
+<div class="border" style="top: 150px"></div>
+<div class="border" style="top: 200px"></div>
+<div class="border" style="top: 250px"></div>
+<div class="border" style="top: 300px"></div>
+<div class="border" style="top: 350px"></div>
+<div class="border" style="top: 400px"></div>
+<div class="border" style="top: 450px"></div>
+<div class="border" style="top: 500px"></div>
+<div class="border" style="top: 550px"></div>
+<div class="border" style="top: 600px"></div>
+<div class="border" style="top: 650px"></div>
+<div class="border" style="top: 700px"></div>
+<div class="border" style="top: 750px"></div>
+<div class="border" style="top: 800px"></div>
+<div class="border" style="top: 850px"></div>
+<div class="border" style="top: 900px"></div>
+<div class="border" style="top: 950px"></div>
+<div style="position: fixed; bottom: 0; right: 0;"><a href="#pageTop" class="smoothing" style="display: block; width: 100px; height: 60px;background-color: #ffff00;">TOP</a></div>
+<script type="text/javascript">
+    ( function ( window ){
+        "use strict";
+        var inazumatv = window.inazumatv,
+            ExternalJQ = inazumatv.jq.ExternalJQ
+        ;
+
+        ExternalJQ.install( "SmoothScroll", window.jQuery );
+
+        $( ".smoothing" ).smoothScroll();
+    }( window ) );
+</script>
+</body>
+</html>

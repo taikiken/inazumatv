@@ -2563,6 +2563,7 @@ var inazumatv = {};
     var Easing = function () {
         throw "Easing cannot be instantiated";
     };
+
     /**
      * jQuery.easing 拡張 easing
      * quart
@@ -2602,7 +2603,9 @@ var inazumatv = {};
     Easing = {
         /**
          * Easing plugin を活性化します
+         * @method activate
          * @param {jQuery} jQuery
+         * @static
          */
         activate: function ( jQuery ){
             var je = jQuery.easing;
@@ -2747,6 +2750,294 @@ var inazumatv = {};
     };
 
     inazumatv.jq.Easing = Easing;
+}( this.inazumatv ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / htp://inazumatv.com
+ * date 2013/12/17 - 17:55
+ *
+ * Copyright (c) 2011-2013 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+/*!
+ * Smooth Scroll - v1.4.13 - 2013-11-02
+ * https://github.com/kswedberg/jquery-smooth-scroll
+ * Copyright (c) 2013 Karl Swedberg
+ * Licensed MIT (https://github.com/kswedberg/jquery-smooth-scroll/blob/master/LICENSE-MIT)
+ */
+( function ( inazumatv ){
+    "use strict";
+
+    /**
+     * @class SmoothScroll
+     * @constructor
+     * @static
+     */
+    var SmoothScroll = function () {
+        throw "SmoothScroll cannot be instantiated";
+    };
+
+    /**
+     * SmoothScroll plugin を活性化します
+     * @method activate
+     * @param {jQuery} jQuery
+     * @static
+     */
+    SmoothScroll.activate = function ( jQuery ){
+        var $ = jQuery;
+
+        var version = '1.4.13',
+            optionOverrides = {},
+            defaults = {
+                exclude: [],
+                excludeWithin:[],
+                offset: 0,
+
+                // one of 'top' or 'left'
+                direction: 'top',
+
+                // jQuery set of elements you wish to scroll (for $.smoothScroll).
+                //  if null (default), $('html, body').firstScrollable() is used.
+                scrollElement: null,
+
+                // only use if you want to override default behavior
+                scrollTarget: null,
+
+                // fn(opts) function to be called before scrolling occurs.
+                // `this` is the element(s) being scrolled
+                beforeScroll: function() {},
+
+                // fn(opts) function to be called after scrolling occurs.
+                // `this` is the triggering element
+                afterScroll: function() {},
+                easing: 'swing',
+                speed: 400,
+
+                // coefficient for "auto" speed
+                autoCoefficent: 2,
+
+                // $.fn.smoothScroll only: whether to prevent the default click action
+                preventDefault: true
+            },
+
+            getScrollable = function(opts) {
+                var scrollable = [],
+                    scrolled = false,
+                    dir = opts.dir && opts.dir === 'left' ? 'scrollLeft' : 'scrollTop';
+
+                this.each(function() {
+
+                    if (this === document || this === window) { return; }
+                    var el = $(this);
+                    if ( el[dir]() > 0 ) {
+                        scrollable.push(this);
+                    } else {
+                        // if scroll(Top|Left) === 0, nudge the element 1px and see if it moves
+                        el[dir](1);
+                        scrolled = el[dir]() > 0;
+                        if ( scrolled ) {
+                            scrollable.push(this);
+                        }
+                        // then put it back, of course
+                        el[dir](0);
+                    }
+                });
+
+                // If no scrollable elements, fall back to <body>,
+                // if it's in the jQuery collection
+                // (doing this because Safari sets scrollTop async,
+                // so can't set it to 1 and immediately get the value.)
+                if (!scrollable.length) {
+                    this.each(function(index) {
+                        if (this.nodeName === 'BODY') {
+                            scrollable = [this];
+                        }
+                    });
+                }
+
+                // Use the first scrollable element if we're calling firstScrollable()
+                if ( opts.el === 'first' && scrollable.length > 1 ) {
+                    scrollable = [ scrollable[0] ];
+                }
+
+                return scrollable;
+            },
+            isTouch = 'ontouchend' in document;
+
+        $.fn.extend({
+            scrollable: function(dir) {
+                var scrl = getScrollable.call(this, {dir: dir});
+                return this.pushStack(scrl);
+            },
+            firstScrollable: function(dir) {
+                var scrl = getScrollable.call(this, {el: 'first', dir: dir});
+                return this.pushStack(scrl);
+            },
+
+            smoothScroll: function(options, extra) {
+                options = options || {};
+
+                if ( options === 'options' ) {
+                    if ( !extra ) {
+                        return this.first().data('ssOpts');
+                    }
+                    return this.each(function() {
+                        var $this = $(this),
+                            opts = $.extend($this.data('ssOpts') || {}, extra);
+
+                        $(this).data('ssOpts', opts);
+                    });
+                }
+
+                var opts = $.extend({}, $.fn.smoothScroll.defaults, options),
+                    locationPath = $.smoothScroll.filterPath(location.pathname);
+
+                this
+                    .unbind('click.smoothscroll')
+                    .bind('click.smoothscroll', function(event) {
+                        var link = this,
+                            $link = $(this),
+                            thisOpts = $.extend({}, opts, $link.data('ssOpts') || {}),
+                            exclude = opts.exclude,
+                            excludeWithin = thisOpts.excludeWithin,
+                            elCounter = 0, ewlCounter = 0,
+                            include = true,
+                            clickOpts = {},
+                            hostMatch = ((location.hostname === link.hostname) || !link.hostname),
+                            pathMatch = thisOpts.scrollTarget || ( $.smoothScroll.filterPath(link.pathname) || locationPath ) === locationPath,
+                            thisHash = escapeSelector(link.hash);
+
+                        if ( !thisOpts.scrollTarget && (!hostMatch || !pathMatch || !thisHash) ) {
+                            include = false;
+                        } else {
+                            while (include && elCounter < exclude.length) {
+                                if ($link.is(escapeSelector(exclude[elCounter++]))) {
+                                    include = false;
+                                }
+                            }
+                            while ( include && ewlCounter < excludeWithin.length ) {
+                                if ($link.closest(excludeWithin[ewlCounter++]).length) {
+                                    include = false;
+                                }
+                            }
+                        }
+
+                        if ( include ) {
+
+                            if ( thisOpts.preventDefault ) {
+                                event.preventDefault();
+                            }
+
+                            $.extend( clickOpts, thisOpts, {
+                                scrollTarget: thisOpts.scrollTarget || thisHash,
+                                link: link
+                            });
+                            $.smoothScroll( clickOpts );
+                        }
+                    });
+
+                return this;
+            }
+        });
+
+        $.smoothScroll = function(options, px) {
+            if ( options === 'options' && typeof px === 'object' ) {
+                return $.extend(optionOverrides, px);
+            }
+            var opts, $scroller, scrollTargetOffset, speed,
+                scrollerOffset = 0,
+                offPos = 'offset',
+                scrollDir = 'scrollTop',
+                aniProps = {},
+                aniOpts = {},
+                scrollprops = [];
+
+            if (typeof options === 'number') {
+                opts = $.extend({link: null}, $.fn.smoothScroll.defaults, optionOverrides);
+                scrollTargetOffset = options;
+            } else {
+                opts = $.extend({link: null}, $.fn.smoothScroll.defaults, options || {}, optionOverrides);
+                if (opts.scrollElement) {
+                    offPos = 'position';
+                    if (opts.scrollElement.css('position') === 'static') {
+                        opts.scrollElement.css('position', 'relative');
+                    }
+                }
+            }
+
+            scrollDir = opts.direction === 'left' ? 'scrollLeft' : scrollDir;
+
+            if ( opts.scrollElement ) {
+                $scroller = opts.scrollElement;
+                if ( !(/^(?:HTML|BODY)$/).test($scroller[0].nodeName) ) {
+                    scrollerOffset = $scroller[scrollDir]();
+                }
+            } else {
+                $scroller = $('html, body').firstScrollable(opts.direction);
+            }
+
+            // beforeScroll callback function must fire before calculating offset
+            opts.beforeScroll.call($scroller, opts);
+
+            scrollTargetOffset = (typeof options === 'number') ? options :
+                px ||
+                    ( $(opts.scrollTarget)[offPos]() &&
+                        $(opts.scrollTarget)[offPos]()[opts.direction] ) ||
+                    0;
+
+            aniProps[scrollDir] = scrollTargetOffset + scrollerOffset + opts.offset;
+            speed = opts.speed;
+
+            // automatically calculate the speed of the scroll based on distance / coefficient
+            if (speed === 'auto') {
+
+                // if aniProps[scrollDir] == 0 then we'll use scrollTop() value instead
+                speed = aniProps[scrollDir] || $scroller.scrollTop();
+
+                // divide the speed by the coefficient
+                speed = speed / opts.autoCoefficent;
+            }
+
+            aniOpts = {
+                duration: speed,
+                easing: opts.easing,
+                complete: function() {
+                    opts.afterScroll.call(opts.link, opts);
+                }
+            };
+
+            if (opts.step) {
+                aniOpts.step = opts.step;
+            }
+
+            if ($scroller.length) {
+                $scroller.stop().animate(aniProps, aniOpts);
+            } else {
+                opts.afterScroll.call(opts.link, opts);
+            }
+        };
+
+        $.smoothScroll.version = version;
+        $.smoothScroll.filterPath = function(string) {
+            return string
+                .replace(/^\//,'')
+                .replace(/(?:index|default).[a-zA-Z]{3,4}$/,'')
+                .replace(/\/$/,'');
+        };
+
+        // default options
+        $.fn.smoothScroll.defaults = defaults;
+
+        function escapeSelector (str) {
+            return str.replace(/(:|\.)/g,'\\$1');
+        }
+    };
+
+    inazumatv.jq.SmoothScroll = SmoothScroll;
+
 }( this.inazumatv ) );/**
  * license inazumatv.com
  * author (at)taikiken / htp://inazumatv.com
@@ -3006,7 +3297,7 @@ var inazumatv = {};
 ( function ( inazumatv ){
     "use strict";
     var _prevHeight = 0,
-        _$document,
+        _$watchTarget,
         _instance,
         _fps,
         _isStart = false,
@@ -3051,7 +3342,14 @@ var inazumatv = {};
      */
     WatchDocumentHeight.activate = function ( jQuery ){
         $ = jQuery;
-        _$document = $( document );
+        var $document = $( document ),
+            $window = $( window );
+
+        if ( $window.height() > $document.height() ) {
+            _$watchTarget = $window;
+        } else {
+            _$watchTarget = $document;
+        }
     };
 
     /**
@@ -3077,14 +3375,6 @@ var inazumatv = {};
     WatchDocumentHeight.RESIZE = "watchDocumentResizeHeight";
 
     var p = WatchDocumentHeight.prototype;
-
-    /**
-     * @method getFPSManager
-     * @returns {FPSManager} FPSManager instance
-     */
-    p.getFPSManager = function (){
-        return this._fps;
-    };
 
     /**
      * Adds the specified event listener.
@@ -3130,10 +3420,10 @@ var inazumatv = {};
 
     /**
      * FPSManager instance を取得します
-     * @method getFPSInstance
+     * @method getFPSManager
      * @returns {FPSManager} FPSManager instance を返します
      */
-    p.getFPSInstance = function (){
+    p.getFPSManager = function (){
         return this._fps;
     };
 
@@ -3146,7 +3436,7 @@ var inazumatv = {};
      * @returns {boolean} true: 高さ変更
      */
     p.update = function ( strong ){
-        var h = _$document.height(),
+        var h = _$watchTarget.height(),
             isChange = h !== _prevHeight,
 
             params = {
@@ -3289,7 +3579,7 @@ var inazumatv = {};
 
     /**
      * Event Handler, Document height resize
-     * @method onResize
+     * @method _onResize
      * @param {EventObject} eventObject
      * @private
      */
@@ -3302,4 +3592,645 @@ var inazumatv = {};
 
     inazumatv.jq.FitDocumentHeight = FitDocumentHeight;
 
+}( this.inazumatv ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / htp://inazumatv.com
+ * date 2013/12/17 - 12:17
+ *
+ * Copyright (c) 2011-2013 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+( function ( inazumatv ){
+    "use strict";
+    var _height = 0,
+        _width = 0,
+        _$window,
+        _instance,
+        _fps,
+        _isStart = false,
+
+        EventObject = inazumatv.EventObject,
+        EventDispatcher = inazumatv.EventDispatcher,
+        FPSManager = inazumatv.FPSManager,
+        /**
+         * jQuery alias
+         * @property $
+         * @type {jQuery}
+         * @private
+         * @static
+         */
+        $
+    ;
+
+    // @class WatchWindowSize
+    /**
+     * @class WatchWindowSize
+     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @constructor
+     * @singleton
+     */
+    function WatchWindowSize () {
+
+        if ( typeof _instance !== "undefined" ) {
+
+            return _instance;
+        }
+
+        _fps = new FPSManager( 24 );
+
+        _instance = this;
+        return _instance;
+    }
+
+    /**
+     * WatchWindowSize へ jQuery object を設定。WatchWindowSize を使用する前に実行する必要があります。<br>
+     * ExternalJQ.import から実行されます。
+     *
+     * @method activate
+     * @param {jQuery} jQuery object
+     * @static
+     */
+    WatchWindowSize.activate = function ( jQuery ){
+        $ = jQuery;
+        _$window = $( window );
+    };
+
+    /**
+     * @method getInstance
+     * @returns {WatchDocumentHeight}
+     * @static
+     */
+    WatchWindowSize.getInstance = function (){
+        if ( typeof _instance === "undefined" ) {
+
+            _instance = new WatchWindowSize();
+        }
+
+        return _instance;
+    };
+
+    /**
+     * window width change Event
+     * @const RESIZE_WIDTH
+     * @type {string}
+     * @static
+     */
+    WatchWindowSize.RESIZE_WIDTH = "watchWindowSizeResizeWidth";
+    /**
+     * window height change Event
+     * @const RESIZE_HEIGHT
+     * @type {string}
+     * @static
+     */
+    WatchWindowSize.RESIZE_HEIGHT = "watchWindowSizeResizeHeight";
+    /**
+     * window width or height change Event
+     * @const RESIZE
+     * @type {string}
+     * @static
+     */
+    WatchWindowSize.RESIZE = "watchWindowSizeResize";
+
+    var p = WatchWindowSize.prototype;
+
+    /**
+     * Adds the specified event listener.
+     * @method addEventListener
+     * @param {String} type The string type of the event.
+     * @param {Function | Object} listener An object with a handleEvent method, or a function that will be called when
+     * the event is dispatched.
+     * @return {Function | Object} Returns the listener for chaining or assignment.
+     **/
+    p.addEventListener = function ( type, listener ){};
+    /**
+     * Removes the specified event listener.
+     * @method removeEventListener
+     * @param {String} type The string type of the event.
+     * @param {Function | Object} listener The listener function or object.
+     **/
+    p.removeEventListener = function (type, listener){};
+    /**
+     * Removes all listeners for the specified type, or all listeners of all types.
+     * @method removeAllEventListeners
+     * @param {String} [type] The string type of the event. If omitted, all listeners for all types will be removed.
+     **/
+    p.removeAllEventListeners = function (type){};
+    /**
+     * Indicates whether there is at least one listener for the specified event type.
+     * @method hasEventListener
+     * @param {String} type The string type of the event.
+     * @return {Boolean} Returns true if there is at least one listener for the specified event.
+     **/
+    p.hasEventListener = function (type){};
+    /**
+     * Dispatches the specified event.
+     * @method dispatchEvent
+     * @param {Object | String} eventObj An object with a "type" property, or a string type. If a string is used,
+     * dispatchEvent will construct a generic event object with "type" and "params" properties.
+     * @param {Object} [target] The object to use as the target property of the event object. This will default to the
+     * dispatching object.
+     * @return {Boolean} Returns true if any listener returned true.
+     **/
+    p.dispatchEvent = function (eventObj, target){};
+
+    EventDispatcher.initialize( p );
+
+    /**
+     * FPSManager instance を取得します
+     * @method getFPSManager
+     * @returns {FPSManager} FPSManager instance を返します
+     */
+    p.getFPSManager = function (){
+        return this._fps;
+    };
+
+    /**
+     * window size を監視し変更があるとイベントを発生させます。
+     * @param {boolean=false} [strong] 強制的にイベントを発生させる default: false
+     * @returns {boolean} true: window size 変更あり
+     */
+    p.update = function ( strong ){
+        var w = _$window.width(),
+            h = _$window.height(),
+
+            isWidthChange = w !== _width,
+            isHeightChange = h !== _height,
+            isChange = isWidthChange || isHeightChange,
+
+            params = {
+                strong: strong,
+                width: w,
+                height: h
+            }
+            ;
+
+        _width = w;
+        _height = h;
+
+        if ( strong ) {
+            // width
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_WIDTH, params ), _instance );
+            // height
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_HEIGHT, params ), _instance );
+            // both
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE, params ), _instance );
+        } else if ( isChange ) {
+            // both
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE, params ), _instance );
+        } else if ( isWidthChange ) {
+            // width
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_WIDTH, params ), _instance );
+        } else if ( isHeightChange ) {
+            // height
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_HEIGHT, params ), _instance );
+        }
+
+        return isChange;
+    };
+
+    /**
+     * 強制的にEventを発火
+     * @method fire
+     */
+    p.fire = function (){
+        this.update( true );
+    };
+
+    /**
+     * @method start
+     */
+    p.start = function (){
+        this.fire();
+
+        if ( !_isStart ) {
+            _fps.addEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
+            _fps.start();
+            _isStart = true;
+        }
+    };
+
+    /**
+     * @method stop
+     */
+    p.stop = function (){
+        _fps.removeEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
+        _fps.stop();
+        _isStart = false;
+    };
+
+    /**
+     * FPSManager.ENTER_FRAME Event Handler<br>
+     * default 24fps
+     *
+     * @method _onEnterFrame
+     * @private
+     */
+    p._onEnterFrame = function (){
+        _instance.update();
+    };
+
+    inazumatv.jq.WatchWindowSize = WatchWindowSize;
+
+}( this.inazumatv ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / htp://inazumatv.com
+ * date 2013/12/17 - 13:57
+ *
+ * Copyright (c) 2011-2013 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+( function ( inazumatv ){
+    "use strict";
+    var isNumeric = inazumatv.isNumeric,
+        WatchWindowSize,
+        /**
+         * jQuery alias
+         * @property $
+         * @type {jQuery}
+         * @private
+         * @static
+         */
+        $;
+    /**
+     *
+     * @class FitWindow
+     * @param {jQuery} $element jQuery object, 対象エレメント
+     * @param {Number} [minWidth] default 0
+     * @param {Number} [minHeight] default 0
+     * @param {Number} [offsetLeft] default 0
+     * @constructor
+     */
+    function FitWindow ( $element, minWidth, minHeight, offsetLeft ) {
+        if ( !isNumeric( minWidth ) ) {
+            minWidth = 0;
+        }
+        if ( !isNumeric( minHeight ) ) {
+            minHeight = 0;
+        }
+        if ( !isNumeric( offsetLeft ) ) {
+            offsetLeft = 0;
+        }
+
+        this._watch = WatchWindowSize.getInstance();
+        this._$element = $element;
+        this._minWidth = minWidth;
+        this._minHeight = minHeight;
+        this._offsetLeft = offsetLeft;
+    }
+
+    /**
+     * FitWindow へ jQuery object を設定。FitWindow を使用する前に実行する必要があります。<br>
+     * ExternalJQ.import から実行されます。
+     *
+     * @method activate
+     * @param {jQuery} jQuery object
+     * @static
+     */
+    FitWindow.activate = function ( jQuery ){
+        $ = jQuery;
+        WatchWindowSize = inazumatv.jq.WatchWindowSize;
+        WatchWindowSize.activate( jQuery );
+    };
+
+    var p = FitWindow.prototype;
+
+    /**
+     *
+     * @method getWatchWindowSize
+     * @returns {WatchWindowSize} WatchWindowSize instance
+     */
+    p.getWatchWindowSize = function (){
+        return this._watch;
+    };
+
+    /**
+     * @method listen
+     */
+    p.listen = function (){
+        this._boundOnResize = this._onResize.bind( this );
+        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        this._watch.start();
+    };
+
+    /**
+     * @method abort
+     */
+    p.abort = function (){
+        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    };
+
+    /**
+     * @method setMinHeight
+     * @param {Number} h Minimum height
+     */
+    p.setMinHeight = function ( h ){
+        if ( isNumeric( h ) ) {
+            this._minHeight = h;
+        }
+    };
+
+    /**
+     * @method setMinWidth
+     * @param {Number} h Minimum width
+     */
+    p.setMinWidth = function ( w ){
+        if ( isNumeric( w ) ) {
+            this._elementWidth = w;
+        }
+    };
+
+    /**
+     * Event Handler, Document height resize
+     * @method _onResize
+     * @param {EventObject} eventObject
+     * @protected
+     */
+    p._onResize = function ( eventObject ){
+        var params = eventObject.params[ 0 ],
+            w = params.width - this._offsetLeft,
+            h = params.height;
+
+        this._$element.width( Math.max( w, this._minWidth ) ).height( Math.max( h, this._minHeight ) );
+    };
+
+    inazumatv.jq.FitWindow = FitWindow;
+
+}( this.inazumatv ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / htp://inazumatv.com
+ * date 2013/12/17 - 14:10
+ *
+ * Copyright (c) 2011-2013 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+( function ( inazumatv ){
+    "use strict";
+    var isNumeric = inazumatv.isNumeric,
+        WatchWindowSize,
+        /**
+         * jQuery alias
+         * @property $
+         * @type {jQuery}
+         * @private
+         * @static
+         */
+        $;
+
+    /**
+     *
+     * @class FitWindowAspect
+     * @param {jQuery} $element jQuery object, 対象エレメント
+     * @param {Number} [minWidth] default 0
+     * @param {Number} [minHeight] default 0
+     * @param {Number} [offsetLeft] default 0
+     * @constructor
+     */
+    function FitWindowAspect ( $element, minWidth, minHeight, offsetLeft ) {
+        if ( !isNumeric( minWidth ) ) {
+            minWidth = 0;
+        }
+        if ( !isNumeric( minHeight ) ) {
+            minHeight = 0;
+        }
+        if ( !isNumeric( offsetLeft ) ) {
+            offsetLeft = 0;
+        }
+
+        this._watch = WatchWindowSize.getInstance();
+        this._$element = $element;
+        this._minWidth = minWidth;
+        this._minHeight = minHeight;
+        this._offsetLeft = offsetLeft;
+
+        this._elementWidth = parseInt( $element.width(), 10 );
+        this._elementHeight = parseInt( $element.height(), 10 );
+    }
+
+    /**
+     * FitWindowAspect へ jQuery object を設定。FitWindowAspect を使用する前に実行する必要があります。<br>
+     * ExternalJQ.import から実行されます。
+     *
+     * @method activate
+     * @param {jQuery} jQuery object
+     * @static
+     */
+    FitWindowAspect.activate = function ( jQuery ){
+        $ = jQuery;
+        WatchWindowSize = inazumatv.jq.WatchWindowSize;
+        WatchWindowSize.activate( jQuery );
+    };
+
+    var p = FitWindowAspect.prototype;
+
+    /**
+     *
+     * @method getWatchWindowSize
+     * @returns {WatchWindowSize} WatchWindowSize instance
+     */
+    p.getWatchWindowSize = function (){
+        return this._watch;
+    };
+
+    /**
+     * @method listen
+     */
+    p.listen = function (){
+        this._boundOnResize = this._onResize.bind( this );
+        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        this._watch.start();
+    };
+
+    /**
+     * @method abort
+     */
+    p.abort = function (){
+        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    };
+
+    /**
+     * @method setElementWidth
+     * @param {Number} w DOMElement width
+     */
+    p.setElementWidth = function ( w ){
+        if ( isNumeric( w ) ) {
+            this._elementWidth = w;
+        }
+    };
+
+    /**
+     * @method setElementHeight
+     * @param {Number} h DOMElement height
+     */
+    p.setElementHeight = function ( h ){
+        if ( isNumeric( h ) ) {
+            this._elementHeight = h;
+        }
+    };
+
+    /**
+     * @method setMinHeight
+     * @param {Number} h Minimum height
+     */
+    p.setMinHeight = function ( h ){
+        if ( isNumeric( h ) ) {
+            this._minHeight = h;
+        }
+    };
+
+    /**
+     * @method setMinWidth
+     * @param {Number} h Minimum width
+     */
+    p.setMinWidth = function ( w ){
+        if ( isNumeric( w ) ) {
+            this._elementWidth = w;
+        }
+    };
+
+    /**
+     * Event Handler, Window width or height resize
+     * @method _onResize
+     * @param {EventObject} eventObject
+     * @protected
+     */
+    p._onResize = function ( eventObject ){
+        var ew = this._elementWidth,
+            eh = this._elementHeight,
+            params = eventObject.params[ 0 ],
+            w = params.width - this._offsetLeft,
+            h = params.height,
+            aw,
+            ah,
+            aspect;
+
+        w = Math.max( w, this._minWidth );
+        h = Math.max( h, this._minHeight );
+        aw = w / ew;
+        ah = h / eh;
+        aspect = Math.max( aw, ah );
+
+        this._$element.width( Math.ceil( ew * aspect ) ).height( Math.ceil( eh * aspect ) );
+    };
+
+    inazumatv.jq.FitWindowAspect = FitWindowAspect;
+}( this.inazumatv ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / htp://inazumatv.com
+ * date 2013/12/17 - 14:26
+ *
+ * Copyright (c) 2011-2013 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+( function ( inazumatv ){
+    "use strict";
+    var isNumeric = inazumatv.isNumeric,
+        WatchWindowSize,
+        /**
+         * jQuery alias
+         * @property $
+         * @type {jQuery}
+         * @private
+         * @static
+         */
+        $;
+
+    /**
+     * @class FitWindowHeight
+     * @param {jQuery} $element jQuery object, 対象エレメント
+     * @param {Number} [minHeight] default 0
+     * @constructor
+     */
+    function FitWindowHeight ( $element, minHeight ) {
+        if ( !isNumeric( minHeight ) ) {
+            minHeight = 0;
+        }
+
+        this._watch = WatchWindowSize.getInstance();
+        this._$element = $element;
+        this._minHeight = minHeight;
+
+        this._elementHeight = parseInt( $element.height(), 10 );
+    }
+    /**
+     * FitWindowHeight へ jQuery object を設定。FitWindowHeight を使用する前に実行する必要があります。<br>
+     * ExternalJQ.import から実行されます。
+     *
+     * @method activate
+     * @param {jQuery} jQuery object
+     * @static
+     */
+    FitWindowHeight.activate = function ( jQuery ){
+        $ = jQuery;
+        WatchWindowSize = inazumatv.jq.WatchWindowSize;
+        WatchWindowSize.activate( jQuery );
+    };
+
+    var p = FitWindowHeight.prototype;
+
+    /**
+     *
+     * @method getWatchWindowSize
+     * @returns {WatchWindowSize} WatchWindowSize instance
+     */
+    p.getWatchWindowSize = function (){
+        return this._watch;
+    };
+
+    /**
+     * @method listen
+     */
+    p.listen = function (){
+        this._boundOnResize = this._onResize.bind( this );
+        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        this._watch.start();
+    };
+
+    /**
+     * @method abort
+     */
+    p.abort = function (){
+        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    };
+
+    /**
+     * @method setMinHeight
+     * @param {Number} h Minimum height
+     */
+    p.setMinHeight = function ( h ){
+        if ( isNumeric( h ) ) {
+            this._minHeight = h;
+        }
+    };
+
+    /**
+     * Event Handler, Window width or height resize
+     * @method _onResize
+     * @param {EventObject} eventObject
+     * @protected
+     */
+    p._onResize = function ( eventObject ){
+        var params = eventObject.params[ 0 ],
+            h = params.height
+        ;
+
+        this._$element.height( Math.max( h, this._minHeight ) );
+    };
+
+    inazumatv.jq.FitWindowHeight = FitWindowHeight;
 }( this.inazumatv ) );

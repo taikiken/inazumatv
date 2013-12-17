@@ -22,13 +22,19 @@
         "./src/external/jq/ExternalJQ.js",
 
         "./src/external/jq/plugins/Easing.js",
+        "./src/external/jq/plugins/SmoothScroll.js",
 
         "./src/external/jq/extensions/loader/XMLLoader.js",
         "./src/external/jq/extensions/loader/TXTLoader.js",
         "./src/external/jq/extensions/loader/HTMLLoader.js",
 
         "./src/external/jq/extensions/dom/WatchDocumentHeight.js",
-        "./src/external/jq/extensions/dom/FitDocumentHeight.js"
+        "./src/external/jq/extensions/dom/FitDocumentHeight.js",
+
+        "./src/external/jq/extensions/dom/WatchWindowSize.js",
+        "./src/external/jq/extensions/dom/FitWindow.js",
+        "./src/external/jq/extensions/dom/FitWindowAspect.js",
+        "./src/external/jq/extensions/dom/FitWindowHeight.js"
     ],
 
     "docs_out_path": "./out/inazumatvUtilDocs/"

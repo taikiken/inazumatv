@@ -71,11 +71,47 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/external/jq/extensions/dom/FitWindow.js": {
+            "name": "src/external/jq/extensions/dom/FitWindow.js",
+            "modules": {},
+            "classes": {
+                "FitWindow": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/external/jq/extensions/dom/FitWindowAspect.js": {
+            "name": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "modules": {},
+            "classes": {
+                "FitWindowAspect": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/external/jq/extensions/dom/FitWindowHeight.js": {
+            "name": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "modules": {},
+            "classes": {
+                "FitWindowHeight": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/external/jq/extensions/dom/WatchDocumentHeight.js": {
             "name": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
             "modules": {},
             "classes": {
                 "WatchDocumentHeight": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/external/jq/extensions/dom/WatchWindowSize.js": {
+            "name": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "modules": {},
+            "classes": {
+                "WatchWindowSize": 1
             },
             "fors": {},
             "namespaces": {}
@@ -112,6 +148,15 @@
             "modules": {},
             "classes": {
                 "Easing": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/external/jq/plugins/SmoothScroll.js": {
+            "name": "src/external/jq/plugins/SmoothScroll.js",
+            "modules": {},
+            "classes": {
+                "SmoothScroll": 1
             },
             "fors": {},
             "namespaces": {}
@@ -231,11 +276,16 @@
                 "EventDispatcher": 1,
                 "EventObject": 1,
                 "FitDocumentHeight": 1,
+                "FitWindow": 1,
+                "FitWindowAspect": 1,
+                "FitWindowHeight": 1,
                 "WatchDocumentHeight": 1,
+                "WatchWindowSize": 1,
                 "HTMLLoader": 1,
                 "TXTLoader": 1,
                 "XMLLoader": 1,
                 "Easing": 1,
+                "SmoothScroll": 1,
                 "jq.ExternalJQ": 1,
                 "inazumatv": 1,
                 "ShuffleText": 1,
@@ -424,6 +474,108 @@
             ],
             "is_constructor": 1
         },
+        "FitWindow": {
+            "name": "FitWindow",
+            "shortname": "FitWindow",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "inazumatv",
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 25,
+            "params": [
+                {
+                    "name": "$element",
+                    "description": "jQuery object, 対象エレメント",
+                    "type": "JQuery"
+                },
+                {
+                    "name": "minWidth",
+                    "description": "default 0",
+                    "type": "Number",
+                    "optional": true
+                },
+                {
+                    "name": "minHeight",
+                    "description": "default 0",
+                    "type": "Number",
+                    "optional": true
+                },
+                {
+                    "name": "offsetLeft",
+                    "description": "default 0",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "is_constructor": 1
+        },
+        "FitWindowAspect": {
+            "name": "FitWindowAspect",
+            "shortname": "FitWindowAspect",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "inazumatv",
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 26,
+            "params": [
+                {
+                    "name": "$element",
+                    "description": "jQuery object, 対象エレメント",
+                    "type": "JQuery"
+                },
+                {
+                    "name": "minWidth",
+                    "description": "default 0",
+                    "type": "Number",
+                    "optional": true
+                },
+                {
+                    "name": "minHeight",
+                    "description": "default 0",
+                    "type": "Number",
+                    "optional": true
+                },
+                {
+                    "name": "offsetLeft",
+                    "description": "default 0",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "is_constructor": 1
+        },
+        "FitWindowHeight": {
+            "name": "FitWindowHeight",
+            "shortname": "FitWindowHeight",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "inazumatv",
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 26,
+            "params": [
+                {
+                    "name": "$element",
+                    "description": "jQuery object, 対象エレメント",
+                    "type": "JQuery"
+                },
+                {
+                    "name": "minHeight",
+                    "description": "default 0",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "is_constructor": 1
+        },
         "WatchDocumentHeight": {
             "name": "WatchDocumentHeight",
             "shortname": "WatchDocumentHeight",
@@ -440,6 +592,24 @@
                 "type": "WatchDocumentHeight"
             },
             "is_constructor": 1
+        },
+        "WatchWindowSize": {
+            "name": "WatchWindowSize",
+            "shortname": "WatchWindowSize",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "inazumatv",
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 36,
+            "return": {
+                "description": "WatchWindowSize instance",
+                "type": "WatchWindowSize"
+            },
+            "is_constructor": 1,
+            "singleton": ""
         },
         "HTMLLoader": {
             "name": "HTMLLoader",
@@ -537,6 +707,20 @@
             "module": "inazumatv",
             "file": "src/external/jq/plugins/Easing.js",
             "line": 16,
+            "is_constructor": 1,
+            "static": 1
+        },
+        "SmoothScroll": {
+            "name": "SmoothScroll",
+            "shortname": "SmoothScroll",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "inazumatv",
+            "file": "src/external/jq/plugins/SmoothScroll.js",
+            "line": 22,
             "is_constructor": 1,
             "static": 1
         },
@@ -1544,7 +1728,7 @@
             "line": 82,
             "description": "Event Handler, Document height resize",
             "itemtype": "method",
-            "name": "onResize",
+            "name": "_onResize",
             "params": [
                 {
                     "name": "eventObject",
@@ -1555,6 +1739,332 @@
             "access": "private",
             "tagname": "",
             "class": "FitDocumentHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 1,
+            "description": "license inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 13:57\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 17,
+            "description": "jQuery alias",
+            "itemtype": "property",
+            "name": "$",
+            "type": "{jQuery}",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 52,
+            "description": "FitWindow へ jQuery object を設定。FitWindow を使用する前に実行する必要があります。<br>\nExternalJQ.import から実行されます。",
+            "itemtype": "method",
+            "name": "activate",
+            "params": [
+                {
+                    "name": "jQuery",
+                    "description": "object",
+                    "type": "JQuery"
+                }
+            ],
+            "static": 1,
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 68,
+            "itemtype": "method",
+            "name": "getWatchWindowSize",
+            "return": {
+                "description": "WatchWindowSize instance",
+                "type": "WatchWindowSize"
+            },
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 77,
+            "itemtype": "method",
+            "name": "listen",
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 86,
+            "itemtype": "method",
+            "name": "abort",
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 93,
+            "itemtype": "method",
+            "name": "setMinHeight",
+            "params": [
+                {
+                    "name": "h",
+                    "description": "Minimum height",
+                    "type": "Number"
+                }
+            ],
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 103,
+            "itemtype": "method",
+            "name": "setMinWidth",
+            "params": [
+                {
+                    "name": "h",
+                    "description": "Minimum width",
+                    "type": "Number"
+                }
+            ],
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindow.js",
+            "line": 113,
+            "description": "Event Handler, Document height resize",
+            "itemtype": "method",
+            "name": "_onResize",
+            "params": [
+                {
+                    "name": "eventObject",
+                    "description": "",
+                    "type": "EventObject"
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "class": "FitWindow"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 1,
+            "description": "license inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 14:10\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 17,
+            "description": "jQuery alias",
+            "itemtype": "property",
+            "name": "$",
+            "type": "{jQuery}",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 56,
+            "description": "FitWindowAspect へ jQuery object を設定。FitWindowAspect を使用する前に実行する必要があります。<br>\nExternalJQ.import から実行されます。",
+            "itemtype": "method",
+            "name": "activate",
+            "params": [
+                {
+                    "name": "jQuery",
+                    "description": "object",
+                    "type": "JQuery"
+                }
+            ],
+            "static": 1,
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 72,
+            "itemtype": "method",
+            "name": "getWatchWindowSize",
+            "return": {
+                "description": "WatchWindowSize instance",
+                "type": "WatchWindowSize"
+            },
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 81,
+            "itemtype": "method",
+            "name": "listen",
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 90,
+            "itemtype": "method",
+            "name": "abort",
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 97,
+            "itemtype": "method",
+            "name": "setElementWidth",
+            "params": [
+                {
+                    "name": "w",
+                    "description": "DOMElement width",
+                    "type": "Number"
+                }
+            ],
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 107,
+            "itemtype": "method",
+            "name": "setElementHeight",
+            "params": [
+                {
+                    "name": "h",
+                    "description": "DOMElement height",
+                    "type": "Number"
+                }
+            ],
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 117,
+            "itemtype": "method",
+            "name": "setMinHeight",
+            "params": [
+                {
+                    "name": "h",
+                    "description": "Minimum height",
+                    "type": "Number"
+                }
+            ],
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 127,
+            "itemtype": "method",
+            "name": "setMinWidth",
+            "params": [
+                {
+                    "name": "h",
+                    "description": "Minimum width",
+                    "type": "Number"
+                }
+            ],
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowAspect.js",
+            "line": 137,
+            "description": "Event Handler, Window width or height resize",
+            "itemtype": "method",
+            "name": "_onResize",
+            "params": [
+                {
+                    "name": "eventObject",
+                    "description": "",
+                    "type": "EventObject"
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "class": "FitWindowAspect"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 1,
+            "description": "license inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 14:26\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "class": "FitWindowHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 17,
+            "description": "jQuery alias",
+            "itemtype": "property",
+            "name": "$",
+            "type": "{jQuery}",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "FitWindowHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 43,
+            "description": "FitWindowHeight へ jQuery object を設定。FitWindowHeight を使用する前に実行する必要があります。<br>\nExternalJQ.import から実行されます。",
+            "itemtype": "method",
+            "name": "activate",
+            "params": [
+                {
+                    "name": "jQuery",
+                    "description": "object",
+                    "type": "JQuery"
+                }
+            ],
+            "static": 1,
+            "class": "FitWindowHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 59,
+            "itemtype": "method",
+            "name": "getWatchWindowSize",
+            "return": {
+                "description": "WatchWindowSize instance",
+                "type": "WatchWindowSize"
+            },
+            "class": "FitWindowHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 68,
+            "itemtype": "method",
+            "name": "listen",
+            "class": "FitWindowHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 77,
+            "itemtype": "method",
+            "name": "abort",
+            "class": "FitWindowHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 84,
+            "itemtype": "method",
+            "name": "setMinHeight",
+            "params": [
+                {
+                    "name": "h",
+                    "description": "Minimum height",
+                    "type": "Number"
+                }
+            ],
+            "class": "FitWindowHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/FitWindowHeight.js",
+            "line": 94,
+            "description": "Event Handler, Window width or height resize",
+            "itemtype": "method",
+            "name": "_onResize",
+            "params": [
+                {
+                    "name": "eventObject",
+                    "description": "",
+                    "type": "EventObject"
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "class": "FitWindowHeight"
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
@@ -1592,7 +2102,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 64,
+            "line": 71,
             "itemtype": "method",
             "name": "getInstance",
             "return": {
@@ -1604,7 +2114,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 78,
+            "line": 85,
             "description": "document height change event",
             "itemtype": "property",
             "name": "RESIZE_HEIGHT",
@@ -1615,18 +2125,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 88,
-            "itemtype": "method",
-            "name": "getFPSManager",
-            "return": {
-                "description": "FPSManager instance",
-                "type": "FPSManager"
-            },
-            "class": "WatchDocumentHeight"
-        },
-        {
-            "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 96,
+            "line": 95,
             "description": "Adds the specified event listener.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -1650,7 +2149,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 105,
+            "line": 104,
             "description": "Removes the specified event listener.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -1670,7 +2169,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 112,
+            "line": 111,
             "description": "Removes all listeners for the specified type, or all listeners of all types.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -1686,7 +2185,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 118,
+            "line": 117,
             "description": "Indicates whether there is at least one listener for the specified event type.",
             "itemtype": "method",
             "name": "hasEventListener",
@@ -1705,7 +2204,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 125,
+            "line": 124,
             "description": "Dispatches the specified event.",
             "itemtype": "method",
             "name": "dispatchEvent",
@@ -1730,10 +2229,10 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 138,
+            "line": 137,
             "description": "FPSManager instance を取得します",
             "itemtype": "method",
-            "name": "getFPSInstance",
+            "name": "getFPSManager",
             "return": {
                 "description": "FPSManager instance を返します",
                 "type": "FPSManager"
@@ -1742,7 +2241,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 147,
+            "line": 146,
             "description": "フレーム毎に呼び出されます。<br>\n高さが変更されると WatchDocumentHeight.RESIZE を dispatchEvent し true を返します。",
             "itemtype": "method",
             "name": "update",
@@ -1762,7 +2261,7 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 174,
+            "line": 173,
             "description": "強制的にEventを発火",
             "itemtype": "method",
             "name": "fire",
@@ -1770,27 +2269,272 @@
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 182,
+            "line": 181,
             "itemtype": "method",
             "name": "start",
             "class": "WatchDocumentHeight"
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 195,
+            "line": 194,
             "itemtype": "method",
             "name": "stop",
             "class": "WatchDocumentHeight"
         },
         {
             "file": "src/external/jq/extensions/dom/WatchDocumentHeight.js",
-            "line": 204,
+            "line": 203,
             "description": "FPSManager.ENTER_FRAME Event Handler<br>\ndefault 24fps",
             "itemtype": "method",
             "name": "_onEnterFrame",
             "access": "private",
             "tagname": "",
             "class": "WatchDocumentHeight"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 1,
+            "description": "license inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 12:17\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 25,
+            "description": "jQuery alias",
+            "itemtype": "property",
+            "name": "$",
+            "type": "{jQuery}",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 55,
+            "description": "WatchWindowSize へ jQuery object を設定。WatchWindowSize を使用する前に実行する必要があります。<br>\nExternalJQ.import から実行されます。",
+            "itemtype": "method",
+            "name": "activate",
+            "params": [
+                {
+                    "name": "jQuery",
+                    "description": "object",
+                    "type": "JQuery"
+                }
+            ],
+            "static": 1,
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 68,
+            "itemtype": "method",
+            "name": "getInstance",
+            "return": {
+                "description": "",
+                "type": "WatchDocumentHeight"
+            },
+            "static": 1,
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 82,
+            "description": "window width change Event",
+            "itemtype": "property",
+            "name": "RESIZE_WIDTH",
+            "final": "",
+            "type": "{string}",
+            "static": 1,
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 89,
+            "description": "window height change Event",
+            "itemtype": "property",
+            "name": "RESIZE_HEIGHT",
+            "final": "",
+            "type": "{string}",
+            "static": 1,
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 96,
+            "description": "window width or height change Event",
+            "itemtype": "property",
+            "name": "RESIZE",
+            "final": "",
+            "type": "{string}",
+            "static": 1,
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 106,
+            "description": "Adds the specified event listener.",
+            "itemtype": "method",
+            "name": "addEventListener",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "The string type of the event.",
+                    "type": "String"
+                },
+                {
+                    "name": "listener",
+                    "description": "An object with a handleEvent method, or a function that will be called when\nthe event is dispatched.",
+                    "type": "Function | Object"
+                }
+            ],
+            "return": {
+                "description": "Returns the listener for chaining or assignment.",
+                "type": "Function | Object"
+            },
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 115,
+            "description": "Removes the specified event listener.",
+            "itemtype": "method",
+            "name": "removeEventListener",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "The string type of the event.",
+                    "type": "String"
+                },
+                {
+                    "name": "listener",
+                    "description": "The listener function or object.",
+                    "type": "Function | Object"
+                }
+            ],
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 122,
+            "description": "Removes all listeners for the specified type, or all listeners of all types.",
+            "itemtype": "method",
+            "name": "removeAllEventListeners",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "The string type of the event. If omitted, all listeners for all types will be removed.",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 128,
+            "description": "Indicates whether there is at least one listener for the specified event type.",
+            "itemtype": "method",
+            "name": "hasEventListener",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "The string type of the event.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Returns true if there is at least one listener for the specified event.",
+                "type": "Boolean"
+            },
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 135,
+            "description": "Dispatches the specified event.",
+            "itemtype": "method",
+            "name": "dispatchEvent",
+            "params": [
+                {
+                    "name": "eventObj",
+                    "description": "An object with a \"type\" property, or a string type. If a string is used,\ndispatchEvent will construct a generic event object with \"type\" and \"params\" properties.",
+                    "type": "Object | String"
+                },
+                {
+                    "name": "target",
+                    "description": "The object to use as the target property of the event object. This will default to the\ndispatching object.",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "Returns true if any listener returned true.",
+                "type": "Boolean"
+            },
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 148,
+            "description": "FPSManager instance を取得します",
+            "itemtype": "method",
+            "name": "getFPSManager",
+            "return": {
+                "description": "FPSManager instance を返します",
+                "type": "FPSManager"
+            },
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 157,
+            "description": "window size を監視し変更があるとイベントを発生させます。",
+            "params": [
+                {
+                    "name": "strong",
+                    "description": "強制的にイベントを発生させる default: false",
+                    "type": "Boolean=false",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "true: window size 変更あり",
+                "type": "Boolean"
+            },
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 201,
+            "description": "強制的にEventを発火",
+            "itemtype": "method",
+            "name": "fire",
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 209,
+            "itemtype": "method",
+            "name": "start",
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 222,
+            "itemtype": "method",
+            "name": "stop",
+            "class": "WatchWindowSize"
+        },
+        {
+            "file": "src/external/jq/extensions/dom/WatchWindowSize.js",
+            "line": 231,
+            "description": "FPSManager.ENTER_FRAME Event Handler<br>\ndefault 24fps",
+            "itemtype": "method",
+            "name": "_onEnterFrame",
+            "access": "private",
+            "tagname": "",
+            "class": "WatchWindowSize"
         },
         {
             "file": "src/external/jq/extensions/loader/HTMLLoader.js",
@@ -1931,15 +2675,17 @@
         },
         {
             "file": "src/external/jq/plugins/Easing.js",
-            "line": 24,
+            "line": 25,
             "description": "jQuery.easing 拡張 easing\nquart\neaseInQuad\neaseOutQuad\neaseInOutQuad\neaseInCubic\neaseOutCubic\neaseInOutCubic\neaseInQuart\neaseOutQuart\neaseInOutQuart\neaseInQuint\neaseOutQuint\neaseInOutQuint\neaseInSine\neaseOutSine\neaseInOutSine\neaseInExpo\neaseOutExpo\neaseInOutExpo\neaseInCirc\neaseOutCirc\neaseInOutCirc\neaseInElastic\neaseOutElastic\neaseInOutElastic\neaseInBack\neaseOutBack\neaseInOutBack\neaseInBounce\neaseOutBounce\neaseInOutBounce",
             "type": "{{activate: Function}}",
             "class": "Easing"
         },
         {
             "file": "src/external/jq/plugins/Easing.js",
-            "line": 61,
+            "line": 62,
             "description": "Easing plugin を活性化します",
+            "itemtype": "method",
+            "name": "activate",
             "params": [
                 {
                     "name": "jQuery",
@@ -1947,7 +2693,30 @@
                     "type": "JQuery"
                 }
             ],
+            "static": 1,
             "class": "Easing"
+        },
+        {
+            "file": "src/external/jq/plugins/SmoothScroll.js",
+            "line": 1,
+            "description": "license inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 17:55\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "class": "SmoothScroll"
+        },
+        {
+            "file": "src/external/jq/plugins/SmoothScroll.js",
+            "line": 31,
+            "description": "SmoothScroll plugin を活性化します",
+            "itemtype": "method",
+            "name": "activate",
+            "params": [
+                {
+                    "name": "jQuery",
+                    "description": "",
+                    "type": "JQuery"
+                }
+            ],
+            "static": 1,
+            "class": "SmoothScroll"
         },
         {
             "file": "src/external/jq/ExternalJQ.js",
@@ -3180,23 +3949,51 @@
         },
         {
             "message": "replacing incorrect tag: returns with return",
+            "line": " src/external/jq/extensions/dom/FitWindow.js:68"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " src/external/jq/extensions/dom/FitWindowAspect.js:72"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " src/external/jq/extensions/dom/FitWindowHeight.js:59"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
             "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:34"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:64"
+            "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:71"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:88"
+            "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:137"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:138"
+            "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:146"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:147"
+            "line": " src/external/jq/extensions/dom/WatchWindowSize.js:36"
+        },
+        {
+            "message": "unknown tag: singleton",
+            "line": " src/external/jq/extensions/dom/WatchWindowSize.js:36"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " src/external/jq/extensions/dom/WatchWindowSize.js:68"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " src/external/jq/extensions/dom/WatchWindowSize.js:148"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " src/external/jq/extensions/dom/WatchWindowSize.js:157"
         },
         {
             "message": "replacing incorrect tag: returns with return",
@@ -3307,8 +4104,28 @@
             "line": " src/external/jq/extensions/dom/FitDocumentHeight.js:1"
         },
         {
+            "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 13:57\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "line": " src/external/jq/extensions/dom/FitWindow.js:1"
+        },
+        {
+            "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 14:10\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "line": " src/external/jq/extensions/dom/FitWindowAspect.js:1"
+        },
+        {
+            "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 14:26\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "line": " src/external/jq/extensions/dom/FitWindowHeight.js:1"
+        },
+        {
             "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/15 - 18:28\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
             "line": " src/external/jq/extensions/dom/WatchDocumentHeight.js:1"
+        },
+        {
+            "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 12:17\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "line": " src/external/jq/extensions/dom/WatchWindowSize.js:1"
+        },
+        {
+            "message": "Missing item type\nwindow size を監視し変更があるとイベントを発生させます。",
+            "line": " src/external/jq/extensions/dom/WatchWindowSize.js:157"
         },
         {
             "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/15 - 17:47\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
@@ -3328,11 +4145,11 @@
         },
         {
             "message": "Missing item type\njQuery.easing 拡張 easing\nquart\neaseInQuad\neaseOutQuad\neaseInOutQuad\neaseInCubic\neaseOutCubic\neaseInOutCubic\neaseInQuart\neaseOutQuart\neaseInOutQuart\neaseInQuint\neaseOutQuint\neaseInOutQuint\neaseInSine\neaseOutSine\neaseInOutSine\neaseInExpo\neaseOutExpo\neaseInOutExpo\neaseInCirc\neaseOutCirc\neaseInOutCirc\neaseInElastic\neaseOutElastic\neaseInOutElastic\neaseInBack\neaseOutBack\neaseInOutBack\neaseInBounce\neaseOutBounce\neaseInOutBounce",
-            "line": " src/external/jq/plugins/Easing.js:24"
+            "line": " src/external/jq/plugins/Easing.js:25"
         },
         {
-            "message": "Missing item type\nEasing plugin を活性化します",
-            "line": " src/external/jq/plugins/Easing.js:61"
+            "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/17 - 17:55\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",
+            "line": " src/external/jq/plugins/SmoothScroll.js:1"
         },
         {
             "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/13 - 21:12\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",

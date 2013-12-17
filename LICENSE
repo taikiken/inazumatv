@@ -68,3 +68,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
+ /*!
+  * Smooth Scroll - v1.4.11 - 2013-07-15
+  * https://github.com/kswedberg/jquery-smooth-scroll
+  * Copyright (c) 2013 Karl Swedberg
+  * Licensed MIT (https://github.com/kswedberg/jquery-smooth-scroll/blob/master/LICENSE-MIT)
+  */
