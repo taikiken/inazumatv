@@ -148,6 +148,14 @@ var inazumatv = {};
                 return fBound;
             };
         }
+
+        // trim
+        // three.js
+        String.prototype.trim = String.prototype.trim || function () {
+
+            return this.replace( /^\s+|\s+$/g, '' );
+
+        };
     }());
 
 }( window.self ) );
@@ -206,6 +214,36 @@ var inazumatv = {};
 
 }( inazumatv ) );
 /**
+ * @module inazumatv
+ */
+(function( inazumatv ) {
+    "use strict";
+
+    /**
+     * Static class holding library specific information such as the version and buildDate of
+     * the library.
+     * @class inazumatv
+     **/
+    var s = inazumatv.build = inazumatv.build || {};
+
+    /**
+     * The version string for this release.
+     * @property version
+     * @type String
+     * @static
+     **/
+    s.version = /*version*/"0.8.01"; // injected by build process
+
+    /**
+     * The build date for this release in UTC format.
+     * @property buildDate
+     * @type String
+     * @static
+     **/
+    s.buildDate = /*date*/"Wed, 18 Dec 2013 03:56:52 GMT"; // injected by build process
+
+})( this.inazumatv );
+/**
  * license inazumatv.com
  * author (at)taikiken / htp://inazumatv.com
  * date 2013/12/12 - 17:25
@@ -244,6 +282,8 @@ var inazumatv = {};
         safari = !!ua.match(/safari/i) && !chrome,
 
         touch = typeof window.ontouchstart !== "undefined",
+
+        fullScreen = typeof navigator.standalone !== "undefined",
 
         android_phone = false,
         android_tablet = false,
@@ -406,6 +446,15 @@ var inazumatv = {};
              */
             iPod: function (){
                 return ipod;
+            },
+            /**
+             * @for Browser.iOS
+             * @method fullScreen
+             * @returns {boolean} standalone mode か否かを返します
+             * @static
+             */
+            fullScreen: function (){
+                return fullScreen;
             }
         },
         /**
@@ -600,6 +649,23 @@ var inazumatv = {};
                 return touch;
             }
         },
+        /**
+         * iPhone, Android phone. URL bar 下へスクロールさせます。<br>
+         * window.onload 後に実行します。
+         * iOS 7 では動作しません。
+         *
+         *     function onLoad () {
+         *          window.removeEventListener( "load", onLoad );
+         *          Browser.hideURLBar();
+         *     }
+         *     window.addEventListener( "load", onLoad, false );
+         *
+         * @for Browser
+         * @method hideURLBar
+         */
+        hideURLBar : function (){
+            setTimeout( function (){ scrollTo( 0, 1 ); }, 0);
+        },
         // below for compatibility older version of inazumatv.util
         ie: function (){
             return ie;
@@ -663,9 +729,6 @@ var inazumatv = {};
         },
         ipod: function (){
             return ipod;
-        },
-        hideURLBar : function (){
-            setTimeout( function (){ scrollTo( 0, 1 ); }, 0);
         }
     };
 
@@ -1013,6 +1076,7 @@ var inazumatv = {};
 
     /**
      * パラメタ取出し
+     * @method getParams
      * @returns {*} 配列を返します
      */
     p.getParams = function (){
@@ -2899,7 +2963,8 @@ var inazumatv = {};
                 // (doing this because Safari sets scrollTop async,
                 // so can't set it to 1 and immediately get the value.)
                 if (!scrollable.length) {
-                    this.each(function(index) {
+//                    this.each(function(index) {
+                    this.each(function() {
                         if (this.nodeName === 'BODY') {
                             scrollable = [this];
                         }
@@ -3158,7 +3223,7 @@ var inazumatv = {};
 
     /**
      * XMLLoader へ jQuery object を設定。XMLLoader を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -3276,7 +3341,7 @@ var inazumatv = {};
 
     /**
      * TXTLoader へ jQuery object を設定。TXTLoader を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -3321,7 +3386,7 @@ var inazumatv = {};
 
     /**
      * HTMLLoader へ jQuery object を設定。HTMLLoader を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -3384,7 +3449,7 @@ var inazumatv = {};
 
     /**
      * WatchDocumentHeight へ jQuery object を設定。WatchDocumentHeight を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -3513,6 +3578,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を開始します
      * @method start
      */
     p.start = function (){
@@ -3526,6 +3592,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を止めます
      * @method stop
      */
     p.stop = function (){
@@ -3589,7 +3656,7 @@ var inazumatv = {};
 
     /**
      * FitDocumentHeight へ jQuery object を設定。FitDocumentHeight を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -3613,6 +3680,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を開始します
      * @method listen
      */
     p.listen = function (){
@@ -3621,6 +3689,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を止めます
      * @method abort
      */
     p.abort = function (){
@@ -3698,7 +3767,7 @@ var inazumatv = {};
 
     /**
      * WatchWindowSize へ jQuery object を設定。WatchWindowSize を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -3851,6 +3920,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を開始します
      * @method start
      */
     p.start = function (){
@@ -3864,6 +3934,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を止めます
      * @method stop
      */
     p.stop = function (){
@@ -3938,7 +4009,7 @@ var inazumatv = {};
 
     /**
      * FitWindow へ jQuery object を設定。FitWindow を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -3962,6 +4033,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を開始します
      * @method listen
      */
     p.listen = function (){
@@ -3971,6 +4043,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を止めます
      * @method abort
      */
     p.abort = function (){
@@ -4070,7 +4143,7 @@ var inazumatv = {};
 
     /**
      * FitWindowAspect へ jQuery object を設定。FitWindowAspect を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -4094,6 +4167,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を開始します
      * @method listen
      */
     p.listen = function (){
@@ -4103,6 +4177,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を止めます
      * @method abort
      */
     p.abort = function (){
@@ -4219,7 +4294,7 @@ var inazumatv = {};
     }
     /**
      * FitWindowHeight へ jQuery object を設定。FitWindowHeight を使用する前に実行する必要があります。<br>
-     * ExternalJQ.import から実行されます。
+     * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
@@ -4243,6 +4318,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を開始します
      * @method listen
      */
     p.listen = function (){
@@ -4252,6 +4328,7 @@ var inazumatv = {};
     };
 
     /**
+     * 監視を止めます
      * @method abort
      */
     p.abort = function (){

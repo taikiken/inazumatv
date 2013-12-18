@@ -1,6 +1,7 @@
 {
     "inazumatv_util_source": [
         "./src/inazumatv.js",
+        "./src/version.js",
 
         "./src/browser/Browser.js",
         "./src/browser/CookieUtil.js",
