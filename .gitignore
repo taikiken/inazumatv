@@ -3,3 +3,4 @@ out
 .idea
 *.idea
 inazumatv.util_docs*
+node_modules
