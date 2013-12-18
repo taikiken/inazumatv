@@ -243,6 +243,8 @@ var inazumatv = {};
         firefox = !!ua.match(/firefox/i),
         safari = !!ua.match(/safari/i) && !chrome,
 
+        touch = typeof window.ontouchstart !== "undefined",
+
         android_phone = false,
         android_tablet = false,
         ios_version = -1,
@@ -578,6 +580,24 @@ var inazumatv = {};
              */
             is: function (){
                 return firefox;
+            }
+        },
+        /**
+         * Touch action に関する情報
+         * @for Browser
+         * @property Touch
+         * @type Object
+         * @static
+         */
+        Touch: {
+            /**
+             * @for Browser.Touch
+             * @method is
+             * @returns {boolean} Touch 可能か否かを返します
+             * @static
+             */
+            is: function (){
+                return touch;
             }
         },
         // below for compatibility older version of inazumatv.util

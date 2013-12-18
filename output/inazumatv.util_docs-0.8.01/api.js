@@ -8,6 +8,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "Browser.Firefox",
         "Browser.IE",
         "Browser.Safari",
+        "Browser.Touch",
         "Browser.iOS",
         "CheckList",
         "CookieUtil",

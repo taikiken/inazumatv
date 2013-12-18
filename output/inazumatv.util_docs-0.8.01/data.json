@@ -20,7 +20,8 @@
                 "Browser.IE": 1,
                 "Browser.Chrome": 1,
                 "Browser.Safari": 1,
-                "Browser.Firefox": 1
+                "Browser.Firefox": 1,
+                "Browser.Touch": 1
             },
             "namespaces": {}
         },
@@ -271,6 +272,7 @@
                 "Browser.Chrome": 1,
                 "Browser.Safari": 1,
                 "Browser.Firefox": 1,
+                "Browser.Touch": 1,
                 "CookieUtil": 1,
                 "AjaxEvent": 1,
                 "EventDispatcher": 1,
@@ -314,7 +316,7 @@
             "extension_for": [],
             "module": "inazumatv",
             "file": "src/browser/Browser.js",
-            "line": 115,
+            "line": 117,
             "description": "Browser 情報を管理します",
             "is_constructor": 1
         },
@@ -371,6 +373,16 @@
         "Browser.Firefox": {
             "name": "Browser.Firefox",
             "shortname": "Browser.Firefox",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "inazumatv"
+        },
+        "Browser.Touch": {
+            "name": "Browser.Touch",
+            "shortname": "Browser.Touch",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -889,7 +901,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 60,
+            "line": 62,
             "description": "iOS version detection",
             "return": {
                 "description": "iOS version 配列 3桁",
@@ -901,7 +913,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 79,
+            "line": 81,
             "description": "Android version detection",
             "return": {
                 "description": "Android version 配列 2桁~3桁",
@@ -913,13 +925,13 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 124,
+            "line": 126,
             "type": "{{iOS: {is: Function, number: Function, major: Function, version: Function}, Android: {is: Function, number: Function, major: Function, version: Function}, IE: {is: Function, version: Function}, Chrome: {is: Function}, Safari: {is: Function}, Firefox: {is: Function}, ie: Function, ie6: Function, ie7: Function, ie8: Function, ie9: Function, ie10: Function, ie11: Function, chrome: Function, firefox: Function, safari: Function, legacy: Function, mobile: Function, ios: Function, ios_version: Function, android_version: Function, android_version_major: Function, android_version_num: Function, android: Function, iphone: Function, ipad: Function, ipod: Function, hideURLBar: Function}}",
             "class": "Browser"
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 130,
+            "line": 132,
             "description": "iOS に関する情報",
             "itemtype": "property",
             "name": "iOS",
@@ -929,7 +941,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 138,
+            "line": 140,
             "itemtype": "method",
             "name": "is",
             "return": {
@@ -941,7 +953,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 147,
+            "line": 149,
             "itemtype": "method",
             "name": "number",
             "return": {
@@ -953,7 +965,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 156,
+            "line": 158,
             "itemtype": "method",
             "name": "major",
             "return": {
@@ -965,7 +977,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 165,
+            "line": 167,
             "itemtype": "method",
             "name": "version",
             "return": {
@@ -977,7 +989,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 174,
+            "line": 176,
             "itemtype": "method",
             "name": "iPhone",
             "return": {
@@ -989,7 +1001,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 183,
+            "line": 185,
             "itemtype": "method",
             "name": "iPad",
             "return": {
@@ -1001,7 +1013,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 192,
+            "line": 194,
             "itemtype": "method",
             "name": "iPod",
             "return": {
@@ -1013,7 +1025,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 202,
+            "line": 204,
             "description": "Android に関する情報",
             "itemtype": "property",
             "name": "Android",
@@ -1023,7 +1035,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 210,
+            "line": 212,
             "itemtype": "method",
             "name": "is",
             "return": {
@@ -1035,7 +1047,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 219,
+            "line": 221,
             "itemtype": "method",
             "name": "number",
             "return": {
@@ -1047,7 +1059,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 228,
+            "line": 230,
             "itemtype": "method",
             "name": "major",
             "return": {
@@ -1059,7 +1071,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 237,
+            "line": 239,
             "itemtype": "method",
             "name": "version",
             "return": {
@@ -1071,7 +1083,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 246,
+            "line": 248,
             "itemtype": "method",
             "name": "phone",
             "return": {
@@ -1083,7 +1095,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 255,
+            "line": 257,
             "itemtype": "method",
             "name": "tablet",
             "return": {
@@ -1095,7 +1107,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 265,
+            "line": 267,
             "description": "IE に関する情報",
             "itemtype": "property",
             "name": "IE",
@@ -1105,7 +1117,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 273,
+            "line": 275,
             "itemtype": "method",
             "name": "is",
             "return": {
@@ -1117,7 +1129,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 282,
+            "line": 284,
             "itemtype": "method",
             "name": "is6",
             "return": {
@@ -1128,7 +1140,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 290,
+            "line": 292,
             "itemtype": "method",
             "name": "legacy",
             "return": {
@@ -1139,7 +1151,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 298,
+            "line": 300,
             "itemtype": "method",
             "name": "version",
             "return": {
@@ -1151,7 +1163,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 322,
+            "line": 324,
             "description": "Chrome に関する情報",
             "itemtype": "property",
             "name": "Chrome",
@@ -1161,7 +1173,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 330,
+            "line": 332,
             "itemtype": "method",
             "name": "is",
             "return": {
@@ -1173,7 +1185,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 340,
+            "line": 342,
             "description": "Safari に関する情報",
             "itemtype": "property",
             "name": "Safari",
@@ -1183,7 +1195,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 348,
+            "line": 350,
             "itemtype": "method",
             "name": "is",
             "return": {
@@ -1195,7 +1207,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 358,
+            "line": 360,
             "description": "Firefox に関する情報",
             "itemtype": "property",
             "name": "Firefox",
@@ -1205,7 +1217,7 @@
         },
         {
             "file": "src/browser/Browser.js",
-            "line": 366,
+            "line": 368,
             "itemtype": "method",
             "name": "is",
             "return": {
@@ -1214,6 +1226,28 @@
             },
             "static": 1,
             "class": "Browser.Firefox"
+        },
+        {
+            "file": "src/browser/Browser.js",
+            "line": 378,
+            "description": "Touch action に関する情報",
+            "itemtype": "property",
+            "name": "Touch",
+            "type": "Object",
+            "static": 1,
+            "class": "Browser"
+        },
+        {
+            "file": "src/browser/Browser.js",
+            "line": 386,
+            "itemtype": "method",
+            "name": "is",
+            "return": {
+                "description": "Touch 可能か否かを返します",
+                "type": "Boolean"
+            },
+            "static": 1,
+            "class": "Browser.Touch"
         },
         {
             "file": "src/browser/CookieUtil.js",
@@ -3845,91 +3879,95 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:60"
+            "line": " src/browser/Browser.js:62"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:79"
+            "line": " src/browser/Browser.js:81"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:138"
+            "line": " src/browser/Browser.js:140"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:147"
+            "line": " src/browser/Browser.js:149"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:156"
+            "line": " src/browser/Browser.js:158"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:165"
+            "line": " src/browser/Browser.js:167"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:174"
+            "line": " src/browser/Browser.js:176"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:183"
+            "line": " src/browser/Browser.js:185"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:192"
+            "line": " src/browser/Browser.js:194"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:210"
+            "line": " src/browser/Browser.js:212"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:219"
+            "line": " src/browser/Browser.js:221"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:228"
+            "line": " src/browser/Browser.js:230"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:237"
+            "line": " src/browser/Browser.js:239"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:246"
+            "line": " src/browser/Browser.js:248"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:255"
+            "line": " src/browser/Browser.js:257"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:273"
+            "line": " src/browser/Browser.js:275"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:282"
+            "line": " src/browser/Browser.js:284"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:290"
+            "line": " src/browser/Browser.js:292"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:298"
+            "line": " src/browser/Browser.js:300"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:330"
+            "line": " src/browser/Browser.js:332"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:348"
+            "line": " src/browser/Browser.js:350"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/browser/Browser.js:366"
+            "line": " src/browser/Browser.js:368"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " src/browser/Browser.js:386"
         },
         {
             "message": "replacing incorrect tag: returns with return",
@@ -4077,15 +4115,15 @@
         },
         {
             "message": "Missing item type\niOS version detection",
-            "line": " src/browser/Browser.js:60"
+            "line": " src/browser/Browser.js:62"
         },
         {
             "message": "Missing item type\nAndroid version detection",
-            "line": " src/browser/Browser.js:79"
+            "line": " src/browser/Browser.js:81"
         },
         {
             "message": "Missing item type",
-            "line": " src/browser/Browser.js:124"
+            "line": " src/browser/Browser.js:126"
         },
         {
             "message": "Missing item type\nlicense inazumatv.com\nauthor (at)taikiken / htp://inazumatv.com\ndate 2013/12/13 - 13:57\n\nCopyright (c) 2011-2013 inazumatv.com, inc.\n\nDistributed under the terms of the MIT license.\nhttp://www.opensource.org/licenses/mit-license.html\n\nThis notice shall be included in all copies or substantial portions of the Software.",

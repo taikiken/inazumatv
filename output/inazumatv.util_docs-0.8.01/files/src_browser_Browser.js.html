@@ -57,6 +57,8 @@
             
                 <li><a href="../classes/Browser.Safari.html">Browser.Safari</a></li>
             
+                <li><a href="../classes/Browser.Touch.html">Browser.Touch</a></li>
+            
                 <li><a href="../classes/CheckList.html">CheckList</a></li>
             
                 <li><a href="../classes/CookieUtil.html">CookieUtil</a></li>
@@ -185,6 +187,8 @@
         chrome = !!ua.match(/chrome/i),
         firefox = !!ua.match(/firefox/i),
         safari = !!ua.match(/safari/i) &amp;&amp; !chrome,
+
+        touch = typeof window.ontouchstart !== &quot;undefined&quot;,
 
         android_phone = false,
         android_tablet = false,
@@ -521,6 +525,24 @@
              */
             is: function (){
                 return firefox;
+            }
+        },
+        /**
+         * Touch action に関する情報
+         * @for Browser
+         * @property Touch
+         * @type Object
+         * @static
+         */
+        Touch: {
+            /**
+             * @for Browser.Touch
+             * @method is
+             * @returns {boolean} Touch 可能か否かを返します
+             * @static
+             */
+            is: function (){
+                return touch;
             }
         },
         // below for compatibility older version of inazumatv.util
