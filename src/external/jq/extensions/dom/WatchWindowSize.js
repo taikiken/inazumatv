@@ -1,0 +1,246 @@
+/**
+ * license inazumatv.com
+ * author (at)taikiken / htp://inazumatv.com
+ * date 2013/12/17 - 12:17
+ *
+ * Copyright (c) 2011-2013 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+( function ( inazumatv ){
+    "use strict";
+    var _height = 0,
+        _width = 0,
+        _$window,
+        _instance,
+        _fps,
+        _isStart = false,
+
+        EventObject = inazumatv.EventObject,
+        EventDispatcher = inazumatv.EventDispatcher,
+        FPSManager = inazumatv.FPSManager,
+        /**
+         * jQuery alias
+         * @property $
+         * @type {jQuery}
+         * @private
+         * @static
+         */
+        $
+    ;
+
+    // @class WatchWindowSize
+    /**
+     * @class WatchWindowSize
+     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @constructor
+     * @singleton
+     */
+    function WatchWindowSize () {
+
+        if ( typeof _instance !== "undefined" ) {
+
+            return _instance;
+        }
+
+        _fps = new FPSManager( 24 );
+
+        _instance = this;
+        return _instance;
+    }
+
+    /**
+     * WatchWindowSize へ jQuery object を設定。WatchWindowSize を使用する前に実行する必要があります。<br>
+     * ExternalJQ.imports から実行されます。
+     *
+     * @method activate
+     * @param {jQuery} jQuery object
+     * @static
+     */
+    WatchWindowSize.activate = function ( jQuery ){
+        $ = jQuery;
+        _$window = $( window );
+    };
+
+    /**
+     * @method getInstance
+     * @returns {WatchDocumentHeight}
+     * @static
+     */
+    WatchWindowSize.getInstance = function (){
+        if ( typeof _instance === "undefined" ) {
+
+            _instance = new WatchWindowSize();
+        }
+
+        return _instance;
+    };
+
+    /**
+     * window width change Event
+     * @const RESIZE_WIDTH
+     * @type {string}
+     * @static
+     */
+    WatchWindowSize.RESIZE_WIDTH = "watchWindowSizeResizeWidth";
+    /**
+     * window height change Event
+     * @const RESIZE_HEIGHT
+     * @type {string}
+     * @static
+     */
+    WatchWindowSize.RESIZE_HEIGHT = "watchWindowSizeResizeHeight";
+    /**
+     * window width or height change Event
+     * @const RESIZE
+     * @type {string}
+     * @static
+     */
+    WatchWindowSize.RESIZE = "watchWindowSizeResize";
+
+    var p = WatchWindowSize.prototype;
+
+    /**
+     * Adds the specified event listener.
+     * @method addEventListener
+     * @param {String} type The string type of the event.
+     * @param {Function | Object} listener An object with a handleEvent method, or a function that will be called when
+     * the event is dispatched.
+     * @return {Function | Object} Returns the listener for chaining or assignment.
+     **/
+    p.addEventListener = function ( type, listener ){};
+    /**
+     * Removes the specified event listener.
+     * @method removeEventListener
+     * @param {String} type The string type of the event.
+     * @param {Function | Object} listener The listener function or object.
+     **/
+    p.removeEventListener = function (type, listener){};
+    /**
+     * Removes all listeners for the specified type, or all listeners of all types.
+     * @method removeAllEventListeners
+     * @param {String} [type] The string type of the event. If omitted, all listeners for all types will be removed.
+     **/
+    p.removeAllEventListeners = function (type){};
+    /**
+     * Indicates whether there is at least one listener for the specified event type.
+     * @method hasEventListener
+     * @param {String} type The string type of the event.
+     * @return {Boolean} Returns true if there is at least one listener for the specified event.
+     **/
+    p.hasEventListener = function (type){};
+    /**
+     * Dispatches the specified event.
+     * @method dispatchEvent
+     * @param {Object | String} eventObj An object with a "type" property, or a string type. If a string is used,
+     * dispatchEvent will construct a generic event object with "type" and "params" properties.
+     * @param {Object} [target] The object to use as the target property of the event object. This will default to the
+     * dispatching object.
+     * @return {Boolean} Returns true if any listener returned true.
+     **/
+    p.dispatchEvent = function (eventObj, target){};
+
+    EventDispatcher.initialize( p );
+
+    /**
+     * FPSManager instance を取得します
+     * @method getFPSManager
+     * @returns {FPSManager} FPSManager instance を返します
+     */
+    p.getFPSManager = function (){
+        return this._fps;
+    };
+
+    /**
+     * window size を監視し変更があるとイベントを発生させます。
+     * @param {boolean=false} [strong] 強制的にイベントを発生させる default: false
+     * @returns {boolean} true: window size 変更あり
+     */
+    p.update = function ( strong ){
+        var w = _$window.width(),
+            h = _$window.height(),
+
+            isWidthChange = w !== _width,
+            isHeightChange = h !== _height,
+            isChange = isWidthChange || isHeightChange,
+
+            params = {
+                strong: strong,
+                width: w,
+                height: h
+            }
+            ;
+
+        _width = w;
+        _height = h;
+
+        if ( strong ) {
+            // width
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_WIDTH, params ), _instance );
+            // height
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_HEIGHT, params ), _instance );
+            // both
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE, params ), _instance );
+        } else if ( isChange ) {
+            // both
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE, params ), _instance );
+        } else if ( isWidthChange ) {
+            // width
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_WIDTH, params ), _instance );
+        } else if ( isHeightChange ) {
+            // height
+            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_HEIGHT, params ), _instance );
+        }
+
+        return isChange;
+    };
+
+    /**
+     * 強制的にEventを発火
+     * @method fire
+     */
+    p.fire = function (){
+        this.update( true );
+    };
+
+    /**
+     * 監視を開始します
+     * @method start
+     */
+    p.start = function (){
+        this.fire();
+
+        if ( !_isStart ) {
+            _fps.addEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
+            _fps.start();
+            _isStart = true;
+        }
+    };
+
+    /**
+     * 監視を止めます
+     * @method stop
+     */
+    p.stop = function (){
+        _fps.removeEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
+        _fps.stop();
+        _isStart = false;
+    };
+
+    /**
+     * FPSManager.ENTER_FRAME Event Handler<br>
+     * default 24fps
+     *
+     * @method _onEnterFrame
+     * @private
+     */
+    p._onEnterFrame = function (){
+        _instance.update();
+    };
+
+    inazumatv.jq.WatchWindowSize = WatchWindowSize;
+
+}( this.inazumatv ) );
