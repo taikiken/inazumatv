@@ -232,7 +232,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.01"; // injected by build process
+    s.version = /*version*/"0.8.02"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -240,7 +240,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Wed, 18 Dec 2013 03:56:52 GMT"; // injected by build process
+    s.buildDate = /*date*/"Wed, 18 Dec 2013 10:30:14 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -258,54 +258,56 @@ var inazumatv = {};
 ( function ( window, inazumatv ){
     "use strict";
     var navigator = window.navigator,
-        ua = navigator.userAgent,
+        _ua = navigator.userAgent,
 
-        ie6 = !!ua.match(/msie [6]/i),
-        ie7 = !!ua.match(/msie [7]/i),
-        ie8 = !!ua.match(/msie [8]/i),
-        ie9 = !!ua.match(/msie [9]/i),
-        ie10 = !!ua.match(/msie [10]/i),
-        ie11 = !!ua.match(/trident\/[7]/i) && !!ua.match(/rv:[11]/i),
-        ie = !!ua.match(/msie/i) || ie11,
-        legacy = ie6 || ie7|| ie8,
+        _ie6 = !!_ua.match(/msie [6]/i),
+        _ie7 = !!_ua.match(/msie [7]/i),
+        _ie8 = !!_ua.match(/msie [8]/i),
+        _ie9 = !!_ua.match(/msie [9]/i),
+        _ie10 = !!_ua.match(/msie [10]/i),
+        _ie11 = !!_ua.match(/trident\/[7]/i) && !!_ua.match(/rv:[11]/i),
+        _ie = !!_ua.match(/msie/i) || _ie11,
+        _legacy = _ie6 || _ie7|| _ie8,
 
-        ipad = !!ua.match(/ipad/i),
-        ipod = !!ua.match(/ipod/i),
-        iphone = !!ua.match(/iphone/i) && !ipad && !ipod,
-        ios = ipad || ipod || iphone,
+        _ipad = !!_ua.match(/ipad/i),
+        _ipod = !!_ua.match(/ipod/i),
+        _iphone = !!_ua.match(/iphone/i) && !_ipad && !_ipod,
+        _ios = _ipad || _ipod || _iphone,
 
-        android = !!ua.match(/android/i),
-        mobile = ios || android,
+        _android = !!_ua.match(/android/i),
+        _mobile = _ios || _android,
 
-        chrome = !!ua.match(/chrome/i),
-        firefox = !!ua.match(/firefox/i),
-        safari = !!ua.match(/safari/i) && !chrome,
+        _chrome = !!_ua.match(/chrome/i),
+        _firefox = !!_ua.match(/firefox/i),
+        _safari = !!_ua.match(/safari/i) && !_chrome,
 
-        touch = typeof window.ontouchstart !== "undefined",
+        _touch = typeof window.ontouchstart !== "undefined",
 
-        fullScreen = typeof navigator.standalone !== "undefined",
+        _fullScreen = typeof navigator.standalone !== "undefined",
 
-        android_phone = false,
-        android_tablet = false,
-        ios_version = -1,
-        android_version = -1,
-        android_version_major = -1,
-        android_version_num = -1,
+        _android_phone = false,
+        _android_tablet = false,
+        _ios_version = -1,
+        _android_version = -1,
+        _android_version_major = -1,
+        _android_version_num = -1,
+        _safari_version = -1,
 
+        _safari_versions = [ -1, 0, 0 ],
         _ios_versions,
         _android_versions
     ;
 
-    if ( android ) {
-        android_phone = !!ua.match(/mobile/i);
+    if ( _android ) {
+        _android_phone = !!_ua.match(/mobile/i);
 
-        if ( !android_phone ) {
-            android_tablet = true;
+        if ( !_android_phone ) {
+            _android_tablet = true;
         }
     }
     // private
     // iOS version
-    // http://stackoverflow.com/questions/8348139/detect-ios-version-less-than-5-with-javascript
+    // http://stackoverflow.com/questions/8348139/detect-_ios-version-less-than-5-with-javascript
     /**
      * iOS version detection
      * @returns {Array} iOS version 配列 3桁
@@ -313,11 +315,11 @@ var inazumatv = {};
      */
     function _iosVersion () {
         var v, versions = [ -1, 0, 0 ];
-        if ( ios ) {
+        if ( _ios ) {
             // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
             v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
             versions = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
-            ios_version = versions;
+            _ios_version = parseFloat( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
         }
 
         return versions;
@@ -331,20 +333,20 @@ var inazumatv = {};
      * @private
      */
     function _androidVersion () {
-        var ua_lower = ua.toLowerCase(),
+        var ua_lower = _ua.toLowerCase(),
             version,
             versions = [ -1, 0, 0 ];
 
-        if ( android && !firefox ) {
+        if ( _android && !_firefox ) {
 
-            version = ua_lower.substr( ua_lower.indexOf( "android" ) + 8, 5 ).split( "." );
+            version = ua_lower.substr( ua_lower.indexOf( "_android" ) + 8, 5 ).split( "." );
             versions = [
                 parseInt( version[ 0 ], 10 ),
                 parseInt( version[ 1 ], 10 ),
                 parseInt( version[ 2 ], 10 )
             ];
 
-            android_version_major = versions[ 0 ];
+            _android_version_major = versions[ 0 ];
 
             var a_num = versions[ 0 ] + "." + versions[ 1 ];
 
@@ -353,13 +355,34 @@ var inazumatv = {};
                 a_num += versions[ 2 ];
             }
 
-            android_version_num = parseFloat( a_num );
+            _android_version_num = parseFloat( a_num );
 
-            android_version = versions;
+            _android_version = versions;
         }
         return versions;
     }
     _android_versions = _androidVersion();
+
+    // Safari version
+    /**
+     * Safari version detection
+     * @returns {Array} Safari version 配列 2桁~3桁
+     * @private
+     */
+    function _safariVersion () {
+        var v, versions;
+
+        // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
+        v = (navigator.appVersion).match(/Version\/(\d+)\.(\d+)\.?(\d+)?/);
+        versions = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+        _safari_version = parseFloat( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
+        return versions;
+    }
+
+    if ( _safari && !_mobile ) {
+        // not _mobile and _safari
+        _safari_versions = _safariVersion();
+    }
 
     /**
      * Browser 情報を管理します
@@ -372,7 +395,7 @@ var inazumatv = {};
 
     /**
      *
-     * @type {{iOS: {is: Function, number: Function, major: Function, version: Function}, Android: {is: Function, number: Function, major: Function, version: Function}, IE: {is: Function, version: Function}, Chrome: {is: Function}, Safari: {is: Function}, Firefox: {is: Function}, ie: Function, ie6: Function, ie7: Function, ie8: Function, ie9: Function, ie10: Function, ie11: Function, chrome: Function, firefox: Function, safari: Function, legacy: Function, mobile: Function, ios: Function, ios_version: Function, android_version: Function, android_version_major: Function, android_version_num: Function, android: Function, iphone: Function, ipad: Function, ipod: Function, hideURLBar: Function}}
+     * @type {{iOS: {is: Function, number: Function, major: Function, version: Function}, Android: {is: Function, number: Function, major: Function, version: Function}, IE: {is: Function, version: Function}, Chrome: {is: Function}, Safari: {is: Function}, Firefox: {is: Function}, _ie: Function, _ie6: Function, _ie7: Function, _ie8: Function, _ie9: Function, _ie10: Function, _ie11: Function, _chrome: Function, _firefox: Function, _safari: Function, _legacy: Function, _mobile: Function, _ios: Function, _ios_version: Function, _android_version: Function, _android_version_major: Function, _android_version_num: Function, _android: Function, _iphone: Function, _ipad: Function, _ipod: Function, hideURLBar: Function}}
      */
     Browser = {
         // new version
@@ -391,7 +414,7 @@ var inazumatv = {};
              * @static
              */
             is: function (){
-                return ios;
+                return _ios;
             },
             /**
              * @for Browser.iOS
@@ -418,7 +441,7 @@ var inazumatv = {};
              * @static
              */
             version: function (){
-                return parseFloat( _ios_versions[ 0 ] + "." + _ios_versions[ 1 ] + _ios_versions[ 2 ] );
+                return _ios_version;
             },
             /**
              * @for Browser.iOS
@@ -427,7 +450,7 @@ var inazumatv = {};
              * @static
              */
             iPhone: function (){
-                return iphone;
+                return _iphone;
             },
             /**
              * @for Browser.iOS
@@ -436,7 +459,7 @@ var inazumatv = {};
              * @static
              */
             iPad: function (){
-                return ipad;
+                return _ipad;
             },
             /**
              * @for Browser.iOS
@@ -445,16 +468,16 @@ var inazumatv = {};
              * @static
              */
             iPod: function (){
-                return ipod;
+                return _ipod;
             },
             /**
              * @for Browser.iOS
-             * @method fullScreen
+             * @method _fullScreen
              * @returns {boolean} standalone mode か否かを返します
              * @static
              */
             fullScreen: function (){
-                return fullScreen;
+                return _fullScreen;
             }
         },
         /**
@@ -472,7 +495,7 @@ var inazumatv = {};
              * @static
              */
             is: function (){
-                return android;
+                return _android;
             },
             /**
              * @for Browser.Android
@@ -490,7 +513,7 @@ var inazumatv = {};
              * @static
              */
             major: function (){
-                return android_version_major;
+                return _android_version_major;
             },
             /**
              * @for Browser.Android
@@ -499,7 +522,7 @@ var inazumatv = {};
              * @static
              */
             version: function (){
-                return android_version_num;
+                return _android_version_num;
             },
             /**
              * @for Browser.Android
@@ -508,7 +531,7 @@ var inazumatv = {};
              * @static
              */
             phone: function (){
-                return android_phone;
+                return _android_phone;
             },
             /**
              * @for Browser.Android
@@ -517,7 +540,7 @@ var inazumatv = {};
              * @static
              */
             tablet: function (){
-                return android_tablet;
+                return _android_tablet;
             }
         },
         /**
@@ -535,7 +558,7 @@ var inazumatv = {};
              * @static
              */
             is: function (){
-                return ie;
+                return _ie;
             },
             /**
              * @for Browser.IE
@@ -543,15 +566,15 @@ var inazumatv = {};
              * @returns {boolean} IE 6 か否かを返します
              */
             is6: function (){
-                return ie6;
+                return _ie6;
             },
             /**
              * @for Browser.IE
-             * @method legacy
+             * @method _legacy
              * @returns {boolean} IE 6 or 7 or 8 か否かを返します
              */
             legacy: function (){
-                return legacy;
+                return _legacy;
             },
             /**
              * @for Browser.IE
@@ -561,17 +584,17 @@ var inazumatv = {};
              */
             version: function (){
                 var v = -1;
-                if ( ie11 ) {
+                if ( _ie11 ) {
                     v = 11;
-                } else if ( ie10 ) {
+                } else if ( _ie10 ) {
                     v = 10;
-                } else if ( ie9 ) {
+                } else if ( _ie9 ) {
                     v = 9;
-                } else if ( ie8 ) {
+                } else if ( _ie8 ) {
                     v = 8;
-                } else if ( ie7 ) {
+                } else if ( _ie7 ) {
                     v = 7;
-                } else if ( ie6 ) {
+                } else if ( _ie6 ) {
                     v = 6;
                 }
                 return v;
@@ -592,7 +615,7 @@ var inazumatv = {};
              * @static
              */
             is: function (){
-                return chrome;
+                return _chrome;
             }
         },
         /**
@@ -610,7 +633,34 @@ var inazumatv = {};
              * @static
              */
             is: function (){
-                return safari;
+                return _safari;
+            },
+            /**
+             * @for Browser.Safari
+             * @method number
+             * @returns {Array} Safari version number を返します [ major, minor, build ]
+             * @static
+             */
+            number: function (){
+                return _safari_versions;
+            },
+            /**
+             * @for Browser.Safari
+             * @method major
+             * @returns {Number} Safari major version number を返します
+             * @static
+             */
+            major: function (){
+                return _safari_versions[ 0 ];
+            },
+            /**
+             * @for Browser.Safari
+             * @method version
+             * @returns {Number} Safari version を返します 9.99
+             * @static
+             */
+            version: function (){
+                return _safari_version;
             }
         },
         /**
@@ -628,7 +678,7 @@ var inazumatv = {};
              * @static
              */
             is: function (){
-                return firefox;
+                return _firefox;
             }
         },
         /**
@@ -646,13 +696,13 @@ var inazumatv = {};
              * @static
              */
             is: function (){
-                return touch;
+                return _touch;
             }
         },
         /**
          * iPhone, Android phone. URL bar 下へスクロールさせます。<br>
-         * window.onload 後に実行します。
-         * iOS 7 では動作しません。
+         * window.onload 後に実行します。<br>
+         * iOS 7, Android, iOS Chrome では動作しません。
          *
          *     function onLoad () {
          *          window.removeEventListener( "load", onLoad );
@@ -668,67 +718,67 @@ var inazumatv = {};
         },
         // below for compatibility older version of inazumatv.util
         ie: function (){
-            return ie;
+            return _ie;
         },
         ie6: function (){
-            return ie6;
+            return _ie6;
         },
         ie7: function (){
-            return ie7;
+            return _ie7;
         },
         ie8: function (){
-            return ie8;
+            return _ie8;
         },
         ie9: function (){
-            return ie9;
+            return _ie9;
         },
         ie10: function (){
-            return ie10;
+            return _ie10;
         },
         ie11: function (){
-            return ie11;
+            return _ie11;
         },
         chrome: function (){
-            return chrome;
+            return _chrome;
         },
         firefox: function (){
-            return firefox;
+            return _firefox;
         },
         safari: function (){
-            return safari;
+            return _safari;
         },
         legacy: function (){
-            return legacy;
+            return _legacy;
         },
         mobile: function() {
-            return mobile;
+            return _mobile;
         },
         ios: function (){
-            return ios;
+            return _ios;
         },
         ios_version: function (){
-            return ios_version;
+            return _ios_version;
         },
         android_version: function (){
-            return android_version;
+            return _android_version;
         },
         android_version_major: function (){
-            return android_version_major;
+            return _android_version_major;
         },
         android_version_num: function (){
-            return android_version_num;
+            return _android_version_num;
         },
         android: function (){
-            return android;
+            return _android;
         },
         iphone: function (){
-            return iphone;
+            return _iphone;
         },
         ipad: function (){
-            return ipad;
+            return _ipad;
         },
         ipod: function (){
-            return ipod;
+            return _ipod;
         }
     };
 
