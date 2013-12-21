@@ -232,7 +232,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.02"; // injected by build process
+    s.version = /*version*/"0.8.03"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -240,7 +240,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Wed, 18 Dec 2013 10:30:14 GMT"; // injected by build process
+    s.buildDate = /*date*/"Fri, 20 Dec 2013 10:41:11 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -2051,8 +2051,7 @@ var inazumatv = {};
      * <h4>Example</h4>
      * [1]
      * update()の戻り値で判定
-     * <br>
-     * make instance
+     * <br>make instance
      *
      *      var polling1 = new PollingManager( 1000 );
      *      polling1.start();
@@ -2071,8 +2070,7 @@ var inazumatv = {};
      *
      * [2]
      * addEventListener を使う別の方法
-     * <br>
-     * make instance
+     * <br>make instance
      *
      *      var polling1 = new PollingManager( 1000 );
      *      polling1.start();
@@ -2191,7 +2189,17 @@ var inazumatv = {};
     /**
      * FPSを管理します
      *
+     *      // 1.auto
      *      var fps24 = new FPSManager( 24 );
+     *
+     *      function eventHandler () {
+     *          // do something
+     *      }
+     *      fps24.addEventListener( FPSManager.FPS_FRAME, eventHandler );
+     *      fps24.start();
+     *
+     *      // 2.manual
+     *      var fps24 = new FPSManager( 24, true );
      *
      *      function eventHandler () {
      *      }
@@ -2199,21 +2207,22 @@ var inazumatv = {};
      *
      *      function loop () {
      *          requestAnimationFrame( loop );
-     *          fps24.update();
+     *          if ( fps24.update() ) {
+     *              // do something
+     *          }
      *      }
      *
      *      loop();
-     *      fps24.start();
+     *      ps24.start();
      *
      * @class FPSManager
      * @param {int} fps frame rate 指定（整数）
+     * @param {Boolean} [manual] abort auto start, default: false
      * @constructor
      */
-    function FPSManager ( fps ) {
-//        this._startTime = 0;
-//        this._polling = 1000 / fps;
-//        this._fps = fps;
+    function FPSManager ( fps, manual ) {
         this.setFPS( fps );
+        this._manualStart = !!manual;
         this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
         this._loop = LoopManager.getInstance();
         this._boundEnterFrame = this._onEnterFrame.bind( this );
@@ -2245,8 +2254,12 @@ var inazumatv = {};
      * @method start
      */
     p.start = function (){
-        this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-        this._loop.start();
+        if ( !this._manualStart ) {
+            // no manual
+            this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+            this._loop.start();
+        }
+
         this._startTime = new Date().getTime();
     };
 
@@ -2255,7 +2268,10 @@ var inazumatv = {};
      * @method stop
      */
     p.stop = function (){
-        this._loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+        if ( !this._manualStart ) {
+            // no manual
+            this._loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+        }
         this._polling = Number.MAX_VALUE;
     };
 

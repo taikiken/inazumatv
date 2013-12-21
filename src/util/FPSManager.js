@@ -23,7 +23,17 @@
     /**
      * FPSを管理します
      *
+     *      // 1.auto
      *      var fps24 = new FPSManager( 24 );
+     *
+     *      function eventHandler () {
+     *          // do something
+     *      }
+     *      fps24.addEventListener( FPSManager.FPS_FRAME, eventHandler );
+     *      fps24.start();
+     *
+     *      // 2.manual
+     *      var fps24 = new FPSManager( 24, true );
      *
      *      function eventHandler () {
      *      }
@@ -31,21 +41,22 @@
      *
      *      function loop () {
      *          requestAnimationFrame( loop );
-     *          fps24.update();
+     *          if ( fps24.update() ) {
+     *              // do something
+     *          }
      *      }
      *
      *      loop();
-     *      fps24.start();
+     *      ps24.start();
      *
      * @class FPSManager
      * @param {int} fps frame rate 指定（整数）
+     * @param {Boolean} [manual] abort auto start, default: false
      * @constructor
      */
-    function FPSManager ( fps ) {
-//        this._startTime = 0;
-//        this._polling = 1000 / fps;
-//        this._fps = fps;
+    function FPSManager ( fps, manual ) {
         this.setFPS( fps );
+        this._manualStart = !!manual;
         this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
         this._loop = LoopManager.getInstance();
         this._boundEnterFrame = this._onEnterFrame.bind( this );
@@ -77,8 +88,12 @@
      * @method start
      */
     p.start = function (){
-        this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-        this._loop.start();
+        if ( !this._manualStart ) {
+            // no manual
+            this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+            this._loop.start();
+        }
+
         this._startTime = new Date().getTime();
     };
 
@@ -87,7 +102,10 @@
      * @method stop
      */
     p.stop = function (){
-        this._loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+        if ( !this._manualStart ) {
+            // no manual
+            this._loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+        }
         this._polling = Number.MAX_VALUE;
     };
 

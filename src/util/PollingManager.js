@@ -23,8 +23,7 @@
      * <h4>Example</h4>
      * [1]
      * update()の戻り値で判定
-     * <br>
-     * make instance
+     * <br>make instance
      *
      *      var polling1 = new PollingManager( 1000 );
      *      polling1.start();
@@ -43,8 +42,7 @@
      *
      * [2]
      * addEventListener を使う別の方法
-     * <br>
-     * make instance
+     * <br>make instance
      *
      *      var polling1 = new PollingManager( 1000 );
      *      polling1.start();
