@@ -38,7 +38,7 @@
 
         _touch = typeof window.ontouchstart !== "undefined",
 
-        _fullScreen = typeof navigator.standalone !== "undefined",
+        _fullScreen = typeof navigator.standalone !== "undefined" ? navigator.standalone : false,
 
         _android_phone = false,
         _android_tablet = false,
@@ -50,7 +50,9 @@
 
         _safari_versions = [ -1, 0, 0 ],
         _ios_versions,
-        _android_versions
+        _android_versions,
+
+        _canvas = !!window.CanvasRenderingContext2D
     ;
 
     if ( _android ) {
@@ -127,7 +129,6 @@
     function _safariVersion () {
         var v, versions;
 
-        // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
         v = (navigator.appVersion).match(/Version\/(\d+)\.(\d+)\.?(\d+)?/);
         versions = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
         _safari_version = parseFloat( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
@@ -227,7 +228,7 @@
             },
             /**
              * @for Browser.iOS
-             * @method _fullScreen
+             * @method fullScreen
              * @returns {boolean} standalone mode か否かを返します
              * @static
              */
@@ -322,6 +323,46 @@
              */
             is6: function (){
                 return _ie6;
+            },
+            /**
+             * @for Browser.IE
+             * @method is7
+             * @returns {boolean} IE 7 か否かを返します
+             */
+            is7: function (){
+                return _ie7;
+            },
+            /**
+             * @for Browser.IE
+             * @method is8
+             * @returns {boolean} IE 8 か否かを返します
+             */
+            is8: function (){
+                return _ie8;
+            },
+            /**
+             * @for Browser.IE
+             * @method is9
+             * @returns {boolean} IE 9 か否かを返します
+             */
+            is9: function (){
+                return _ie9;
+            },
+            /**
+             * @for Browser.IE
+             * @method is10
+             * @returns {boolean} IE 10 か否かを返します
+             */
+            is10: function (){
+                return _ie10;
+            },
+            /**
+             * @for Browser.IE
+             * @method is11
+             * @returns {boolean} IE 11 か否かを返します
+             */
+            is11: function (){
+                return _ie11;
             },
             /**
              * @for Browser.IE
@@ -471,6 +512,41 @@
         hideURLBar : function (){
             setTimeout( function (){ scrollTo( 0, 1 ); }, 0);
         },
+        /**
+         * Canvas に関する情報
+         * @for Browser
+         * @property Canvas
+         * @type Object
+         * @static
+         */
+        Canvas: {
+            /**
+             * @for Browser.Canvas
+             * @method is
+             * @returns {boolean} canvas 2D が使用可能か否かを返します
+             * @static
+             */
+            is: function (){
+                return _canvas;
+            },
+            /**
+             * @for Browser.Canvas
+             * @method webgl
+             * @returns {boolean} canvas webgl 使用可能か否かを返します
+             * @static
+             */
+            webgl: function (){
+                if ( !_canvas ) {
+                    return false;
+                }
+
+                try {
+                    return !!window.WebGLRenderingContext && !!document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
+                } catch( e ) {
+                    return false;
+                }
+            }
+        },
         // below for compatibility older version of inazumatv.util
         ie: function (){
             return _ie;
@@ -540,4 +616,4 @@
     inazumatv.Browser = Browser;
     // below for compatibility older version of inazumatv.util
     inazumatv.browser = Browser;
-}( window, this.inazumatv ) );
+}( window, this.inazumatv || {} ) );
