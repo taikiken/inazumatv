@@ -1,6 +1,6 @@
 {
   "name": "inazumatv.util",
-  "version": "0.8.07",
+  "version": "0.8.7",
   "description": "inazumatv.com JavaScript core library",
   "main": "inazumatv.js",
   "dependencies": {
