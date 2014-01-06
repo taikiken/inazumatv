@@ -232,7 +232,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.06"; // injected by build process
+    s.version = /*version*/"0.8.07"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -240,7 +240,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Sat, 04 Jan 2014 05:18:15 GMT"; // injected by build process
+    s.buildDate = /*date*/"Mon, 06 Jan 2014 04:19:58 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**

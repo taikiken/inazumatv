@@ -10,14 +10,12 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         // Default values
-//        version: '0.8.01',
         name: 'inazumatv.util',
         docsZip: "<%= pkg.name %>_docs-<%= version %>.zip",
 
         // Setup doc names / paths.
         docsName: '<%= pkg.name %>_docs-<%= version %>',
-//        docsZip: "<%= docsName %>.zip",
-        docsFolder: "./output/<%= docsName %>/",
+        docsFolder: "../_output/<%= docsName %>/",
 
         // Setup Uglify for JS minification.
         uglify: {
@@ -32,7 +30,7 @@ module.exports = function(grunt) {
             },
             build: {
                 files: {
-                    'output/<%= pkg.name.toLowerCase() %>-<%= version %>.min.js': getConfigValue('inazumatv_util_source')
+                    '../_output/<%= pkg.name.toLowerCase() %>-<%= version %>.min.js': getConfigValue('inazumatv_util_source')
                 }
             }
         },
@@ -43,7 +41,7 @@ module.exports = function(grunt) {
             },
             build: {
                 files: {
-                    'output/<%= pkg.name.toLowerCase() %>-<%= version %>.js': getCombinedSource()
+                    '../_output/<%= pkg.name.toLowerCase() %>-<%= version %>.js': getCombinedSource()
                 }
             }
         },
@@ -57,7 +55,7 @@ module.exports = function(grunt) {
                 url: '<%= pkg.url %>',
                 logo: '<%= pkg.logo %>',
                 options: {
-                    paths: ['./src/'],
+                    paths: ['../src/'],
                     outdir: '<%= docsFolder %>',
                     linkNatives: true,
                     attributesEmit: true,
@@ -71,7 +69,7 @@ module.exports = function(grunt) {
             build: {
                 options: {
                     mode:'zip',
-                    archive:'output/<%= docsZip %>'
+                    archive:'../_output/<%= docsZip %>'
                 },
                 files: [
                     {expand:true, src:'**', cwd:'<%= docsFolder %>'}
@@ -82,7 +80,7 @@ module.exports = function(grunt) {
         copy: {
             docsZip: {
                 files: [
-                    {expand: true, cwd:'./output/', src:'<%= docsZip %>', dest:'./docs/'}
+                    {expand: true, cwd:'../_output/', src:'<%= docsZip %>', dest:'../docs/'}
                 ]
             },
             docsSite: {
@@ -92,14 +90,14 @@ module.exports = function(grunt) {
             },
             src: {
                 files: [
-                    {expand: true, cwd:'./output/', src: '*.js', dest: './libs/'}
+                    {expand: true, cwd:'../_output/', src: '*.js', dest: '../libs/'}
                 ]
             }
         },
 
         updateversion: {
             inazumatv: {
-                file: './src/version.js',
+                file: '../src/version.js',
                 version: '<%= version %>'
             }
         }
@@ -172,7 +170,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadTasks('./output/tasks/');
+    grunt.loadTasks('./tasks/');
 
     /**
      * Build the docs using YUIdocs.

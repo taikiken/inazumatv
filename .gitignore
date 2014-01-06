@@ -2,5 +2,5 @@
 .idea
 *.idea
 node_modules
-output
+_output
 out
