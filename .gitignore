@@ -1,7 +1,6 @@
-out
 *.iml
 .idea
 *.idea
-inazumatv.util_docs*
 node_modules
 output
+out
