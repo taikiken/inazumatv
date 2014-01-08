@@ -25,6 +25,6 @@
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Mon, 06 Jan 2014 04:32:12 GMT"; // injected by build process
+    s.buildDate = /*date*/"Wed, 08 Jan 2014 03:29:50 GMT"; // injected by build process
 
 })( this.inazumatv );

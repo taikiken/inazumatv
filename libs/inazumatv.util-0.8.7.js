@@ -232,7 +232,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.07"; // injected by build process
+    s.version = /*version*/"0.8.7"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -240,7 +240,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Mon, 06 Jan 2014 04:31:40 GMT"; // injected by build process
+    s.buildDate = /*date*/"Mon, 06 Jan 2014 04:32:12 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -755,7 +755,7 @@ var inazumatv = {};
          * @method hideURLBar
          */
         hideURLBar : function (){
-            setTimeout( function (){ scrollTo( 0, 1 ); }, 0);
+            setTimeout( function (){ scrollBy( 0, 1 ); }, 0);
         },
         /**
          * Canvas に関する情報

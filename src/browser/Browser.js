@@ -510,7 +510,7 @@
          * @method hideURLBar
          */
         hideURLBar : function (){
-            setTimeout( function (){ scrollTo( 0, 1 ); }, 0);
+            setTimeout( function (){ scrollBy( 0, 1 ); }, 0);
         },
         /**
          * Canvas に関する情報
