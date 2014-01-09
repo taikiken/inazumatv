@@ -28,7 +28,7 @@
  */
 /**
  * license inazumatv.com
- * author (at)taikiken / htp://inazumatv.com
+ * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 15:21
  *
  * Copyright (c) 2011-2013 inazumatv.com, inc.
