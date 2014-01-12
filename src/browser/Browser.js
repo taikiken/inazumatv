@@ -496,21 +496,39 @@
             }
         },
         /**
-         * iPhone, Android phone. URL bar 下へスクロールさせます。<br>
-         * window.onload 後に実行します。<br>
-         * iOS 7, Android, iOS Chrome では動作しません。
-         *
-         *     function onLoad () {
-         *          window.removeEventListener( "load", onLoad );
-         *          Browser.hideURLBar();
-         *     }
-         *     window.addEventListener( "load", onLoad, false );
-         *
+         * Mobile action に関する情報
          * @for Browser
-         * @method hideURLBar
+         * @property Mobile
+         * @type Object
+         * @static
          */
-        hideURLBar : function (){
-            setTimeout( function (){ scrollBy( 0, 1 ); }, 0);
+        Mobile: {
+            /**
+             * @for Browser.Mobile
+             * @method is
+             * @returns {boolean} mobile(smart phone) か否かを返します
+             * @static
+             */
+            is: function (){
+                return _touch;
+            },
+            /**
+             * iPhone, Android phone. URL bar 下へスクロールさせます。<br>
+             * window.onload 後に実行します。<br>
+             * iOS 7 mobile Safari, Android Chrome and iOS Chrome では動作しません。
+             *
+             *     function onLoad () {
+             *          window.removeEventListener( "load", onLoad );
+             *          Browser.Mobile.hideURLBar();
+             *     }
+             *     window.addEventListener( "load", onLoad, false );
+             *
+             * @for Browser
+             * @method hideURLBar
+             */
+            hideURLBar : function (){
+                setTimeout( function (){ scrollBy( 0, 1 ); }, 0);
+            },
         },
         /**
          * Canvas に関する情報

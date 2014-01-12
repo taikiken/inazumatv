@@ -71,7 +71,7 @@
      */
     p.listen = function (){
         this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        this._watch.addEventListener( WatchWindowSize.RESIZE_HEIGHT, this._boundOnResize );
         this._watch.start();
     };
 
@@ -80,7 +80,7 @@
      * @method abort
      */
     p.abort = function (){
-        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        this._watch.removeEventListener( WatchWindowSize.RESIZE_HEIGHT, this._boundOnResize );
     };
 
     /**
