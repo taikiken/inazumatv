@@ -510,7 +510,7 @@
              * @static
              */
             is: function (){
-                return _touch;
+                return _mobile;
             },
             /**
              * iPhone, Android phone. URL bar 下へスクロールさせます。<br>
@@ -528,7 +528,7 @@
              */
             hideURLBar : function (){
                 setTimeout( function (){ scrollBy( 0, 1 ); }, 0);
-            },
+            }
         },
         /**
          * Canvas に関する情報

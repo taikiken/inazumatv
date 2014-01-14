@@ -240,7 +240,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Sat, 11 Jan 2014 05:50:59 GMT"; // injected by build process
+    s.buildDate = /*date*/"Sat, 11 Jan 2014 05:53:11 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -755,7 +755,7 @@ var inazumatv = {};
              * @static
              */
             is: function (){
-                return _touch;
+                return _mobile;
             },
             /**
              * iPhone, Android phone. URL bar 下へスクロールさせます。<br>
@@ -773,7 +773,7 @@ var inazumatv = {};
              */
             hideURLBar : function (){
                 setTimeout( function (){ scrollBy( 0, 1 ); }, 0);
-            },
+            }
         },
         /**
          * Canvas に関する情報
@@ -4515,7 +4515,7 @@ var inazumatv = {};
         var params = eventObject.params[ 0 ],
             h = params.height
         ;
-        
+
         this._$element.height( Math.max( h, this._minHeight ) );
     };
 
