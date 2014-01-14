@@ -523,8 +523,9 @@
              *     }
              *     window.addEventListener( "load", onLoad, false );
              *
-             * @for Browser
+             * @for Browser.Mobile
              * @method hideURLBar
+             * @static
              */
             hideURLBar : function (){
                 setTimeout( function (){ scrollBy( 0, 1 ); }, 0);

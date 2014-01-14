@@ -16,17 +16,12 @@
     inazumatv.jq = inazumatv.jq || {};
     var ExternalJQ = inazumatv.jq.ExternalJQ  = inazumatv.jq.ExternalJQ || {};
 
-//    /**
-//     * @class ExternalJQ
-//     * @constructor
-//     * @static
-//     */
-//    function ExternalJQ (){
-//        throw "ExternalJQ cannot be instantiated";
-//    }
-
     /**
-     * jQuery Object 設定します
+     * jQuery Object 設定します。<br>
+     * imports, exports を行う前に実行します。
+     *
+     *     inazumatv.jq.ExternalJQ.save( jQuery );
+     *
      * @for jq.ExternalJQ
      * @method save
      * @param {jQuery} jQuery global jQuery Object
@@ -43,6 +38,10 @@
     };
 
     /**
+     * jQuery Object を取得します。
+     *
+     *     var $ = inazumatv.jq.ExternalJQ.exports();
+     *
      * @for jq.ExternalJQ
      * @method exports
      * @returns {jQuery} jQuery Object
@@ -53,7 +52,14 @@
     };
 
     /**
-     * jQuery plugin を活性化させます
+     * jQuery plugin を活性化させます。<br>
+     *
+     *     inazumatv.jq.ExternalJQ.save( jQuery );
+     *     inazumatv.jq.ExternalJQ.install( "Easing" );
+     *
+     *     // あるいは
+     *     inazumatv.jq.ExternalJQ.install( "Easing", jQuery );
+     *
      * @for jq.ExternalJQ
      * @method install
      * @param {String} pluginName プラグイン名称
@@ -69,7 +75,14 @@
     };
 
     /**
-     * 拡張機能を取得します
+     * 拡張機能を取得します。<br>
+     *
+     *     inazumatv.jq.ExternalJQ.save( jQuery );
+     *     var FitWindowHeight = inazumatv.jq.ExternalJQ.imports( "FitWindowHeight" );
+     *
+     *     // あるいは
+     *     var FitWindowHeight = inazumatv.jq.ExternalJQ.imports( "FitWindowHeight", jQuery );
+     *
      * @for jq.ExternalJQ
      * @method imports
      * @param {String} extensionName 拡張機能名称(Class名)
@@ -93,31 +106,33 @@
      *
      *      ExternalJQ.save( jQuery )
      *
+     *      // preventDefault() && topPropagation()
+     *      function eventHandler ( e ) {
+     *          inazumatv.eventStop( e );
+     *      }
+     *
+     *      // preventDefault()
+     *      function eventHandler ( e ) {
+     *          inazumatv.eventStop( e, false );
+     *      }
+     *
      * @for inazumatv
      * @method eventStop
      * @param {Event} e jQuery event instance
-     * @param {Boolean} [propagation] optional, default true
+     * @param {*\Boolean} [propagation] optional, default true
      */
     function eventStop ( e, propagation ){
         if ( typeof propagation === 'undefined' || propagation === null ) {
-            // if description
+            // undefined or null
             propagation = true;
         }
 
         e.preventDefault();
+
         if ( propagation ) {
             e.stopPropagation();
         }
     }
-
-//    function _checkArguments ( jQuery ) {
-//        if ( typeof jQuery === "undefined" || jQuery === null ) {
-//            // jQuery defined
-//            throw "set first global jQuery object";
-//        }
-//
-//        return true;
-//    }
 
     inazumatv.jq.ExternalJQ = ExternalJQ;
 
