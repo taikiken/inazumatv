@@ -212,6 +212,18 @@ var inazumatv = {};
         return Math.random() * (max - min) + min;
     };
 
+    /**
+     * Top Level
+     * 配列内の最大数値を返す
+     * @for inazumatv
+     * @method maxValue
+     * @param {Array} arr 検証対象の配列、内部は全部数値
+     * @returns {number}
+     */
+    inazumatv.maxValue = function ( arr ){
+        return Math.max.apply(null, arr);
+    };
+
 }( inazumatv ) );
 /**
  * @module inazumatv
@@ -240,7 +252,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Tue, 14 Jan 2014 03:50:35 GMT"; // injected by build process
+    s.buildDate = /*date*/"Tue, 14 Jan 2014 04:58:07 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -2707,15 +2719,6 @@ var inazumatv = {};
 
     inazumatv.jq = inazumatv.jq || {};
     var ExternalJQ = inazumatv.jq.ExternalJQ  = inazumatv.jq.ExternalJQ || {};
-
-//    /**
-//     * @class ExternalJQ
-//     * @constructor
-//     * @static
-//     */
-//    function ExternalJQ (){
-//        throw "ExternalJQ cannot be instantiated";
-//    }
 
     /**
      * jQuery Object 設定します。<br>

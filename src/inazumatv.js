@@ -212,4 +212,16 @@ var inazumatv = {};
         return Math.random() * (max - min) + min;
     };
 
+    /**
+     * Top Level
+     * 配列内の最大数値を返す
+     * @for inazumatv
+     * @method maxValue
+     * @param {Array} arr 検証対象の配列、内部は全部数値
+     * @returns {number}
+     */
+    inazumatv.maxValue = function ( arr ){
+        return Math.max.apply(null, arr);
+    };
+
 }( inazumatv ) );
