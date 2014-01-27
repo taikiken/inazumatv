@@ -27,16 +27,22 @@
      * @class FitWindowHeight
      * @param {jQuery} $element jQuery object, 対象エレメント
      * @param {Number} [minHeight] default 0
+     * @param {Number} [offsetTop] default 0
      * @constructor
      */
-    function FitWindowHeight ( $element, minHeight ) {
+    function FitWindowHeight ( $element, minHeight, offsetTop ) {
         if ( !isNumeric( minHeight ) ) {
             minHeight = 0;
+        }
+
+        if ( !isNumeric( offsetTop ) ) {
+            offsetTop = 0;
         }
 
         this._watch = WatchWindowSize.getInstance();
         this._$element = $element;
         this._minHeight = minHeight;
+        this._offsetTop = offsetTop;
 
         this._elementHeight = parseInt( $element.height(), 10 );
     }
@@ -71,7 +77,7 @@
      */
     p.listen = function (){
         this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE_HEIGHT, this._boundOnResize );
+        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
         this._watch.start();
     };
 
@@ -80,7 +86,7 @@
      * @method abort
      */
     p.abort = function (){
-        this._watch.removeEventListener( WatchWindowSize.RESIZE_HEIGHT, this._boundOnResize );
+        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
     };
 
     /**
@@ -104,7 +110,7 @@
             h = params.height
         ;
 
-        this._$element.height( Math.max( h, this._minHeight ) );
+        this._$element.height( Math.max( h, this._minHeight ) - this._offsetTop );
     };
 
     inazumatv.jq.FitWindowHeight = FitWindowHeight;

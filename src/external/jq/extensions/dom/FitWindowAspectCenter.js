@@ -24,55 +24,46 @@
         $;
 
     /**
+     * window幅に比率を保ち拡大縮小し、常に中央を表示します。
      *
-     * @class FitWindowAspect
+     * @class FitWindowAspectCenter
      * @param {jQuery} $element jQuery object, 対象エレメント
      * @param {Number} [minWidth] default 0
      * @param {Number} [minHeight] default 0
-     * @param {Number} [offsetLeft] default 0
-     * @param {Number} [offsetTop] default 0
      * @constructor
      */
-    function FitWindowAspect ( $element, minWidth, minHeight, offsetLeft, offsetTop ) {
+    function FitWindowAspectCenter ( $element, minWidth, minHeight ) {
         if ( !isNumeric( minWidth ) ) {
             minWidth = 0;
         }
         if ( !isNumeric( minHeight ) ) {
             minHeight = 0;
         }
-        if ( !isNumeric( offsetLeft ) ) {
-            offsetLeft = 0;
-        }
-        if ( !isNumeric( offsetTop ) ) {
-            offsetTop = 0;
-        }
 
         this._watch = WatchWindowSize.getInstance();
         this._$element = $element;
         this._minWidth = minWidth;
         this._minHeight = minHeight;
-        this._offsetLeft = offsetLeft;
-        this._offsetTop = offsetTop;
 
         this._elementWidth = parseInt( $element.width(), 10 );
         this._elementHeight = parseInt( $element.height(), 10 );
     }
 
     /**
-     * FitWindowAspect へ jQuery object を設定。FitWindowAspect を使用する前に実行する必要があります。<br>
+     * FitWindowAspectCenter へ jQuery object を設定。FitWindowAspectCenter を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
      * @method activate
      * @param {jQuery} jQuery object
      * @static
      */
-    FitWindowAspect.activate = function ( jQuery ){
+    FitWindowAspectCenter.activate = function ( jQuery ){
         $ = jQuery;
         WatchWindowSize = inazumatv.jq.WatchWindowSize;
         WatchWindowSize.activate( jQuery );
     };
 
-    var p = FitWindowAspect.prototype;
+    var p = FitWindowAspectCenter.prototype;
 
     /**
      *
@@ -151,20 +142,29 @@
         var ew = this._elementWidth,
             eh = this._elementHeight,
             params = eventObject.params[ 0 ],
-            w = params.width - this._offsetLeft,
-            h = params.height - this._offsetTop,
-            aw,
-            ah,
+            window_w = Math.ceil( params.width ),
+            window_h = Math.ceil( params.height ),
+            w,
+            h,
+            aspect_w,
+            aspect_h,
             aspect;
 
-        w = Math.max( w, this._minWidth );
-        h = Math.max( h, this._minHeight );
-        aw = w / ew;
-        ah = h / eh;
-        aspect = Math.max( aw, ah );
+        w = Math.max( window_w, this._minWidth );
+        h = Math.max( window_h, this._minHeight );
+        aspect_w = w / ew;
+        aspect_h = h / eh;
+        aspect = Math.max( aspect_w, aspect_h );
 
-        this._$element.width( Math.ceil( ew * aspect ) ).height( Math.ceil( eh * aspect ) );
+        // 計算後のwidth, height
+        var after_w = Math.ceil( ew * aspect ),
+            after_h = Math.ceil( eh * aspect ),
+            sub_w = (window_w - after_w) * 0.5,
+            sub_h = (window_h - after_h) * 0.5;
+
+        this._$element.width( after_w ).height( after_h ).css( { left: sub_w + "px", top: sub_h + "px" } );
     };
 
-    inazumatv.jq.FitWindowAspect = FitWindowAspect;
+    inazumatv.jq.FitWindowAspectCenter = FitWindowAspectCenter;
+
 }( this.inazumatv ) );

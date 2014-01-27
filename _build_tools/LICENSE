@@ -1,8 +1,9 @@
 /**
  * @license inazumatv.com
  * @author (at)taikiken / http://inazumatv.com
+ * hosted on https://github.com/taikiken/inazumatv
  *
- * Copyright (c) 2011-2013 Hiroaki Okubo aka taikiken.
+ * Copyright (c) 2011-2014 Hiroaki Okubo aka taikiken.
  *
  * Distributed under the terms of the MIT license.
  * http://www.opensource.org/licenses/mit-license.html
@@ -13,7 +14,7 @@
  * thanks Yasunobu Ikeda aka clockMaker / http://clockmaker.jp/
  * and MDN / https://developer.mozilla.org/
  *
- * EventDispatcher
+ * EventDispatcher from CreateJS
  * Visit http://createjs.com/ for documentation, updates and examples.
  *
  * Copyright (c) 2010 gskinner.com, inc.
@@ -22,6 +23,8 @@
  * Visit http://clockmaker.jp/ for documentation, updates and examples.
  *
  * Copyright (c) 2010 Yasunobu Ikeda
+ *
+ * EventDispatcher and LoadManager, ShuffleText are modified by taikiken
  *
  * Smooth Scroll - v1.4.11 - 2013-07-15
  * https://github.com/kswedberg/jquery-smooth-scroll

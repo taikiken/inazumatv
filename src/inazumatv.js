@@ -164,7 +164,7 @@ var inazumatv = {};
 //  Top Level function
 // ==================================
 
-( function ( inazumatv ){
+( function ( inazumatv, self ){
     "use strict";
 
     /**
@@ -217,11 +217,30 @@ var inazumatv = {};
      * 配列内の最大数値を返す
      * @for inazumatv
      * @method maxValue
-     * @param {Array} arr 検証対象の配列、内部は全部数値
-     * @returns {number}
+     * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
+     * @returns {number} 配列内の最大数値を返します
      */
     inazumatv.maxValue = function ( arr ){
         return Math.max.apply(null, arr);
     };
 
-}( inazumatv ) );
+    /**
+     * Top Level
+     * log 出力を抑制します。<br>
+     * <strong>注意</strong> 実行後にログ出力を行うことはできません。
+     *
+     * @for inazumatv
+     * @method logAbort
+     */
+    inazumatv.logAbort = function (){
+        self.console = {
+            info: function (){},
+            log: function  (){},
+            debug: function (){},
+            warn: function (){},
+            error: function (){},
+            table: function (){}
+        };
+    };
+
+}( inazumatv, window.self ) );

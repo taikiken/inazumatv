@@ -35,6 +35,7 @@
         "../src/external/jq/extensions/dom/WatchWindowSize.js",
         "../src/external/jq/extensions/dom/FitWindow.js",
         "../src/external/jq/extensions/dom/FitWindowAspect.js",
+        "../src/external/jq/extensions/dom/FitWindowAspectCenter.js",
         "../src/external/jq/extensions/dom/FitWindowHeight.js"
     ],
 

@@ -164,7 +164,7 @@ var inazumatv = {};
 //  Top Level function
 // ==================================
 
-( function ( inazumatv ){
+( function ( inazumatv, self ){
     "use strict";
 
     /**
@@ -217,14 +217,33 @@ var inazumatv = {};
      * 配列内の最大数値を返す
      * @for inazumatv
      * @method maxValue
-     * @param {Array} arr 検証対象の配列、内部は全部数値
-     * @returns {number}
+     * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
+     * @returns {number} 配列内の最大数値を返します
      */
     inazumatv.maxValue = function ( arr ){
         return Math.max.apply(null, arr);
     };
 
-}( inazumatv ) );
+    /**
+     * Top Level
+     * log 出力を抑制します。<br>
+     * <strong>注意</strong> 実行後にログ出力を行うことはできません。
+     *
+     * @for inazumatv
+     * @method logAbort
+     */
+    inazumatv.logAbort = function (){
+        self.console = {
+            info: function (){},
+            log: function  (){},
+            debug: function (){},
+            warn: function (){},
+            error: function (){},
+            table: function (){}
+        };
+    };
+
+}( inazumatv, window.self ) );
 /**
  * @module inazumatv
  */
@@ -244,7 +263,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.8"; // injected by build process
+    s.version = /*version*/"0.8.12"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -252,7 +271,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Tue, 14 Jan 2014 04:58:07 GMT"; // injected by build process
+    s.buildDate = /*date*/"Sun, 26 Jan 2014 09:45:09 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -4306,9 +4325,10 @@ var inazumatv = {};
      * @param {Number} [minWidth] default 0
      * @param {Number} [minHeight] default 0
      * @param {Number} [offsetLeft] default 0
+     * @param {Number} [offsetTop] default 0
      * @constructor
      */
-    function FitWindowAspect ( $element, minWidth, minHeight, offsetLeft ) {
+    function FitWindowAspect ( $element, minWidth, minHeight, offsetLeft, offsetTop ) {
         if ( !isNumeric( minWidth ) ) {
             minWidth = 0;
         }
@@ -4318,12 +4338,16 @@ var inazumatv = {};
         if ( !isNumeric( offsetLeft ) ) {
             offsetLeft = 0;
         }
+        if ( !isNumeric( offsetTop ) ) {
+            offsetTop = 0;
+        }
 
         this._watch = WatchWindowSize.getInstance();
         this._$element = $element;
         this._minWidth = minWidth;
         this._minHeight = minHeight;
         this._offsetLeft = offsetLeft;
+        this._offsetTop = offsetTop;
 
         this._elementWidth = parseInt( $element.width(), 10 );
         this._elementHeight = parseInt( $element.height(), 10 );
@@ -4423,7 +4447,7 @@ var inazumatv = {};
             eh = this._elementHeight,
             params = eventObject.params[ 0 ],
             w = params.width - this._offsetLeft,
-            h = params.height,
+            h = params.height - this._offsetTop,
             aw,
             ah,
             aspect;
@@ -4438,6 +4462,175 @@ var inazumatv = {};
     };
 
     inazumatv.jq.FitWindowAspect = FitWindowAspect;
+}( this.inazumatv ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / http://inazumatv.com
+ * date 2013/12/17 - 14:10
+ *
+ * Copyright (c) 2011-2013 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+( function ( inazumatv ){
+    "use strict";
+    var isNumeric = inazumatv.isNumeric,
+        WatchWindowSize,
+        /**
+         * jQuery alias
+         * @property $
+         * @type {jQuery}
+         * @private
+         * @static
+         */
+        $;
+
+    /**
+     * window幅に比率を保ち拡大縮小し、常に中央を表示します。
+     *
+     * @class FitWindowAspectCenter
+     * @param {jQuery} $element jQuery object, 対象エレメント
+     * @param {Number} [minWidth] default 0
+     * @param {Number} [minHeight] default 0
+     * @constructor
+     */
+    function FitWindowAspectCenter ( $element, minWidth, minHeight ) {
+        if ( !isNumeric( minWidth ) ) {
+            minWidth = 0;
+        }
+        if ( !isNumeric( minHeight ) ) {
+            minHeight = 0;
+        }
+
+        this._watch = WatchWindowSize.getInstance();
+        this._$element = $element;
+        this._minWidth = minWidth;
+        this._minHeight = minHeight;
+
+        this._elementWidth = parseInt( $element.width(), 10 );
+        this._elementHeight = parseInt( $element.height(), 10 );
+    }
+
+    /**
+     * FitWindowAspectCenter へ jQuery object を設定。FitWindowAspectCenter を使用する前に実行する必要があります。<br>
+     * ExternalJQ.imports から実行されます。
+     *
+     * @method activate
+     * @param {jQuery} jQuery object
+     * @static
+     */
+    FitWindowAspectCenter.activate = function ( jQuery ){
+        $ = jQuery;
+        WatchWindowSize = inazumatv.jq.WatchWindowSize;
+        WatchWindowSize.activate( jQuery );
+    };
+
+    var p = FitWindowAspectCenter.prototype;
+
+    /**
+     *
+     * @method getWatchWindowSize
+     * @returns {WatchWindowSize} WatchWindowSize instance
+     */
+    p.getWatchWindowSize = function (){
+        return this._watch;
+    };
+
+    /**
+     * 監視を開始します
+     * @method listen
+     */
+    p.listen = function (){
+        this._boundOnResize = this._onResize.bind( this );
+        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        this._watch.start();
+    };
+
+    /**
+     * 監視を止めます
+     * @method abort
+     */
+    p.abort = function (){
+        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    };
+
+    /**
+     * @method setElementWidth
+     * @param {Number} w DOMElement width
+     */
+    p.setElementWidth = function ( w ){
+        if ( isNumeric( w ) ) {
+            this._elementWidth = w;
+        }
+    };
+
+    /**
+     * @method setElementHeight
+     * @param {Number} h DOMElement height
+     */
+    p.setElementHeight = function ( h ){
+        if ( isNumeric( h ) ) {
+            this._elementHeight = h;
+        }
+    };
+
+    /**
+     * @method setMinHeight
+     * @param {Number} h Minimum height
+     */
+    p.setMinHeight = function ( h ){
+        if ( isNumeric( h ) ) {
+            this._minHeight = h;
+        }
+    };
+
+    /**
+     * @method setMinWidth
+     * @param {Number} h Minimum width
+     */
+    p.setMinWidth = function ( w ){
+        if ( isNumeric( w ) ) {
+            this._elementWidth = w;
+        }
+    };
+
+    /**
+     * Event Handler, Window width or height resize
+     * @method _onResize
+     * @param {EventObject} eventObject
+     * @protected
+     */
+    p._onResize = function ( eventObject ){
+        var ew = this._elementWidth,
+            eh = this._elementHeight,
+            params = eventObject.params[ 0 ],
+            window_w = Math.ceil( params.width ),
+            window_h = Math.ceil( params.height ),
+            w,
+            h,
+            aspect_w,
+            aspect_h,
+            aspect;
+
+        w = Math.max( window_w, this._minWidth );
+        h = Math.max( window_h, this._minHeight );
+        aspect_w = w / ew;
+        aspect_h = h / eh;
+        aspect = Math.max( aspect_w, aspect_h );
+
+        // 計算後のwidth, height
+        var after_w = Math.ceil( ew * aspect ),
+            after_h = Math.ceil( eh * aspect ),
+            sub_w = (window_w - after_w) * 0.5,
+            sub_h = (window_h - after_h) * 0.5;
+
+        this._$element.width( after_w ).height( after_h ).css( { left: sub_w + "px", top: sub_h + "px" } );
+    };
+
+    inazumatv.jq.FitWindowAspectCenter = FitWindowAspectCenter;
+
 }( this.inazumatv ) );/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
@@ -4467,16 +4660,22 @@ var inazumatv = {};
      * @class FitWindowHeight
      * @param {jQuery} $element jQuery object, 対象エレメント
      * @param {Number} [minHeight] default 0
+     * @param {Number} [offsetTop] default 0
      * @constructor
      */
-    function FitWindowHeight ( $element, minHeight ) {
+    function FitWindowHeight ( $element, minHeight, offsetTop ) {
         if ( !isNumeric( minHeight ) ) {
             minHeight = 0;
+        }
+
+        if ( !isNumeric( offsetTop ) ) {
+            offsetTop = 0;
         }
 
         this._watch = WatchWindowSize.getInstance();
         this._$element = $element;
         this._minHeight = minHeight;
+        this._offsetTop = offsetTop;
 
         this._elementHeight = parseInt( $element.height(), 10 );
     }
@@ -4511,7 +4710,7 @@ var inazumatv = {};
      */
     p.listen = function (){
         this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE_HEIGHT, this._boundOnResize );
+        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
         this._watch.start();
     };
 
@@ -4520,7 +4719,7 @@ var inazumatv = {};
      * @method abort
      */
     p.abort = function (){
-        this._watch.removeEventListener( WatchWindowSize.RESIZE_HEIGHT, this._boundOnResize );
+        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
     };
 
     /**
@@ -4544,7 +4743,7 @@ var inazumatv = {};
             h = params.height
         ;
 
-        this._$element.height( Math.max( h, this._minHeight ) );
+        this._$element.height( Math.max( h, this._minHeight ) - this._offsetTop );
     };
 
     inazumatv.jq.FitWindowHeight = FitWindowHeight;
