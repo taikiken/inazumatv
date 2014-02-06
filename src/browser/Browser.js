@@ -84,41 +84,58 @@
     _ios_versions = _iosVersion();
 
     // Android version
+//    /**
+//     * Android version detection
+//     * @returns {Array} Android version 配列 2桁~3桁
+//     * @private
+//     */
+//    function _androidVersion () {
+//        var ua_lower = _ua.toLowerCase(),
+//            version,
+//            versions = [ -1, 0, 0 ];
+//
+//        if ( _android && !_firefox ) {
+//
+//            version = ua_lower.substr( ua_lower.indexOf( "_android" ) + 8, 5 ).split( "." );
+//            versions = [
+//                parseInt( version[ 0 ], 10 ),
+//                parseInt( version[ 1 ], 10 ),
+//                parseInt( version[ 2 ], 10 )
+//            ];
+//
+//            _android_version_major = versions[ 0 ];
+//
+//            var a_num = versions[ 0 ] + "." + versions[ 1 ];
+//
+//            if ( versions[ 2 ] ) {
+//                // has small version
+//                a_num += versions[ 2 ];
+//            }
+//
+//            _android_version_num = parseFloat( a_num );
+//
+//            _android_version = versions;
+//        }
+//        return versions;
+//    }
+//    _android_versions = _androidVersion();
+
     /**
      * Android version detection
-     * @returns {Array} Android version 配列 2桁~3桁
+     * @returns {Array} Android version 配列 3桁
      * @private
      */
-    function _androidVersion () {
-        var ua_lower = _ua.toLowerCase(),
-            version,
-            versions = [ -1, 0, 0 ];
-
-        if ( _android && !_firefox ) {
-
-            version = ua_lower.substr( ua_lower.indexOf( "_android" ) + 8, 5 ).split( "." );
-            versions = [
-                parseInt( version[ 0 ], 10 ),
-                parseInt( version[ 1 ], 10 ),
-                parseInt( version[ 2 ], 10 )
-            ];
-
-            _android_version_major = versions[ 0 ];
-
-            var a_num = versions[ 0 ] + "." + versions[ 1 ];
-
-            if ( versions[ 2 ] ) {
-                // has small version
-                a_num += versions[ 2 ];
-            }
-
-            _android_version_num = parseFloat( a_num );
-
-            _android_version = versions;
+    function _get_androidVersion () {
+        var v, versions = [ -1, 0, 0 ];
+        if ( _android ) {
+            v = (navigator.appVersion).match(/Android (\d+)\.(\d+)\.?(\d+)?/);
+            versions = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+            _android_version = parseFloat( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
         }
+
         return versions;
     }
-    _android_versions = _androidVersion();
+    _android_versions = _get_androidVersion();
 
     // Safari version
     /**
@@ -269,7 +286,8 @@
              * @static
              */
             major: function (){
-                return _android_version_major;
+//                return _android_version_major;
+                return _android_versions[ 0 ];
             },
             /**
              * @for Browser.Android
@@ -278,7 +296,8 @@
              * @static
              */
             version: function (){
-                return _android_version_num;
+//                return _android_version_num;
+                return _android_version;
             },
             /**
              * @for Browser.Android

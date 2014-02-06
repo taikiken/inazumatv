@@ -55,7 +55,7 @@ module.exports = function(grunt) {
                 url: '<%= pkg.url %>',
                 logo: '<%= pkg.logo %>',
                 options: {
-                    paths: ['../src/'],
+                    paths: ['src/'],
                     outdir: '<%= docsFolder %>',
                     linkNatives: true,
                     attributesEmit: true,
