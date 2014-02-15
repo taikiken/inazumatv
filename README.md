@@ -69,7 +69,7 @@ EventDispatcherで使用するevent objectです。
 複数の非同期処理完了後に次の処理に移行したいときに使用する管理ツールです。
 
 ### LoopManager
-内部でrequestAnimationFrameを使用しENTER_FRAMEイベントを発生させます。
+requestAnimationFrameを使用しENTER_FRAMEイベントを発生させます。
 
 ### QuerySearch
 location.searchをparseします。
@@ -141,10 +141,10 @@ document高を監視し変わるとイベント通知します。
 指定jQuery Objectを常にwindowの高と同じにします。
 
 ### FitWindowAspect
-指定jQuery Objectの縦横非を保ち常にwindowの幅・高と同じにします。
+指定jQuery Objectの縦横比率を保ち常にwindowの幅・高と同じにします。
 
 ### FitWindowAspectCenter
-指定jQuery Objectの縦横非を保ち常にwindowの幅・高と同じにし縦横中央に配置します。
+指定jQuery Objectの縦横比率を保ち常にwindowの幅・高と同じにし縦横中央に配置します。
 
 ### FitDocumentHeight
 指定jQuery Objectを常にdocumentの高と同じにします。
