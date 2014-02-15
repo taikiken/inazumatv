@@ -28,7 +28,7 @@
      * 別途 jQuery を読み込んでください。<br><br>
      * ExternalJQ.import を使用し参照を取得します。
      *
-     *      var XMLLoader = ExternalJQ.import( "XMLLoader" );
+     *      var XMLLoader = ExternalJQ.imports( "XMLLoader" );
      *      var xmlLoader = new XMLLoader( "path/to/example.xml" );
      *      function onComplete ( eventObject ) {
      *      }

@@ -59,7 +59,7 @@
      */
     ImageLoader.ERROR = "imageLoaderError";
     /**
-     * @const Start
+     * @const START
      * @type {string}
      * @static
      */

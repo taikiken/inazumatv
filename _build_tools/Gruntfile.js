@@ -55,7 +55,7 @@ module.exports = function(grunt) {
                 url: '<%= pkg.url %>',
                 logo: '<%= pkg.logo %>',
                 options: {
-                    paths: ['src/'],
+                    paths: ['../src/'],
                     outdir: '<%= docsFolder %>',
                     linkNatives: true,
                     attributesEmit: true,
@@ -176,7 +176,7 @@ module.exports = function(grunt) {
      * Build the docs using YUIdocs.
      */
     grunt.registerTask('docs', [
-        "yuidoc", "compress", "copy:docsZip"
+        "setVersion", "yuidoc", "compress", "copy:docsZip"
     ]);
 
     /**

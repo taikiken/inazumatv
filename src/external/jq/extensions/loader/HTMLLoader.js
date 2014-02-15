@@ -16,7 +16,7 @@
         $;
 
     /**
-     * 指定URLのTXTを読込みます
+     * 指定URLのHTMLを読込みます
      * @class HTMLLoader
      * @extends XMLLoader
      * @param {String} url

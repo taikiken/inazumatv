@@ -263,7 +263,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.12"; // injected by build process
+    s.version = /*version*/"0.8.13"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -271,7 +271,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Sat, 15 Feb 2014 05:13:16 GMT"; // injected by build process
+    s.buildDate = /*date*/"Sat, 15 Feb 2014 05:06:07 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -3390,7 +3390,7 @@ var inazumatv = {};
      * 別途 jQuery を読み込んでください。<br><br>
      * ExternalJQ.import を使用し参照を取得します。
      *
-     *      var XMLLoader = ExternalJQ.imports( "XMLLoader" );
+     *      var XMLLoader = ExternalJQ.import( "XMLLoader" );
      *      var xmlLoader = new XMLLoader( "path/to/example.xml" );
      *      function onComplete ( eventObject ) {
      *      }
@@ -3577,7 +3577,7 @@ var inazumatv = {};
         $;
 
     /**
-     * 指定URLのHTMLを読込みます
+     * 指定URLのTXTを読込みます
      * @class HTMLLoader
      * @extends XMLLoader
      * @param {String} url
