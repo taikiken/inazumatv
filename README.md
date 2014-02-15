@@ -57,7 +57,7 @@ userAgentからブラウザ情報判定を行います。
 iOS, AndroidはOSバージョンを表示可能です。
 
 ### CookieUtil
-MDNのCookie関数をを移植し変更を加えています。
+MDNのCookie関数を移植し変更を加えています。
 
 ### EventDispatcher
 CreateJS 6系のEventDispatcherを移植し変更を加えています。
@@ -70,6 +70,9 @@ EventDispatcherで使用するevent objectです。
 
 ### LoopManager
 内部でrequestAnimationFrameを使用しENTER_FRAMEイベントを発生させます。
+
+### QuerySearch
+location.searchをparseします。
 
 ### PollingManager
 一定間隔（秒）で処理を行うときに使用します。

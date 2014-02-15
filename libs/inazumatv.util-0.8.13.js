@@ -271,7 +271,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Sat, 15 Feb 2014 05:06:07 GMT"; // injected by build process
+    s.buildDate = /*date*/"Sat, 15 Feb 2014 12:18:39 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -1933,6 +1933,85 @@ var inazumatv = {};
 }( this.inazumatv ) );/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
+ * date 2014/02/15 - 21:04
+ *
+ * Copyright (c) 2011-2014 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ */
+( function ( window ){
+    "use strict";
+    var document = window.document
+    ;
+
+//    /**
+//     * get parameter を取得します
+//     * @class QuerySearch
+//     * @constructor
+//     */
+//    function QuerySearch () {
+//        throw "QuerySearch cannot be instantiated";
+//    }
+
+    /**
+     * get parameter を取得します
+     * @class QuerySearch
+     * @type {{search: search}}
+     * @static
+     */
+    window.inazumatv.QuerySearch = {
+        /**
+         * 指定Keyの値を取得します。
+         * @for QuerySearch
+         * @method search
+         * @param {string} key_name 取得したいkey name
+         * @returns {string} search value
+         * @static
+         */
+        search: function ( key_name ){
+            var query = window.location.search.substring(1 ),
+                vars = query.split('&' ),
+                result = "";
+
+            for (var i = 0, limit = vars.length; i < limit; i++) {
+                var pair = vars[ i ].split( '=' );
+                if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
+                    result =  decodeURIComponent( pair[ 1 ] );
+                    break;
+                }
+            }
+
+            return result;
+        },
+        /**
+         * get parameter を全て取得します。
+         * ＊key=value形式のみです。
+         *
+         * @for QuerySearch
+         * @method searchAll
+         * @returns {object} key: value
+         * @static
+         */
+        searchAll: function (){
+            var query = window.location.search.substring(1 ),
+                vars = query.split('&' ),
+                result = {};
+
+            for (var i = 0, limit = vars.length; i < limit; i++) {
+                var pair = vars[ i ].split( '=' );
+
+                result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
+            }
+
+            return result;
+        }
+    };
+}( window ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 17:28
  *
  * Copyright (c) 2011-2013 inazumatv.com, inc.
@@ -3390,7 +3469,7 @@ var inazumatv = {};
      * 別途 jQuery を読み込んでください。<br><br>
      * ExternalJQ.import を使用し参照を取得します。
      *
-     *      var XMLLoader = ExternalJQ.import( "XMLLoader" );
+     *      var XMLLoader = ExternalJQ.imports( "XMLLoader" );
      *      var xmlLoader = new XMLLoader( "path/to/example.xml" );
      *      function onComplete ( eventObject ) {
      *      }
@@ -3577,7 +3656,7 @@ var inazumatv = {};
         $;
 
     /**
-     * 指定URLのTXTを読込みます
+     * 指定URLのHTMLを読込みます
      * @class HTMLLoader
      * @extends XMLLoader
      * @param {String} url
