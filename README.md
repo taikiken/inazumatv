@@ -110,7 +110,7 @@ jQueryプラグインsmoothScroll, easingを移植し変更を加えています
 ## jQuery 依存(関数)
 
 ### eventStop
-グローバル関数です。jQueryオブジェクトをセット後に使用可能です。
+イベントをキャンセル、バブリングを止めるinazumatv内グローバル関数です。jQueryオブジェクトをセット後に使用可能です。
 
     inazumatv.jq.ExternalJQ.save( jQuery );
 
