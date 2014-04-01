@@ -17,7 +17,7 @@
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.13"; // injected by build process
+    s.version = /*version*/"0.8.14"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -25,6 +25,6 @@
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Thu, 20 Feb 2014 11:15:27 GMT"; // injected by build process
+    s.buildDate = /*date*/"Tue, 01 Apr 2014 07:34:12 GMT"; // injected by build process
 
 })( this.inazumatv );

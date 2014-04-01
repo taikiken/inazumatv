@@ -1,0 +1,44 @@
+{
+    "inazumatv_util_source": [
+        "../src/inazumatv.js",
+        "../src/version.js",
+
+        "../src/browser/Browser.js",
+        "../src/browser/CookieUtil.js",
+
+        "../src/events/EventDispatcher.js",
+        "../src/events/EventObject.js",
+        "../src/events/AjaxEvent.js",
+
+        "../src/net/LoadManager.js",
+        "../src/net/ImageLoader.js",
+        "../src/net/QuerySearch.js",
+
+        "../src/util/CheckList.js",
+        "../src/util/LoopManager.js",
+        "../src/util/PollingManager.js",
+        "../src/util/FPSManager.js",
+
+        "../src/motion/ShuffleText.js",
+
+        "../src/external/jq/ExternalJQ.js",
+
+        "../src/external/jq/plugins/Easing.js",
+        "../src/external/jq/plugins/SmoothScroll.js",
+
+        "../src/external/jq/extensions/loader/XMLLoader.js",
+        "../src/external/jq/extensions/loader/TXTLoader.js",
+        "../src/external/jq/extensions/loader/HTMLLoader.js",
+
+        "../src/external/jq/extensions/dom/WatchDocumentHeight.js",
+        "../src/external/jq/extensions/dom/FitDocumentHeight.js",
+
+        "../src/external/jq/extensions/dom/WatchWindowSize.js",
+        "../src/external/jq/extensions/dom/FitWindow.js",
+        "../src/external/jq/extensions/dom/FitWindowAspect.js",
+        "../src/external/jq/extensions/dom/FitWindowAspectCenter.js",
+        "../src/external/jq/extensions/dom/FitWindowHeight.js"
+    ],
+
+    "docs_out_path": "../out/inazumatvUtilDocs/"
+}

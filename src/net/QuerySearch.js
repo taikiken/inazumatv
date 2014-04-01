@@ -40,11 +40,11 @@
          * @static
          */
         search: function ( key_name ){
-            var query = window.location.search.substring(1 ),
-                vars = query.split('&' ),
+            var query = window.location.search.substring( 1 ),
+                vars = query.split( '&' ),
                 result = "";
 
-            for (var i = 0, limit = vars.length; i < limit; i++) {
+            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
                 var pair = vars[ i ].split( '=' );
                 if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
                     result =  decodeURIComponent( pair[ 1 ] );
@@ -64,11 +64,11 @@
          * @static
          */
         searchAll: function (){
-            var query = window.location.search.substring(1 ),
-                vars = query.split('&' ),
+            var query = window.location.search.substring( 1 ),
+                vars = query.split( '&' ),
                 result = {};
 
-            for (var i = 0, limit = vars.length; i < limit; i++) {
+            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
                 var pair = vars[ i ].split( '=' );
 
                 result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );

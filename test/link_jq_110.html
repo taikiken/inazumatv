@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>library link test</title>
+<script type="text/javascript" src="library/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../libs/inazumatv.util-0.8.14.js"></script>
+<style type="text/css">
+body {
+	margin: 0;
+	padding: 0;;
+}
+</style>
+</head>
+<body>
+<div id="red" style="width: 50px; background-color: #ffe0e0;"></div>
+<script type="text/javascript">
+( function ( window ){
+	"use strict";
+	var document = window.document,
+		$ = window.jQuery,
+
+		inazumatv = window.inazumatv,
+
+		FitDocumentHeight
+	;
+
+	FitDocumentHeight = inazumatv.jq.ExternalJQ.imports( "FitDocumentHeight", $ );
+
+	var fit_red = new FitDocumentHeight( $( "#red" ) );
+	fit_red.listen();
+
+}( window ) );
+</script>
+</body>
+</html>

@@ -46,7 +46,7 @@
          * @method setItem
          * @param {String} sKey Cookie key
          * @param {String} sValue Cookie value
-         * @param {String} [vEnd] Cookie 期限, [ millisecond, Date.toUTCString ]
+         * @param {String} [vEnd] Cookie 期限, [ second, Date.toUTCString ]
          * @param {String} [sPath] Cookie path
          * @param {String} [sDomain] Cookie Domain
          * @param {String} [bSecure] Cookie secure
