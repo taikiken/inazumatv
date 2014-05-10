@@ -90,6 +90,7 @@
     p.start = function (){
         if ( !this._manualStart ) {
             // no manual
+            this.setFPS( this._fps );
             this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
             this._loop.start();
         }

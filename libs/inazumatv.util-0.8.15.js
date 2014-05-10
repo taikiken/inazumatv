@@ -272,7 +272,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.14"; // injected by build process
+    s.version = /*version*/"0.8.15"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -280,7 +280,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Tue, 01 Apr 2014 07:34:12 GMT"; // injected by build process
+    s.buildDate = /*date*/"Thu, 01 May 2014 09:27:22 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -2449,6 +2449,7 @@ var inazumatv = {};
     p.start = function (){
         if ( !this._manualStart ) {
             // no manual
+            this.setFPS( this._fps );
             this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
             this._loop.start();
         }
