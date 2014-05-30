@@ -111,8 +111,8 @@
         this.duration = ms;
     };
 
-    p._orijinalStr = "";
-    p._orijinalLength = "";
+    p._originalStr = "";
+    p._originalLength = "";
     p._intervalId = 0;
     p._timeCurrent = 0;
     p._timeStart = 0;
@@ -124,8 +124,8 @@
      * @param {string} text
      */
     p.setText = function ( text ) {
-        this._orijinalStr = text;
-        this._orijinalLength = text.length;
+        this._originalStr = text;
+        this._originalLength = text.length;
     };
 
     /**
@@ -143,15 +143,16 @@
         p._randomIndex = [];
         var str = "";
 
-        for ( var i = 0; i < this._orijinalLength; i++ ) {
+        for ( var i = 0; i < this._originalLength; i++ ) {
 
-            var rate = i / this._orijinalLength;
+            var rate = i / this._originalLength;
             p._randomIndex[ i ] = Math.random() * ( 1 - rate ) + rate;
             str += this.emptyCharacter;
         }
 
         this._timeStart = new Date().getTime();
-        this._intervalId = setInterval(Delegate.create( this._onInterval, this ), 1000 / p.fps );
+//        this._intervalId = setInterval(Delegate.create( this._onInterval, this ), 1000 / p.fps );
+        this._intervalId = setInterval( this._onInterval.bind( this ) , 1000 / p.fps );
         this.isRunning = true;
 
         this._element.innerHTML = str;
@@ -181,11 +182,11 @@
         var percent = this._timeCurrent / this.duration;
 
         var str = "";
-        for ( var i = 0; i < this._orijinalLength; i++ ) {
+        for ( var i = 0; i < this._originalLength; i++ ) {
 
             if ( percent >= p._randomIndex[ i ] ) {
 
-                str += this._orijinalStr.charAt(i);
+                str += this._originalStr.charAt(i);
             } else if ( percent < p._randomIndex[ i ] / 3 ) {
 
                 str += this.emptyCharacter;
@@ -197,12 +198,13 @@
 
         if ( percent > 1 ) {
 
-            str = this._orijinalStr;
+            str = this._originalStr;
             clearInterval( this._intervalId );
             this.isRunning = false;
             this.onComplete();
         }
         this._element.innerHTML = str;
+        this.onChange( str );
     };
 
     /**
@@ -210,6 +212,10 @@
      * @method onComplete
      */
     p.onComplete = function () {
+
+    };
+
+    p.onChange = function ( str ) {
 
     };
 

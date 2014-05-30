@@ -280,7 +280,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Thu, 01 May 2014 09:27:22 GMT"; // injected by build process
+    s.buildDate = /*date*/"Sat, 10 May 2014 07:20:24 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -2660,8 +2660,8 @@ var inazumatv = {};
         this.duration = ms;
     };
 
-    p._orijinalStr = "";
-    p._orijinalLength = "";
+    p._originalStr = "";
+    p._originalLength = "";
     p._intervalId = 0;
     p._timeCurrent = 0;
     p._timeStart = 0;
@@ -2673,8 +2673,8 @@ var inazumatv = {};
      * @param {string} text
      */
     p.setText = function ( text ) {
-        this._orijinalStr = text;
-        this._orijinalLength = text.length;
+        this._originalStr = text;
+        this._originalLength = text.length;
     };
 
     /**
@@ -2692,15 +2692,16 @@ var inazumatv = {};
         p._randomIndex = [];
         var str = "";
 
-        for ( var i = 0; i < this._orijinalLength; i++ ) {
+        for ( var i = 0; i < this._originalLength; i++ ) {
 
-            var rate = i / this._orijinalLength;
+            var rate = i / this._originalLength;
             p._randomIndex[ i ] = Math.random() * ( 1 - rate ) + rate;
             str += this.emptyCharacter;
         }
 
         this._timeStart = new Date().getTime();
-        this._intervalId = setInterval(Delegate.create( this._onInterval, this ), 1000 / p.fps );
+//        this._intervalId = setInterval(Delegate.create( this._onInterval, this ), 1000 / p.fps );
+        this._intervalId = setInterval( this._onInterval.bind( this ) , 1000 / p.fps );
         this.isRunning = true;
 
         this._element.innerHTML = str;
@@ -2730,11 +2731,11 @@ var inazumatv = {};
         var percent = this._timeCurrent / this.duration;
 
         var str = "";
-        for ( var i = 0; i < this._orijinalLength; i++ ) {
+        for ( var i = 0; i < this._originalLength; i++ ) {
 
             if ( percent >= p._randomIndex[ i ] ) {
 
-                str += this._orijinalStr.charAt(i);
+                str += this._originalStr.charAt(i);
             } else if ( percent < p._randomIndex[ i ] / 3 ) {
 
                 str += this.emptyCharacter;
@@ -2746,12 +2747,13 @@ var inazumatv = {};
 
         if ( percent > 1 ) {
 
-            str = this._orijinalStr;
+            str = this._originalStr;
             clearInterval( this._intervalId );
             this.isRunning = false;
             this.onComplete();
         }
         this._element.innerHTML = str;
+        this.onChange( str );
     };
 
     /**
@@ -2759,6 +2761,10 @@ var inazumatv = {};
      * @method onComplete
      */
     p.onComplete = function () {
+
+    };
+
+    p.onChange = function ( str ) {
 
     };
 
@@ -3707,6 +3713,7 @@ var inazumatv = {};
 
     /**
      * @class WatchDocumentHeight
+     * @uses EventDispatcher
      * @returns {WatchDocumentHeight}
      * @constructor
      */
@@ -3734,6 +3741,9 @@ var inazumatv = {};
         $ = jQuery;
         var $document = $( document ),
             $window = $( window );
+
+        this._$document = $document;
+        this._$window = $window;
 
         if ( $window.height() > $document.height() ) {
             _$watchTarget = $window;
@@ -3826,6 +3836,15 @@ var inazumatv = {};
      * @returns {boolean} true: 高さ変更
      */
     p.update = function ( strong ){
+        var $window = this._$window,
+            $document = this._$document;
+
+        if ( $window.height() > $document.height() ) {
+            _$watchTarget = $window;
+        } else {
+            _$watchTarget = $document;
+        }
+
         var h = _$watchTarget.height(),
             isChange = h !== _prevHeight,
 

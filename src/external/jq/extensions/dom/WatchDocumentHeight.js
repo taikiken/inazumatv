@@ -33,6 +33,7 @@
 
     /**
      * @class WatchDocumentHeight
+     * @uses EventDispatcher
      * @returns {WatchDocumentHeight}
      * @constructor
      */
@@ -60,6 +61,9 @@
         $ = jQuery;
         var $document = $( document ),
             $window = $( window );
+
+        this._$document = $document;
+        this._$window = $window;
 
         if ( $window.height() > $document.height() ) {
             _$watchTarget = $window;
@@ -152,6 +156,15 @@
      * @returns {boolean} true: 高さ変更
      */
     p.update = function ( strong ){
+        var $window = this._$window,
+            $document = this._$document;
+
+        if ( $window.height() > $document.height() ) {
+            _$watchTarget = $window;
+        } else {
+            _$watchTarget = $document;
+        }
+
         var h = _$watchTarget.height(),
             isChange = h !== _prevHeight,
 
