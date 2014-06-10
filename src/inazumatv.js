@@ -218,7 +218,7 @@ var inazumatv = {};
             min = 0;
         }
 
-        return Math.random() * (max - min) + min;
+        return min + Math.floor(Math.random() * (max - min + 1));
     };
 
     /**
@@ -251,5 +251,33 @@ var inazumatv = {};
             table: function (){}
         };
     };
+
+    /**
+     * http://bost.ocks.org/mike/shuffle/
+     * @param {array} array
+     * @returns {Array}
+     */
+    function shuffle( array ) {
+        var copy = [], n = array.length, i,
+            floor = Math.floor,
+            rand = Math.random;
+
+        // While there remain elements to shuffle…
+        while (n) {
+
+            // Pick a remaining element…
+            i = floor( rand() * array.length );
+
+            // If not already shuffled, move it to the new array.
+            if (i in array) {
+                copy.push(array[i]);
+                delete array[i];
+                n--;
+            }
+        }
+
+        return copy;
+    }
+    inazumatv.shuffle = shuffle;
 
 }( inazumatv, window.self ) );

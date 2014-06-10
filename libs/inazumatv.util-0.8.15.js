@@ -218,7 +218,7 @@ var inazumatv = {};
             min = 0;
         }
 
-        return Math.random() * (max - min) + min;
+        return min + Math.floor(Math.random() * (max - min + 1));
     };
 
     /**
@@ -252,6 +252,34 @@ var inazumatv = {};
         };
     };
 
+    /**
+     * http://bost.ocks.org/mike/shuffle/
+     * @param {array} array
+     * @returns {Array}
+     */
+    function shuffle( array ) {
+        var copy = [], n = array.length, i,
+            floor = Math.floor,
+            rand = Math.random;
+
+        // While there remain elements to shuffle…
+        while (n) {
+
+            // Pick a remaining element…
+            i = floor( rand() * array.length );
+
+            // If not already shuffled, move it to the new array.
+            if (i in array) {
+                copy.push(array[i]);
+                delete array[i];
+                n--;
+            }
+        }
+
+        return copy;
+    }
+    inazumatv.shuffle = shuffle;
+
 }( inazumatv, window.self ) );
 /**
  * @module inazumatv
@@ -280,7 +308,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Sat, 10 May 2014 07:20:24 GMT"; // injected by build process
+    s.buildDate = /*date*/"Fri, 06 Jun 2014 07:53:18 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -2596,12 +2624,20 @@ var inazumatv = {};
 ( function ( inazumatv ){
     "use strict";
 
+    var rand = Math.random,
+        floor = Math.floor,
+
+        FPSManager = inazumatv.FPSManager;
+
     /**
      * テキストをシャッフルし表示します
      * @class ShuffleText
      * @constructor
      */
-    function ShuffleText () {}
+    function ShuffleText () {
+        this._boundUpdate = this.update.bind( this );
+        this._fps = new FPSManager( 60 );
+    }
 
     var p = ShuffleText.prototype;
 
@@ -2689,19 +2725,31 @@ var inazumatv = {};
 
         this.stop();
 
-        p._randomIndex = [];
-        var str = "";
+//        p._randomIndex = [];
+        this._randomIndex = [];
+        var str = "",
+            random_index = this._randomIndex,
+            empty_char = this.emptyCharacter,
+            origin_length = this._originalLength;
 
-        for ( var i = 0; i < this._originalLength; i++ ) {
+        for ( var i = 0; i < origin_length; i++ ) {
 
-            var rate = i / this._originalLength;
-            p._randomIndex[ i ] = Math.random() * ( 1 - rate ) + rate;
-            str += this.emptyCharacter;
+            var rate = i / origin_length;
+//            p._randomIndex[ i ] = Math.random() * ( 1 - rate ) + rate;
+            random_index[ i ] = rand() * ( 1 - rate ) + rate;
+            str += empty_char;
         }
 
         this._timeStart = new Date().getTime();
+
+        var _fps = this._fps;
+
+        _fps.changeFPS( this.fps );
+        _fps.addEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
+        _fps.start();
+
 //        this._intervalId = setInterval(Delegate.create( this._onInterval, this ), 1000 / p.fps );
-        this._intervalId = setInterval( this._onInterval.bind( this ) , 1000 / p.fps );
+//        this._intervalId = setInterval( this._onInterval.bind( this ) , 1000 / this.fps );
         this.isRunning = true;
 
         this._element.innerHTML = str;
@@ -2715,10 +2763,13 @@ var inazumatv = {};
     p.stop = function () {
         if ( this.isRunning ) {
 
-            clearInterval(this._intervalId);
-        }
+//            clearInterval(this._intervalId);
+            this._fps.removeEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
+            this._fps.stop();
 
-        this.isRunning = false;
+            this.isRunning = false;
+        }
+//        this.isRunning = false;
     };
 
     /**
@@ -2726,30 +2777,40 @@ var inazumatv = {};
      * @private
      * @method _onInterval
      */
-    p._onInterval = function () {
+//    p._onInterval = function () {
+    p.update = function () {
         this._timeCurrent = new Date().getTime() - this._timeStart;
-        var percent = this._timeCurrent / this.duration;
+        var percent = this._timeCurrent / this.duration,
+            random_index = this._randomIndex,
+            origin_str = this._originalStr,
+            empty_char = this.emptyCharacter,
+            random_char = this.sourceRandomCharacter,
+            random_char_length = random_char.length;
 
         var str = "";
-        for ( var i = 0; i < this._originalLength; i++ ) {
+        for ( var i = 0, limit = this._originalLength; i < limit; i++ ) {
 
-            if ( percent >= p._randomIndex[ i ] ) {
+            if ( percent >= random_index[ i ] ) {
 
-                str += this._originalStr.charAt(i);
-            } else if ( percent < p._randomIndex[ i ] / 3 ) {
+//                str += this._originalStr.charAt(i);
+                str += origin_str.charAt(i);
 
-                str += this.emptyCharacter;
+            } else if ( percent < random_index[ i ] / 3 ) {
+
+                str += empty_char;
             } else {
 
-                str += this.sourceRandomCharacter.charAt( Math.floor( Math.random() * ( this.sourceRandomCharacter.length ) ) );
+//                str += this.sourceRandomCharacter.charAt( Math.floor( Math.random() * ( this.sourceRandomCharacter.length ) ) );
+                str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
             }
         }
 
         if ( percent > 1 ) {
 
             str = this._originalStr;
-            clearInterval( this._intervalId );
-            this.isRunning = false;
+//            clearInterval( this._intervalId );
+//            this.isRunning = false;
+            this.stop();
             this.onComplete();
         }
         this._element.innerHTML = str;
