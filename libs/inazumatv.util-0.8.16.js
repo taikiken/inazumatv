@@ -308,7 +308,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Fri, 06 Jun 2014 07:53:18 GMT"; // injected by build process
+    s.buildDate = /*date*/"Wed, 18 Jun 2014 06:18:49 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -2265,7 +2265,9 @@ var inazumatv = {};
     "use strict";
 
     var EventDispatcher = inazumatv.EventDispatcher,
-        EventObject = inazumatv.EventObject;
+        EventObject = inazumatv.EventObject,
+
+        LoopManager = inazumatv.LoopManager;
 
     /**
      * 経過時間を管理します
@@ -2319,6 +2321,7 @@ var inazumatv = {};
         this._startTime = 0;
         this._polling = ms;
         this._eventObj = new EventObject( PollingManager.POLLING_PAST );
+        this._boundEnterFrame = this._onEnterFrame.bind( this );
     }
 
     /**
@@ -2335,11 +2338,50 @@ var inazumatv = {};
     EventDispatcher.initialize( p );
 
     /**
+     * _startTime を初期化します
+     * @method _resetTime
+     * @private
+     */
+    p._resetTime = function () {
+        this._startTime = new Date().getTime();
+    };
+
+    /**
      * pollingを開始します
      * @method start
+     * @param {boolean=false} [auto] automatic loop flag
      */
-    p.start = function (){
-        this._startTime = new Date().getTime();
+    p.start = function ( auto ) {
+        auto = !!auto;
+
+        if ( auto ) {
+
+            var loop = LoopManager.getInstance(),
+                boundEnterFrame = this._boundEnterFrame;
+
+            this._loop = loop;
+
+            loop.addEventListener( LoopManager.ENTER_FRAME, boundEnterFrame );
+            loop.start();
+
+        }
+
+        this._resetTime();
+    };
+
+    /**
+     * @method stop
+     */
+    p.stop = function () {
+        var loop = this._loop;
+
+        if ( typeof loop !== "undefined" ) {
+
+            loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+            this._loop = null;
+        }
+
+        this._startTime = Number.MAX_VALUE;
     };
 
     /**
@@ -2350,10 +2392,12 @@ var inazumatv = {};
     p.change = function ( ms ){
         this._startTime = 0;
         this._polling = ms;
-        this.start();
+//        this.start();
+        this._resetTime();
     };
 
     /**
+     * pollingに達した場合は PollingManager.POLLING_PAST を発火します
      * @method update
      * @returns {boolean} pollingに達した場合はtrueを返します
      */
@@ -2368,7 +2412,7 @@ var inazumatv = {};
             bool = true;
 
             setTimeout( function (){
-                _this.dispatchEvent( _this._eventObj );
+                _this.dispatchEvent( _this._eventObj, _this );
             }, 0 );
         }
 
@@ -2381,6 +2425,15 @@ var inazumatv = {};
      */
     p.destroy = function (){
         this.update = function (){};
+    };
+
+    /**
+     * loop ENTER_FRAME Event Handler
+     * @method _onEnterFrame
+     * @private
+     */
+    p._onEnterFrame = function (){
+        this.update();
     };
 
     inazumatv.PollingManager = PollingManager;
@@ -2471,6 +2524,15 @@ var inazumatv = {};
     };
 
     /**
+     * _startTime を初期化します
+     * @method _resetTime
+     * @private
+     */
+    p._resetTime = function () {
+        this._startTime = new Date().getTime();
+    };
+
+    /**
      * FPS監視を開始します
      * @method start
      */
@@ -2482,7 +2544,7 @@ var inazumatv = {};
             this._loop.start();
         }
 
-        this._startTime = new Date().getTime();
+        this._resetTime();
     };
 
     /**
@@ -2531,7 +2593,8 @@ var inazumatv = {};
      */
     p.changeFPS = function ( fps ){
         this.setFPS( fps );
-        this.start();
+//        this.start();
+        this._resetTime();
     };
 
     /**
@@ -2565,7 +2628,7 @@ var inazumatv = {};
     };
 
     /**
-     * loop FPS_FRAME Event Handler
+     * loop ENTER_FRAME Event Handler
      * @method _onEnterFrame
      * @private
      */
@@ -2717,59 +2780,80 @@ var inazumatv = {};
      *
      * 再生を開始します。
      * @method start
+     * @param {boolean=false} [is_keep]
      * */
-    p.start = function () {
-        if (typeof this._element === "undefined") {
+    p.start = function ( is_keep ) {
+        var element = this._element;
+
+        if (typeof element === "undefined") {
             return;
         }
 
-        this.stop();
+        is_keep = !!is_keep;
+
+        this._keep = is_keep;
+
+        if ( this.isRunning ) {
+            this.stop( true );
+        }
 
 //        p._randomIndex = [];
         this._randomIndex = [];
+
         var str = "",
             random_index = this._randomIndex,
             empty_char = this.emptyCharacter,
             origin_length = this._originalLength;
+
+        this._endStr = this._originalStr;
 
         for ( var i = 0; i < origin_length; i++ ) {
 
             var rate = i / origin_length;
 //            p._randomIndex[ i ] = Math.random() * ( 1 - rate ) + rate;
             random_index[ i ] = rand() * ( 1 - rate ) + rate;
+
             str += empty_char;
         }
-
-        this._timeStart = new Date().getTime();
 
         var _fps = this._fps;
 
         _fps.changeFPS( this.fps );
         _fps.addEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
-        _fps.start();
 
 //        this._intervalId = setInterval(Delegate.create( this._onInterval, this ), 1000 / p.fps );
 //        this._intervalId = setInterval( this._onInterval.bind( this ) , 1000 / this.fps );
         this.isRunning = true;
 
-        this._element.innerHTML = str;
+        if ( !is_keep ) {
+            element.innerHTML = str;
+        }
 
+        this._timeStart = new Date().getTime();
+        _fps.start();
     };
 
     /**
      * 停止します。
      * @method stop
      * */
-    p.stop = function () {
+    p.stop = function ( strong ) {
+        strong = !!strong;
+
         if ( this.isRunning ) {
 
 //            clearInterval(this._intervalId);
             this._fps.removeEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
             this._fps.stop();
 
-            this.isRunning = false;
+//            this.isRunning = false;
+            if ( strong ) {
+//                this._element.innerHTML = this._originalStr;
+                this._element.innerHTML = this._endStr;
+            }
         }
-//        this.isRunning = false;
+
+        this.isRunning = false;
     };
 
     /**
@@ -2779,42 +2863,92 @@ var inazumatv = {};
      */
 //    p._onInterval = function () {
     p.update = function () {
-        this._timeCurrent = new Date().getTime() - this._timeStart;
-        var percent = this._timeCurrent / this.duration,
+        var timeCurrent = new Date().getTime() - this._timeStart,
+            percent = timeCurrent / this.duration,
             random_index = this._randomIndex,
             origin_str = this._originalStr,
             empty_char = this.emptyCharacter,
             random_char = this.sourceRandomCharacter,
-            random_char_length = random_char.length;
+            random_char_length = random_char.length,
+            is_keep = this._keep;
+
+        this._timeCurrent = timeCurrent;
 
         var str = "";
         for ( var i = 0, limit = this._originalLength; i < limit; i++ ) {
-
+//
+//            if ( percent >= random_index[ i ] ) {
+//
+////                str += this._originalStr.charAt(i);
+//                str += origin_str.charAt(i);
+//
+//            } else if ( percent < random_index[ i ] / 3 ) {
+//
+//                str += empty_char;
+//            } else {
+//
+////                str += this.sourceRandomCharacter.charAt( Math.floor( Math.random() * ( this.sourceRandomCharacter.length ) ) );
+//                str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
+//            }
             if ( percent >= random_index[ i ] ) {
 
 //                str += this._originalStr.charAt(i);
                 str += origin_str.charAt(i);
 
-            } else if ( percent < random_index[ i ] / 3 ) {
-
-                str += empty_char;
             } else {
+                if ( !is_keep ) {
+                    if ( percent < random_index[ i ] / 3 ) {
+
+                        str += empty_char;
+                    } else {
 
 //                str += this.sourceRandomCharacter.charAt( Math.floor( Math.random() * ( this.sourceRandomCharacter.length ) ) );
-                str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
+                        str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
+                    }
+                } else {
+
+                    if ( percent < random_index[ i ] / 3 ) {
+
+                        str += origin_str.charAt(i);
+                    } else {
+
+                        str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
+                    }
+                }
             }
         }
 
-        if ( percent > 1 ) {
+////        str = this._originalStr;
+//        this._element.innerHTML = str;
+//        this.onChange( str );
+//
+//        if ( percent > 1 ) {
+//            // complete
+////            clearInterval( this._intervalId );
+////            this.isRunning = false;
+//            this.stop();
+//            this.onComplete();
+//        }
+//
+////        else {
+////
+////            this._element.innerHTML = str;
+////            this.onChange( str );
+////        }
 
-            str = this._originalStr;
-//            clearInterval( this._intervalId );
-//            this.isRunning = false;
-            this.stop();
-            this.onComplete();
-        }
         this._element.innerHTML = str;
         this.onChange( str );
+
+        if ( percent > 1 ) {
+
+//            str = this._originalStr;
+//            clearInterval( this._intervalId );
+//            this.isRunning = false;
+            this.stop( true );
+            this.onComplete();
+
+            return;
+        }
     };
 
     /**
@@ -2834,25 +2968,25 @@ var inazumatv = {};
 //     * @static
 //     * @type {{create: Function}}
 //     */
-    var Delegate = {
-        /**
-         * スコープを移譲した関数を作成します。
-         * @param {Function} func 実行したい関数
-         * @param {*} thisObj 移譲したいスコープ
-         * @return {Function} 移譲済みの関数
-         * @private
-         * @static
-         */
-        create:function ( func, thisObj ) {
-            var del = function () {
-                return func.apply( thisObj, arguments );
-            };
-            //情報は関数のプロパティとして定義する
-            del.func = func;
-            del.thisObj = thisObj;
-            return del;
-        }
-    };
+//    var Delegate = {
+//        /**
+//         * スコープを移譲した関数を作成します。
+//         * @param {Function} func 実行したい関数
+//         * @param {*} thisObj 移譲したいスコープ
+//         * @return {Function} 移譲済みの関数
+//         * @private
+//         * @static
+//         */
+//        create:function ( func, thisObj ) {
+//            var del = function () {
+//                return func.apply( thisObj, arguments );
+//            };
+//            //情報は関数のプロパティとして定義する
+//            del.func = func;
+//            del.thisObj = thisObj;
+//            return del;
+//        }
+//    };
 
     inazumatv.ShuffleText = ShuffleText;
 

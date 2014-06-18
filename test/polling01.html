@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>polling</title>
+<script type="text/javascript" src="../libs/inazumatv.util.js"></script>
+<!--<script type="text/javascript" src="../libs/inazumatv.util-0.8.14.min.js"></script>-->
+</head>
+<body>
+<div id="output"></div>
+<script type="text/javascript">
+	( function ( window ){
+		"use strict";
+		var document = window.document,
+
+			requestAnimationFrame = window.self.requestAnimationFrame,
+
+			inazumatv = window.inazumatv,
+			EventObject = inazumatv.EventObject,
+			PollingManager = inazumatv.PollingManager,
+			LoopManager = inazumatv.LoopManager,
+
+			output = document.getElementById( "output" ),
+
+			polling,
+			loop
+		;
+
+		polling = new PollingManager( 2000 );
+		loop = LoopManager.getInstance();
+
+		function _loop () {
+//			requestAnimationFrame( _loop );
+
+//			if ( polling.update() ) {
+//				console.log( "update ====================================" );
+//				polling.dispatchEvent( new EventObject( PollingManager.POLLING_PAST ) );
+//			}
+			polling.update();
+		}
+
+		function insert ( e ) {
+//			console.log( "e ", e.target );
+			output.innerHTML += e.target._startTime + "<br>";
+		}
+
+		polling.addEventListener( PollingManager.POLLING_PAST, insert );
+		loop.addEventListener( LoopManager.ENTER_FRAME, _loop );
+
+		polling.start();
+//		_loop();
+		loop.start();
+
+	}( window ) );
+	</script>
+</body>
+</html>

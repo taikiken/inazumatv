@@ -16,7 +16,9 @@
     "use strict";
 
     var EventDispatcher = inazumatv.EventDispatcher,
-        EventObject = inazumatv.EventObject;
+        EventObject = inazumatv.EventObject,
+
+        LoopManager = inazumatv.LoopManager;
 
     /**
      * 経過時間を管理します
@@ -70,6 +72,7 @@
         this._startTime = 0;
         this._polling = ms;
         this._eventObj = new EventObject( PollingManager.POLLING_PAST );
+        this._boundEnterFrame = this._onEnterFrame.bind( this );
     }
 
     /**
@@ -86,11 +89,50 @@
     EventDispatcher.initialize( p );
 
     /**
+     * _startTime を初期化します
+     * @method _resetTime
+     * @private
+     */
+    p._resetTime = function () {
+        this._startTime = new Date().getTime();
+    };
+
+    /**
      * pollingを開始します
      * @method start
+     * @param {boolean=false} [auto] automatic loop flag
      */
-    p.start = function (){
-        this._startTime = new Date().getTime();
+    p.start = function ( auto ) {
+        auto = !!auto;
+
+        if ( auto ) {
+
+            var loop = LoopManager.getInstance(),
+                boundEnterFrame = this._boundEnterFrame;
+
+            this._loop = loop;
+
+            loop.addEventListener( LoopManager.ENTER_FRAME, boundEnterFrame );
+            loop.start();
+
+        }
+
+        this._resetTime();
+    };
+
+    /**
+     * @method stop
+     */
+    p.stop = function () {
+        var loop = this._loop;
+
+        if ( typeof loop !== "undefined" ) {
+
+            loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+            this._loop = null;
+        }
+
+        this._startTime = Number.MAX_VALUE;
     };
 
     /**
@@ -101,10 +143,12 @@
     p.change = function ( ms ){
         this._startTime = 0;
         this._polling = ms;
-        this.start();
+//        this.start();
+        this._resetTime();
     };
 
     /**
+     * pollingに達した場合は PollingManager.POLLING_PAST を発火します
      * @method update
      * @returns {boolean} pollingに達した場合はtrueを返します
      */
@@ -119,7 +163,7 @@
             bool = true;
 
             setTimeout( function (){
-                _this.dispatchEvent( _this._eventObj );
+                _this.dispatchEvent( _this._eventObj, _this );
             }, 0 );
         }
 
@@ -132,6 +176,15 @@
      */
     p.destroy = function (){
         this.update = function (){};
+    };
+
+    /**
+     * loop ENTER_FRAME Event Handler
+     * @method _onEnterFrame
+     * @private
+     */
+    p._onEnterFrame = function (){
+        this.update();
     };
 
     inazumatv.PollingManager = PollingManager;

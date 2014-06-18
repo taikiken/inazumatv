@@ -30,7 +30,8 @@ module.exports = function(grunt) {
             },
             build: {
                 files: {
-                    '../_output/<%= pkg.name.toLowerCase() %>-<%= version %>.min.js': getConfigValue('inazumatv_util_source')
+                    '../_output/<%= pkg.name.toLowerCase() %>-<%= version %>.min.js': getConfigValue('inazumatv_util_source'),
+                    '../_output/<%= pkg.name.toLowerCase() %>.min.js': getConfigValue('inazumatv_util_source')
                 }
             }
         },
@@ -41,7 +42,8 @@ module.exports = function(grunt) {
             },
             build: {
                 files: {
-                    '../_output/<%= pkg.name.toLowerCase() %>-<%= version %>.js': getCombinedSource()
+                    '../_output/<%= pkg.name.toLowerCase() %>-<%= version %>.js': getCombinedSource(),
+                    '../_output/<%= pkg.name.toLowerCase() %>.js': getCombinedSource()
                 }
             }
         },

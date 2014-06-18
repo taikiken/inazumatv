@@ -84,6 +84,15 @@
     };
 
     /**
+     * _startTime を初期化します
+     * @method _resetTime
+     * @private
+     */
+    p._resetTime = function () {
+        this._startTime = new Date().getTime();
+    };
+
+    /**
      * FPS監視を開始します
      * @method start
      */
@@ -95,7 +104,7 @@
             this._loop.start();
         }
 
-        this._startTime = new Date().getTime();
+        this._resetTime();
     };
 
     /**
@@ -144,7 +153,8 @@
      */
     p.changeFPS = function ( fps ){
         this.setFPS( fps );
-        this.start();
+//        this.start();
+        this._resetTime();
     };
 
     /**
@@ -178,7 +188,7 @@
     };
 
     /**
-     * loop FPS_FRAME Event Handler
+     * loop ENTER_FRAME Event Handler
      * @method _onEnterFrame
      * @private
      */
