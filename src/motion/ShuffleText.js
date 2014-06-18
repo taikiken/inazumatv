@@ -157,7 +157,6 @@
             this.stop( true );
         }
 
-//        p._randomIndex = [];
         this._randomIndex = [];
 
         var str = "",
@@ -170,7 +169,7 @@
         for ( var i = 0; i < origin_length; i++ ) {
 
             var rate = i / origin_length;
-//            p._randomIndex[ i ] = Math.random() * ( 1 - rate ) + rate;
+
             random_index[ i ] = rand() * ( 1 - rate ) + rate;
 
             str += empty_char;
@@ -181,8 +180,6 @@
         _fps.changeFPS( this.fps );
         _fps.addEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
 
-//        this._intervalId = setInterval(Delegate.create( this._onInterval, this ), 1000 / p.fps );
-//        this._intervalId = setInterval( this._onInterval.bind( this ) , 1000 / this.fps );
         this.isRunning = true;
 
         if ( !is_keep ) {
@@ -202,13 +199,11 @@
 
         if ( this.isRunning ) {
 
-//            clearInterval(this._intervalId);
             this._fps.removeEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
             this._fps.stop();
 
-//            this.isRunning = false;
             if ( strong ) {
-//                this._element.innerHTML = this._originalStr;
+
                 this._element.innerHTML = this._endStr;
             }
         }
@@ -218,10 +213,8 @@
 
     /**
      *
-     * @private
-     * @method _onInterval
+     * @method update
      */
-//    p._onInterval = function () {
     p.update = function () {
         var timeCurrent = new Date().getTime() - this._timeStart,
             percent = timeCurrent / this.duration,
@@ -232,27 +225,11 @@
             random_char_length = random_char.length,
             is_keep = this._keep;
 
-        this._timeCurrent = timeCurrent;
-
         var str = "";
         for ( var i = 0, limit = this._originalLength; i < limit; i++ ) {
-//
-//            if ( percent >= random_index[ i ] ) {
-//
-////                str += this._originalStr.charAt(i);
-//                str += origin_str.charAt(i);
-//
-//            } else if ( percent < random_index[ i ] / 3 ) {
-//
-//                str += empty_char;
-//            } else {
-//
-////                str += this.sourceRandomCharacter.charAt( Math.floor( Math.random() * ( this.sourceRandomCharacter.length ) ) );
-//                str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
-//            }
+
             if ( percent >= random_index[ i ] ) {
 
-//                str += this._originalStr.charAt(i);
                 str += origin_str.charAt(i);
 
             } else {
@@ -262,7 +239,6 @@
                         str += empty_char;
                     } else {
 
-//                str += this.sourceRandomCharacter.charAt( Math.floor( Math.random() * ( this.sourceRandomCharacter.length ) ) );
                         str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
                     }
                 } else {
@@ -278,36 +254,13 @@
             }
         }
 
-////        str = this._originalStr;
-//        this._element.innerHTML = str;
-//        this.onChange( str );
-//
-//        if ( percent > 1 ) {
-//            // complete
-////            clearInterval( this._intervalId );
-////            this.isRunning = false;
-//            this.stop();
-//            this.onComplete();
-//        }
-//
-////        else {
-////
-////            this._element.innerHTML = str;
-////            this.onChange( str );
-////        }
-
         this._element.innerHTML = str;
         this.onChange( str );
 
         if ( percent > 1 ) {
 
-//            str = this._originalStr;
-//            clearInterval( this._intervalId );
-//            this.isRunning = false;
             this.stop( true );
             this.onComplete();
-
-            return;
         }
     };
 
@@ -319,34 +272,14 @@
 
     };
 
+    /**
+     * shuffle update callback 関数, override して使用します
+     * @method onChange
+     * @param {string} str 変更された文字
+     */
     p.onChange = function ( str ) {
 
     };
-
-//    /**
-//     * @private
-//     * @static
-//     * @type {{create: Function}}
-//     */
-//    var Delegate = {
-//        /**
-//         * スコープを移譲した関数を作成します。
-//         * @param {Function} func 実行したい関数
-//         * @param {*} thisObj 移譲したいスコープ
-//         * @return {Function} 移譲済みの関数
-//         * @private
-//         * @static
-//         */
-//        create:function ( func, thisObj ) {
-//            var del = function () {
-//                return func.apply( thisObj, arguments );
-//            };
-//            //情報は関数のプロパティとして定義する
-//            del.func = func;
-//            del.thisObj = thisObj;
-//            return del;
-//        }
-//    };
 
     inazumatv.ShuffleText = ShuffleText;
 

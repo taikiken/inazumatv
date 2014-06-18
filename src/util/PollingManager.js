@@ -65,6 +65,7 @@
      *      loop();
      *
      * @class PollingManager
+     * @uses EventDispatcher
      * @param {Number} ms milliseconds 指定
      * @constructor
      */

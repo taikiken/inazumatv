@@ -176,6 +176,10 @@ var inazumatv = {};
 ( function ( inazumatv, self ){
     "use strict";
 
+    var _rand = Math.random,
+        _floor = Math.floor,
+        _max = Math.max;
+
     /**
      * Top Level
      * 継承に使用します
@@ -218,19 +222,19 @@ var inazumatv = {};
             min = 0;
         }
 
-        return min + Math.floor(Math.random() * (max - min + 1));
+        return min + _floor( _rand() * ( max - min + 1 ) );
     };
 
     /**
      * Top Level
-     * 配列内の最大数値を返す
+     * 配列内の最大数値を返します
      * @for inazumatv
      * @method maxValue
      * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
      * @returns {number} 配列内の最大数値を返します
      */
     inazumatv.maxValue = function ( arr ){
-        return Math.max.apply(null, arr);
+        return _max.apply( null, arr );
     };
 
     /**
@@ -252,27 +256,29 @@ var inazumatv = {};
         };
     };
 
+    // http://bost.ocks.org/mike/shuffle/
     /**
-     * http://bost.ocks.org/mike/shuffle/
+     * 配列をシャッフルします
+     * @for inazumatv
+     * @method shuffle
      * @param {array} array
      * @returns {Array}
      */
     function shuffle( array ) {
-        var copy = [], n = array.length, i,
-            floor = Math.floor,
-            rand = Math.random;
+        var copy = [], n = array.length, i;
 
         // While there remain elements to shuffle…
-        while (n) {
+        while ( n ) {
 
             // Pick a remaining element…
-            i = floor( rand() * array.length );
+            i = _floor( _rand() * array.length );
 
             // If not already shuffled, move it to the new array.
-            if (i in array) {
-                copy.push(array[i]);
-                delete array[i];
-                n--;
+            if ( i in array ) {
+
+                copy.push( array[ i ] );
+                delete array[ i ];
+                --n;
             }
         }
 

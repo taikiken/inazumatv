@@ -22,6 +22,7 @@
     /**
      * 画像ロードヘルパークラスです
      * @class ImageLoader
+     * @uses EventDispatcher
      * @param {Array} imageList [pathToImage,...]
      * @constructor
      */

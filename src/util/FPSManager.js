@@ -50,6 +50,7 @@
      *      ps24.start();
      *
      * @class FPSManager
+     * @uses EventDispatcher
      * @param {int} fps frame rate 指定（整数）
      * @param {Boolean} [manual] abort auto start, default: false
      * @constructor

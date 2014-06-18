@@ -14,10 +14,16 @@
         "../src/net/ImageLoader.js",
         "../src/net/QuerySearch.js",
 
+        "../src/net/LoadImage.js",
+        "../src/net/BulkLoader.js",
+
         "../src/util/CheckList.js",
         "../src/util/LoopManager.js",
         "../src/util/PollingManager.js",
         "../src/util/FPSManager.js",
+
+        "../src/util/List.js",
+        "../src/util/Kana.js",
 
         "../src/motion/ShuffleText.js",
 

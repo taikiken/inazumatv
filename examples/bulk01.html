@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Bulk loader</title>
+<script type="text/javascript" src="../libs/inazumatv.util.js"></script>
+</head>
+<body>
+
+<div id="output"></div>
+<div id="fail"></div>
+<div id="comp"></div>
+<script type="text/javascript">
+	( function ( window ){
+		"use strict";
+		var document = window.document,
+
+
+			inazumatv = window.inazumatv,
+			BulkLoader = inazumatv.BulkLoader,
+
+			output = document.getElementById( "output" ),
+			fail = document.getElementById( "fail" ),
+			comp = document.getElementById( "comp" ),
+			list,
+			bulk;
+
+		list = [
+			"img/dummy/animals-1.jpg",
+			"img/dummy/animals-2.jpg",
+			"img/dummy/animals-3.jpg",
+			"img/dummy/img-4.jpg",
+			"img/dummy/img-5.jpg",
+			"img/dummy/img-6.jpg",
+			"img/dummy/img-7.jpg",
+			"img/dummy/img-8.jpg",
+			"img/dummy/img-9.jpg",
+			"img/dummy/img-x.jpg",
+			"img/dummy/img-10.jpg",
+			"img/dummy/img-11.jpg",
+			"img/dummy/img-12.jpg",
+			"img/dummy/img-13.jpg",
+			"img/dummy/img-y.jpg",
+			"img/dummy/img-14.jpg"
+		];
+
+		function load ( e ) {
+			console.log( "load ", e );
+
+			output.appendChild( e.params[ 0 ] );
+		}
+
+		function error ( e ) {
+			console.log( "error ", e );
+			var div = document.createElement( "div" );
+
+			div.innerHTML = "error: " + e.params[ 0 ].src;
+			fail.appendChild( div );
+		}
+
+		function complete ( e ) {
+			console.log( "complete ", e );
+
+			comp.innerHTML = "<strong>COMPLETE</strong>"
+		}
+
+		bulk = new BulkLoader( list );
+		bulk.addEventListener( BulkLoader.LOAD, load );
+		bulk.addEventListener( BulkLoader.ERROR, error );
+		bulk.addEventListener( BulkLoader.COMPLETE, complete );
+
+		bulk.start();
+
+	}( window ) );
+	</script>
+</body>
+</html>

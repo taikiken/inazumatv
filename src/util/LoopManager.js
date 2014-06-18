@@ -53,6 +53,7 @@
      *      loopInstance.addEventListener( LoopManager.ENTER_FRAME, onEnterFrame );
      *
      * @class LoopManager
+     * @uses EventDispatcher
      * @returns {LoopManager} LoopManager instance
      * @constructor
      */

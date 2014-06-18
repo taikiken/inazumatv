@@ -13,43 +13,22 @@
 		"use strict";
 		var document = window.document,
 
-			requestAnimationFrame = window.self.requestAnimationFrame,
-
 			inazumatv = window.inazumatv,
-			EventObject = inazumatv.EventObject,
 			PollingManager = inazumatv.PollingManager,
-			LoopManager = inazumatv.LoopManager,
 
 			output = document.getElementById( "output" ),
 
-			polling,
-			loop
-		;
+			polling;
 
 		polling = new PollingManager( 2000 );
-		loop = LoopManager.getInstance();
-
-		function _loop () {
-//			requestAnimationFrame( _loop );
-
-//			if ( polling.update() ) {
-//				console.log( "update ====================================" );
-//				polling.dispatchEvent( new EventObject( PollingManager.POLLING_PAST ) );
-//			}
-			polling.update();
-		}
 
 		function insert ( e ) {
-//			console.log( "e ", e.target );
 			output.innerHTML += e.target._startTime + "<br>";
 		}
 
 		polling.addEventListener( PollingManager.POLLING_PAST, insert );
-		loop.addEventListener( LoopManager.ENTER_FRAME, _loop );
 
-		polling.start();
-//		_loop();
-		loop.start();
+		polling.start( true );
 
 	}( window ) );
 	</script>

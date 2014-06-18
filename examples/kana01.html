@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Kana</title>
+<script type="text/javascript" src="../libs/inazumatv.util.js"></script>
+</head>
+<body>
+<div id="kanji">大</div>
+<div id="hiragana">だ</div>
+<div id="kana">ダ</div>
+<div id="han">ﾀﾞ</div>
+<div id="zen">あ</div>
+<script type="text/javascript">
+	( function ( window ){
+		"use strict";
+		var document = window.document,
+
+
+			inazumatv = window.inazumatv,
+			Kana = inazumatv.Kana,
+
+			kanji = document.getElementById( "kanji" ),
+			hiragana = document.getElementById( "hiragana" ),
+			kana = document.getElementById( "kana" ),
+			han = document.getElementById( "han" ),
+			zen = document.getElementById( "zen" );
+
+		function judge ( element, func ) {
+			var result = func( element.innerHTML );
+
+			element.innerHTML += ": " + result;
+		}
+
+		judge( kanji, Kana.kanji );
+		judge( hiragana, Kana.hiragana );
+		judge( kana, Kana.kana );
+		judge( han, Kana.han );
+		judge( zen, Kana.zen );
+
+	}( window ) );
+	</script>
+</body>
+</html>

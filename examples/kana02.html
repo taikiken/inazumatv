@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Kana</title>
+<style type="text/css">
+.border,
+.border td,
+.border th
+{
+	border: 1px solid #ccc;
+}
+</style>
+<script type="text/javascript" src="../libs/inazumatv.util.js"></script>
+</head>
+<body>
+<div id="question">
+梅雨ない北海道で12日連続雨写真NEW
+国内トピックスV
+国内
+政治
+社会
+人ｱｲｳｴｵ
+２７歳市議、女子高生のわいせつ動画投稿でカネ儲け「生活費に必要だった」
+産経新聞 6月18日(水)15時15分配信</div>
+
+<div id="output"></div>
+<script type="text/javascript">
+	( function ( window ){
+		"use strict";
+		var document = window.document,
+
+
+			inazumatv = window.inazumatv,
+			Kana = inazumatv.Kana,
+
+			question = document.getElementById( "question" ),
+			output = document.getElementById( "output" ),
+			i, limit,
+			texts, text, tag;
+
+		texts = question.innerHTML;
+
+		tag = "";
+		tag += "<table class='border'>";
+
+		tag += "<tr>";
+		tag += "<th>text</th>";
+		tag += "<td> kanji</td>";
+		tag += "<td>hiragana</td>";
+		tag += "<td>kana </td>";
+		tag += "<td>han</td>";
+		tag += "<td>zen</td>";
+		tag += "<td>alphabetic</td>";
+		tag += "</tr>";
+
+		for ( i = 0, limit = texts.length; i < limit; i++ ) {
+		    text = texts[ i ];
+
+			var kanji, hiragana, kana, han, zen, alphabetic;
+
+			kanji = Kana.kanji( text );
+			hiragana = Kana.hiragana( text );
+			kana = Kana.kana( text );
+			han = Kana.han( text );
+			zen = Kana.zen( text );
+			alphabetic = Kana.alphabetic( text );
+
+			tag += "<tr>";
+			tag += "<th>" + text + "</th>";
+			tag += "<td>" + kanji +  "</td>";
+			tag += "<td>" + hiragana +  "</td>";
+			tag += "<td>" + kana +  "</td>";
+			tag += "<td>" + han +  "</td>";
+			tag += "<td>" + zen +  "</td>";
+			tag += "<td>" + alphabetic +  "</td>";
+			tag += "</tr>";
+		}
+
+		tag += "</table>";
+		output.innerHTML = tag;
+
+
+	}( window ) );
+	</script>
+</body>
+</html>
