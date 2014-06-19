@@ -328,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Thu, 19 Jun 2014 06:48:04 GMT"; // injected by build process
+    s.buildDate = /*date*/"Thu, 19 Jun 2014 07:02:04 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
