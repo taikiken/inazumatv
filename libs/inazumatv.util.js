@@ -320,7 +320,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.8.18"; // injected by build process
+    s.version = /*version*/"0.9.1"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -328,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Wed, 18 Jun 2014 13:38:10 GMT"; // injected by build process
+    s.buildDate = /*date*/"Thu, 19 Jun 2014 06:48:04 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -2419,6 +2419,17 @@ var inazumatv = {};
          */
         l.shuffle = function ( array ) {
             return inazumatv.shuffle( array );
+        };
+
+        /**
+         * 配列内の最大数値を返します
+         * @method max
+         * @static
+         * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
+         * @returns {number} 配列内の最大数値を返します
+         */
+        l.max = function ( arr ) {
+            inazumatv.maxValue( arr );
         };
 
         return List;

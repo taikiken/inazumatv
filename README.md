@@ -33,6 +33,10 @@ jQuery依存機能を使わないのであればjquery.jsを読み込まずに�
 
 * Function.prototype.bind
 
+* Date.now
+
+* String.prototype.trim
+
 ## jQuery 非依存(関数)
 
 ### extend
@@ -80,17 +84,25 @@ location.searchをparseします。
 ### FPSManager
 フレームレートを設定しfps毎に処理を行いたいときに使用します。
 
-### LoadManager
-複数画像ロードするときに使用します。@clockmaker氏のLoadManagerを移植し変更を加えています。
+### LoadImage
+画像をロードするときに使用します。
 
-### ImageLoader
-LoadManagerのヘルパーです。START, COMPLETE, ERRORのeventが発生します。
+### BulkLoader
+複数画像ファイルをロードする際に使用します。  
+LoadImageに依存します。
 
 ### ShuffleText
 テキストをシャッフルし表示します。@clockmaker氏のShuffleTextを移植し変更を加えています。
 
 ### AjaxEvent
 Ajax Event Class.
+
+### Kana
+日本語文字列判定に使用します  
+半角カタカナ、全角、漢字、ひらがな、カタカナを判定可能です。
+
+### List
+Arrayヘルパーです。
 
 ## jQuery 依存(Plugin)
 jQueryプラグインsmoothScroll, easingを移植し変更を加えています。

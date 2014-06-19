@@ -68,6 +68,17 @@
             return inazumatv.shuffle( array );
         };
 
+        /**
+         * 配列内の最大数値を返します
+         * @method max
+         * @static
+         * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
+         * @returns {number} 配列内の最大数値を返します
+         */
+        l.max = function ( arr ) {
+            inazumatv.maxValue( arr );
+        };
+
         return List;
     }() );
 
