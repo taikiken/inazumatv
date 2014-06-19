@@ -10,6 +10,8 @@
         "../src/events/EventObject.js",
         "../src/events/AjaxEvent.js",
 
+        "../src/net/LoadManager.js",
+        "../src/net/ImageLoader.js",
         "../src/net/QuerySearch.js",
 
         "../src/net/LoadImage.js",

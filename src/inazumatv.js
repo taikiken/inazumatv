@@ -31,7 +31,8 @@ var inazumatv = {};
         };
     }
 
-    if (!Date.now) {
+    // Date.now
+    if ( !Date.now ) {
         Date.now = function now() {
             return new Date().getTime();
         };
@@ -165,6 +166,19 @@ var inazumatv = {};
             return this.replace( /^\s+|\s+$/g, '' );
 
         };
+
+        // getUserMedia
+        navigator.getUserMedia =
+            navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia;
+
+        // URL
+        window.URL = window.URL ||
+            window.webkitURL ||
+            window.mozURL ||
+            window.msURL;
     }());
 
 }( window.self ) );
