@@ -86,6 +86,8 @@
 
     var p = PollingManager.prototype;
 
+    p.constructor = inazumatv.PollingManager;
+
     // mixin
     EventDispatcher.initialize( p );
 
@@ -151,7 +153,7 @@
     /**
      * pollingに達した場合は PollingManager.POLLING_PAST を発火します
      * @method update
-     * @returns {boolean} pollingに達した場合はtrueを返します
+     * @return {boolean} pollingに達した場合はtrueを返します
      */
     p.update = function (){
         var now = new Date().getTime(),

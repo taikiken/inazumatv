@@ -34,7 +34,7 @@
          * @static
          * @param {int} length
          * @param {int|string} word
-         * @returns {Array}
+         * @return {Array}
          */
         l.word = function ( length, word ) {
             var arr = [], i;
@@ -51,7 +51,7 @@
          * @method zero
          * @static
          * @param {int} length
-         * @returns {Array}
+         * @return {Array}
          */
         l.zero = function ( length ) {
             return this.word( length, 0 );
@@ -62,7 +62,7 @@
          * @method shuffle
          * @static
          * @param {array} array
-         * @returns {Array} シャッフル後の配列を返します
+         * @return {Array} シャッフル後の配列を返します
          */
         l.shuffle = function ( array ) {
             return inazumatv.shuffle( array );
@@ -73,7 +73,7 @@
          * @method max
          * @static
          * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
-         * @returns {number} 配列内の最大数値を返します
+         * @return {number} 配列内の最大数値を返します
          */
         l.max = function ( arr ) {
             inazumatv.maxValue( arr );

@@ -28,6 +28,8 @@
         this._type = "html";
     }
 
+    HTMLLoader.prototype.constructor = HTMLLoader;
+
     inazumatv.extend( XMLLoader, HTMLLoader );
 
     /**

@@ -54,7 +54,7 @@
      *
      * @class LoopManager
      * @uses EventDispatcher
-     * @returns {LoopManager} LoopManager instance
+     * @return {LoopManager} LoopManager instance
      * @constructor
      */
     function LoopManager () {
@@ -74,7 +74,7 @@
     /**
      * @static
      * @method getInstance
-     * @returns {LoopManager} LoopManager instance
+     * @return {LoopManager} LoopManager instance
      */
     LoopManager.getInstance = function (){
         if ( typeof _instanceLoopManager === "undefined" ) {
@@ -94,6 +94,8 @@
     LoopManager.ENTER_FRAME = "loopManagerEnterFrame";
 
     var p = LoopManager.prototype;
+
+    p.constructor = inazumatv.LoopManager;
 
     EventDispatcher.initialize( p );
 

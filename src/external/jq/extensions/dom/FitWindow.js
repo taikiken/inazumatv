@@ -65,10 +65,12 @@
 
     var p = FitWindow.prototype;
 
+    p.constructor = inazumatv.FitWindow;
+
     /**
      *
      * @method getWatchWindowSize
-     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
         return this._watch;

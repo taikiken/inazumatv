@@ -12,69 +12,114 @@
  */
 ( function ( window ){
     "use strict";
-    var document = window.document
+    var inazumatv = window.inazumatv
     ;
-
-//    /**
-//     * get parameter を取得します
-//     * @class QuerySearch
-//     * @constructor
-//     */
-//    function QuerySearch () {
-//        throw "QuerySearch cannot be instantiated";
-//    }
 
     /**
      * get parameter を取得します
      * @class QuerySearch
-     * @type {{search: search}}
+     * @constructor
+     */
+    function QuerySearch () {
+        throw "QuerySearch cannot be instantiated";
+    }
+
+    var q = QuerySearch;
+
+    /**
+     * 指定Keyの値を取得します。
+     * @for QuerySearch
+     * @method search
+     * @param {string} key_name 取得したいkey name
+     * @return {string} search value
      * @static
      */
-    window.inazumatv.QuerySearch = {
-        /**
-         * 指定Keyの値を取得します。
-         * @for QuerySearch
-         * @method search
-         * @param {string} key_name 取得したいkey name
-         * @returns {string} search value
-         * @static
-         */
-        search: function ( key_name ){
-            var query = window.location.search.substring( 1 ),
-                vars = query.split( '&' ),
-                result = "";
+    q.search = function ( key_name ){
+        var query = window.location.search.substring( 1 ),
+            vars = query.split( '&' ),
+            result = "";
 
-            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
-                var pair = vars[ i ].split( '=' );
-                if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
-                    result =  decodeURIComponent( pair[ 1 ] );
-                    break;
-                }
+        for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+            var pair = vars[ i ].split( '=' );
+            if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
+                result =  decodeURIComponent( pair[ 1 ] );
+                break;
             }
-
-            return result;
-        },
-        /**
-         * get parameter を全て取得します。
-         * ＊key=value形式のみです。
-         *
-         * @for QuerySearch
-         * @method searchAll
-         * @returns {object} key: value
-         * @static
-         */
-        searchAll: function (){
-            var query = window.location.search.substring( 1 ),
-                vars = query.split( '&' ),
-                result = {};
-
-            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
-                var pair = vars[ i ].split( '=' );
-
-                result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
-            }
-
-            return result;
         }
+
+        return result;
     };
+
+    /**
+     * get parameter を全て取得します。
+     * ＊key=value形式のみです。
+     *
+     * @for QuerySearch
+     * @method searchAll
+     * @return {object} key: value
+     * @static
+     */
+    q.searchAll = function (){
+        var query = window.location.search.substring( 1 ),
+            vars = query.split( '&' ),
+            result = {};
+
+        for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+            var pair = vars[ i ].split( '=' );
+
+            result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
+        }
+
+        return result;
+    };
+
+    inazumatv.QuerySearch = QuerySearch;
+//
+//    window.inazumatv.QuerySearch = {
+//        /**
+//         * 指定Keyの値を取得します。
+//         * @for QuerySearch
+//         * @method search
+//         * @param {string} key_name 取得したいkey name
+//         * @return {string} search value
+//         * @static
+//         */
+//        search: function ( key_name ){
+//            var query = window.location.search.substring( 1 ),
+//                vars = query.split( '&' ),
+//                result = "";
+//
+//            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+//                var pair = vars[ i ].split( '=' );
+//                if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
+//                    result =  decodeURIComponent( pair[ 1 ] );
+//                    break;
+//                }
+//            }
+//
+//            return result;
+//        },
+//        /**
+//         * get parameter を全て取得します。
+//         * ＊key=value形式のみです。
+//         *
+//         * @for QuerySearch
+//         * @method searchAll
+//         * @return {object} key: value
+//         * @static
+//         */
+//        searchAll: function (){
+//            var query = window.location.search.substring( 1 ),
+//                vars = query.split( '&' ),
+//                result = {};
+//
+//            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+//                var pair = vars[ i ].split( '=' );
+//
+//                result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
+//            }
+//
+//            return result;
+//        }
+//    };
 }( window ) );

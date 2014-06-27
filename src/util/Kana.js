@@ -31,7 +31,7 @@
          * @method kanji
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} 漢字かどうかの真偽値を返します
+         * @return {boolean} 漢字かどうかの真偽値を返します
          */
         k.kanji = function ( txt ) {
             var unicode = txt.charCodeAt( 0 );
@@ -54,7 +54,7 @@
          * @method hiragana
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} ひらがなか否かの真偽値を返します
+         * @return {boolean} ひらがなか否かの真偽値を返します
          */
         k.hiragana = function ( txt ) {
             var unicode = txt.charCodeAt( 0 );
@@ -66,7 +66,7 @@
          * @method kana
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} カナか否かの真偽値を返します
+         * @return {boolean} カナか否かの真偽値を返します
          */
         k.kana = function ( txt ) {
             var unicode = txt.charCodeAt( 0 );
@@ -78,7 +78,7 @@
          * @method han
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} 半角文字か否かの真偽値を返します
+         * @return {boolean} 半角文字か否かの真偽値を返します
          */
         k.han = function ( txt ) {
             var unicode = txt.charCodeAt( 0 );
@@ -90,7 +90,7 @@
          * @method zen
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} 全角か否かの真偽値を返します
+         * @return {boolean} 全角か否かの真偽値を返します
          */
         k.zen = function ( txt ) {
             return k.kanji( txt ) || k.hiragana( txt ) || k.kana( txt );
@@ -101,7 +101,7 @@
          * @method alphabetic
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} アルファベットか否かの真偽値を返します、スペースはfalseです
+         * @return {boolean} アルファベットか否かの真偽値を返します、スペースはfalseです
          */
         k.alphabetic = function ( txt ) {
             return /^[a-zA-Z]+$/.test( txt );

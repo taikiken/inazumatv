@@ -213,7 +213,7 @@ var inazumatv = {};
      * @for inazumatv
      * @method isNumeric
      * @param {*} obj
-     * @returns {boolean} true: Number, false: not Number
+     * @return {boolean} true: Number, false: not Number
      */
     function isNumeric ( obj ) {
         return !isNaN( parseFloat( obj ) ) && isFinite( obj );
@@ -227,7 +227,7 @@ var inazumatv = {};
      * @method random
      * @param {Number} min 最小値
      * @param {Number} [max] 最大値 optional
-     * @returns {Number} min ~ max 間の乱数(Float)を発生させます
+     * @return {Number} min ~ max 間の乱数(Float)を発生させます
      */
     inazumatv.random = function ( min, max ) {
         if ( !isNumeric( max ) ) {
@@ -245,7 +245,7 @@ var inazumatv = {};
      * @for inazumatv
      * @method maxValue
      * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
-     * @returns {number} 配列内の最大数値を返します
+     * @return {number} 配列内の最大数値を返します
      */
     inazumatv.maxValue = function ( arr ){
         return _max.apply( null, arr );
@@ -276,7 +276,7 @@ var inazumatv = {};
      * @for inazumatv
      * @method shuffle
      * @param {array} array
-     * @returns {Array}
+     * @return {Array}
      */
     function shuffle( array ) {
         var copy = [], n = array.length, i;
@@ -328,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Thu, 19 Jun 2014 07:02:04 GMT"; // injected by build process
+    s.buildDate = /*date*/"Thu, 19 Jun 2014 10:22:36 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -413,7 +413,7 @@ var inazumatv = {};
      * iOS version detection
      * @for Browser
      * @method _iosVersion
-     * @returns {Array} iOS version 配列 3桁
+     * @return {Array} iOS version 配列 3桁
      * @private
      */
     function _iosVersion () {
@@ -433,7 +433,7 @@ var inazumatv = {};
      * Android version detection
      * @for Browser
      * @method _androidVersion
-     * @returns {Array} Android version 配列 3桁
+     * @return {Array} Android version 配列 3桁
      * @private
      */
     function _androidVersion () {
@@ -451,7 +451,7 @@ var inazumatv = {};
     // Safari version
     /**
      * Safari version detection
-     * @returns {Array} Safari version 配列 2桁~3桁
+     * @return {Array} Safari version 配列 2桁~3桁
      * @private
      */
     function _safariVersion () {
@@ -491,7 +491,7 @@ var inazumatv = {};
 
     /**
      *
-     * @type {{iOS: {is: Function, number: Function, major: Function, version: Function}, Android: {is: Function, number: Function, major: Function, version: Function}, IE: {is: Function, version: Function}, Chrome: {is: Function}, Safari: {is: Function}, Firefox: {is: Function}, _ie: Function, _ie6: Function, _ie7: Function, _ie8: Function, _ie9: Function, _ie10: Function, _ie11: Function, _chrome: Function, _firefox: Function, _safari: Function, _legacy: Function, _mobile: Function, _ios: Function, _ios_version: Function, _android_version: Function, _android_version_major: Function, _android_version_num: Function, _android: Function, _iphone: Function, _ipad: Function, _ipod: Function, hideURLBar: Function}}
+     * @type {object}
      */
     Browser = {
         // new version
@@ -506,7 +506,7 @@ var inazumatv = {};
             /**
              * @for Browser.iOS
              * @method is
-             * @returns {boolean} iOS か否かを返します
+             * @return {boolean} iOS か否かを返します
              * @static
              */
             is: function (){
@@ -515,7 +515,7 @@ var inazumatv = {};
             /**
              * @for Browser.iOS
              * @method number
-             * @returns {Array} iOS version number を返します [ major, minor, build ]
+             * @return {Array} iOS version number を返します [ major, minor, build ]
              * @static
              */
             number: function (){
@@ -524,7 +524,7 @@ var inazumatv = {};
             /**
              * @for Browser.iOS
              * @method major
-             * @returns {Number} iOS major version number を返します
+             * @return {Number} iOS major version number を返します
              * @static
              */
             major: function (){
@@ -533,7 +533,7 @@ var inazumatv = {};
             /**
              * @for Browser.iOS
              * @method version
-             * @returns {Number} iOS version を返します 9.99
+             * @return {Number} iOS version を返します 9.99
              * @static
              */
             version: function (){
@@ -542,7 +542,7 @@ var inazumatv = {};
             /**
              * @for Browser.iOS
              * @method iPhone
-             * @returns {Boolean} iPhone か否かを返します
+             * @return {Boolean} iPhone か否かを返します
              * @static
              */
             iPhone: function (){
@@ -551,7 +551,7 @@ var inazumatv = {};
             /**
              * @for Browser.iOS
              * @method iPad
-             * @returns {Boolean} iPad か否かを返します
+             * @return {Boolean} iPad か否かを返します
              * @static
              */
             iPad: function (){
@@ -560,7 +560,7 @@ var inazumatv = {};
             /**
              * @for Browser.iOS
              * @method iPod
-             * @returns {Boolean} iPod か否かを返します
+             * @return {Boolean} iPod か否かを返します
              * @static
              */
             iPod: function (){
@@ -569,7 +569,7 @@ var inazumatv = {};
             /**
              * @for Browser.iOS
              * @method fullScreen
-             * @returns {boolean} standalone mode か否かを返します
+             * @return {boolean} standalone mode か否かを返します
              * @static
              */
             fullScreen: function (){
@@ -587,7 +587,7 @@ var inazumatv = {};
             /**
              * @for Browser.Android
              * @method is
-             * @returns {boolean} Android か否かを返します
+             * @return {boolean} Android か否かを返します
              * @static
              */
             is: function (){
@@ -596,7 +596,7 @@ var inazumatv = {};
             /**
              * @for Browser.Android
              * @method number
-             * @returns {Array} Android version number を返します [ major, minor, build ]
+             * @return {Array} Android version number を返します [ major, minor, build ]
              * @static
              */
             number: function (){
@@ -605,7 +605,7 @@ var inazumatv = {};
             /**
              * @for Browser.Android
              * @method major
-             * @returns {Number} Android major version number を返します
+             * @return {Number} Android major version number を返します
              * @static
              */
             major: function (){
@@ -614,7 +614,7 @@ var inazumatv = {};
             /**
              * @for Browser.Android
              * @method version
-             * @returns {Number} Android version を返します 9.99
+             * @return {Number} Android version を返します 9.99
              * @static
              */
             version: function (){
@@ -623,7 +623,7 @@ var inazumatv = {};
             /**
              * @for Browser.Android
              * @method phone
-             * @returns {boolean} Android Phone か否かを返します
+             * @return {boolean} Android Phone か否かを返します
              * @static
              */
             phone: function (){
@@ -632,7 +632,7 @@ var inazumatv = {};
             /**
              * @for Browser.Android
              * @method tablet
-             * @returns {boolean} Android Tablet か否かを返します
+             * @return {boolean} Android Tablet か否かを返します
              * @static
              */
             tablet: function (){
@@ -641,7 +641,7 @@ var inazumatv = {};
             /**
              * @for Browser.Android
              * @method standard
-             * @returns {boolean} Android standard Browser か否かを返します
+             * @return {boolean} Android standard Browser か否かを返します
              * @static
              */
             standard: function () {
@@ -659,7 +659,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method is
-             * @returns {boolean} IE か否かを返します
+             * @return {boolean} IE か否かを返します
              * @static
              */
             is: function (){
@@ -668,7 +668,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method is6
-             * @returns {boolean} IE 6 か否かを返します
+             * @return {boolean} IE 6 か否かを返します
              */
             is6: function (){
                 return _ie6;
@@ -676,7 +676,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method is7
-             * @returns {boolean} IE 7 か否かを返します
+             * @return {boolean} IE 7 か否かを返します
              */
             is7: function (){
                 return _ie7;
@@ -684,7 +684,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method is8
-             * @returns {boolean} IE 8 か否かを返します
+             * @return {boolean} IE 8 か否かを返します
              */
             is8: function (){
                 return _ie8;
@@ -692,7 +692,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method is9
-             * @returns {boolean} IE 9 か否かを返します
+             * @return {boolean} IE 9 か否かを返します
              */
             is9: function (){
                 return _ie9;
@@ -700,7 +700,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method is10
-             * @returns {boolean} IE 10 か否かを返します
+             * @return {boolean} IE 10 か否かを返します
              */
             is10: function (){
                 return _ie10;
@@ -708,7 +708,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method is11
-             * @returns {boolean} IE 11 か否かを返します
+             * @return {boolean} IE 11 か否かを返します
              */
             is11: function (){
                 return _ie11;
@@ -716,7 +716,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method _legacy
-             * @returns {boolean} IE 6 or 7 or 8 か否かを返します
+             * @return {boolean} IE 6 or 7 or 8 か否かを返します
              */
             legacy: function (){
                 return _legacy;
@@ -724,7 +724,7 @@ var inazumatv = {};
             /**
              * @for Browser.IE
              * @method version
-             * @returns {Number} IE version を返します int 6 ~ 11, IE 6 ~ IE 11 でない場合は -1 を返します
+             * @return {Number} IE version を返します int 6 ~ 11, IE 6 ~ IE 11 でない場合は -1 を返します
              * @static
              */
             version: function (){
@@ -756,7 +756,7 @@ var inazumatv = {};
             /**
              * @for Browser.Chrome
              * @method is
-             * @returns {boolean} Chrome か否かを返します
+             * @return {boolean} Chrome か否かを返します
              * @static
              */
             is: function (){
@@ -765,7 +765,7 @@ var inazumatv = {};
             /**
              * @for Browser.Chrome
              * @method version
-             * @returns {string}
+             * @return {string}
              */
             version: function () {
                 return _chrome_version;
@@ -782,7 +782,7 @@ var inazumatv = {};
             /**
              * @for Browser.Safari
              * @method is
-             * @returns {boolean} Safari か否かを返します
+             * @return {boolean} Safari か否かを返します
              * @static
              */
             is: function (){
@@ -791,7 +791,7 @@ var inazumatv = {};
             /**
              * @for Browser.Safari
              * @method number
-             * @returns {Array} Safari version number を返します [ major, minor, build ]
+             * @return {Array} Safari version number を返します [ major, minor, build ]
              * @static
              */
             number: function (){
@@ -800,7 +800,7 @@ var inazumatv = {};
             /**
              * @for Browser.Safari
              * @method major
-             * @returns {Number} Safari major version number を返します
+             * @return {Number} Safari major version number を返します
              * @static
              */
             major: function (){
@@ -809,7 +809,7 @@ var inazumatv = {};
             /**
              * @for Browser.Safari
              * @method version
-             * @returns {Number} Safari version を返します 9.99
+             * @return {Number} Safari version を返します 9.99
              * @static
              */
             version: function (){
@@ -827,7 +827,7 @@ var inazumatv = {};
             /**
              * @for Browser.Firefox
              * @method is
-             * @returns {boolean} Firefox か否かを返します
+             * @return {boolean} Firefox か否かを返します
              * @static
              */
             is: function (){
@@ -845,7 +845,7 @@ var inazumatv = {};
             /**
              * @for Browser.Touch
              * @method is
-             * @returns {boolean} Touch 可能か否かを返します
+             * @return {boolean} Touch 可能か否かを返します
              * @static
              */
             is: function (){
@@ -863,7 +863,7 @@ var inazumatv = {};
             /**
              * @for Browser.Mobile
              * @method is
-             * @returns {boolean} mobile(smart phone) か否かを返します
+             * @return {boolean} mobile(smart phone) か否かを返します
              * @static
              */
             is: function (){
@@ -890,7 +890,7 @@ var inazumatv = {};
             /**
              * @for Browser.Mobile
              * @method phone
-             * @returns {boolean} Smart Phone(include iPod)か否かを返します
+             * @return {boolean} Smart Phone(include iPod)か否かを返します
              * @static
              */
             phone: function (){
@@ -899,7 +899,7 @@ var inazumatv = {};
             /**
              * @for Browser.Mobile
              * @method tablet
-             * @returns {boolean} tablet か否かを返します
+             * @return {boolean} tablet か否かを返します
              * @static
              */
             tablet: function (){
@@ -917,7 +917,7 @@ var inazumatv = {};
             /**
              * @for Browser.Canvas
              * @method is
-             * @returns {boolean} canvas 2D が使用可能か否かを返します
+             * @return {boolean} canvas 2D が使用可能か否かを返します
              * @static
              */
             is: function (){
@@ -926,7 +926,7 @@ var inazumatv = {};
             /**
              * @for Browser.Canvas
              * @method webgl
-             * @returns {boolean} canvas webgl 使用可能か否かを返します
+             * @return {boolean} canvas webgl 使用可能か否かを返します
              * @static
              */
             webgl: function (){
@@ -947,6 +947,7 @@ var inazumatv = {};
 
     // below for compatibility to older version of inazumatv.util
     inazumatv.browser = Browser;
+
 }( window, this.inazumatv || {} ) );/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
@@ -963,102 +964,102 @@ var inazumatv = {};
     "use strict";
     var document = window.document;
 
+    // https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
     /**
      * @class CookieUtil
      * @constructor
      * @static
      */
-    var CookieUtil = function () {
+    function CookieUtil () {
         throw "CookieUtil cannot be instantiated";
+    }
+
+    var c = CookieUtil;
+
+    /**
+     * Cookie 取得
+     * @for CookieUtil
+     * @method getItem
+     * @param {String} sKey
+     * @return {string|null} Cookie 値を返します。取得できない場合はnullを返します。
+     * @static
+     */
+    c.getItem = function (sKey) {
+        return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
     };
 
     /**
-     *
-     * @type {{getItem: Function, setItem: Function, removeItem: Function, hasItem: Function, keys: Function}}
-     * https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
+     * Cookie 保存
+     * @for CookieUtil
+     * @method setItem
+     * @param {String} sKey Cookie key
+     * @param {String} sValue Cookie value
+     * @param {String} [vEnd] Cookie 期限, [ second, Date.toUTCString ]
+     * @param {String} [sPath] Cookie path
+     * @param {String} [sDomain] Cookie Domain
+     * @param {String} [bSecure] Cookie secure
+     * @return {boolean} 保存に成功したかの真偽値を返します
+     * @static
      */
-    CookieUtil = {
-        /**
-         * Cookie 取得
-         * @for CookieUtil
-         * @method getItem
-         * @param {String} sKey
-         * @returns {string|null} Cookie 値を返します。取得できない場合はnullを返します。
-         * @static
-         */
-        getItem: function (sKey) {
-            return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
-        },
-        /**
-         * Cookie 保存
-         * @for CookieUtil
-         * @method setItem
-         * @param {String} sKey Cookie key
-         * @param {String} sValue Cookie value
-         * @param {String} [vEnd] Cookie 期限, [ second, Date.toUTCString ]
-         * @param {String} [sPath] Cookie path
-         * @param {String} [sDomain] Cookie Domain
-         * @param {String} [bSecure] Cookie secure
-         * @returns {boolean} 保存に成功したかの真偽値を返します
-         * @static
-         */
-        setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
-            if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
-            var sExpires = "";
-            if (vEnd) {
-                switch (vEnd.constructor) {
-                    case Number:
-                        sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
-                        break;
-                    case String:
-                        sExpires = "; expires=" + vEnd;
-                        break;
-                    case Date:
-                        sExpires = "; expires=" + vEnd.toUTCString();
-                        break;
-                }
+    c.setItem = function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+        if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+        var sExpires = "";
+        if (vEnd) {
+            switch (vEnd.constructor) {
+                case Number:
+                    sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+                    break;
+                case String:
+                    sExpires = "; expires=" + vEnd;
+                    break;
+                case Date:
+                    sExpires = "; expires=" + vEnd.toUTCString();
+                    break;
             }
-            document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
-            return true;
-        },
-        /**
-         * Cookie 削除
-         * @for CookieUtil
-         * @method removeItem
-         * @param {String} sKey Cookie key
-         * @param {String} [sPath] Cookie path
-         * @param {String} [sDomain] Cookie Domain
-         * @returns {boolean} 削除に成功したかの真偽値を返します
-         * @static
-         */
-        removeItem: function (sKey, sPath, sDomain) {
-            if (!sKey || !this.hasItem(sKey)) { return false; }
-            document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + ( sDomain ? "; domain=" + sDomain : "") + ( sPath ? "; path=" + sPath : "");
-            return true;
-        },
-        /**
-         * Cookie Key が存在するかを調べる
-         * @for CookieUtil
-         * @method hasItem
-         * @param sKey Cookie key
-         * @returns {boolean} true / false
-         * @static
-         */
-        hasItem: function (sKey) {
-            return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
-        },
-        /**
-         * Cookie key 列挙
-         * @for CookieUtil
-         * @method keys
-         * @returns {Array} Cookie key 配列を返します
-         * @static
-         */
-        keys: /* optional method: you can safely remove it! */ function () {
-            var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
-            for (var nIdx = 0; nIdx < aKeys.length; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
-            return aKeys;
         }
+        document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+        return true;
+    };
+
+    /**
+     * Cookie 削除
+     * @for CookieUtil
+     * @method removeItem
+     * @param {String} sKey Cookie key
+     * @param {String} [sPath] Cookie path
+     * @param {String} [sDomain] Cookie Domain
+     * @return {boolean} 削除に成功したかの真偽値を返します
+     * @static
+     */
+    c.removeItem = function (sKey, sPath, sDomain) {
+        if (!sKey || !this.hasItem(sKey)) { return false; }
+        document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + ( sDomain ? "; domain=" + sDomain : "") + ( sPath ? "; path=" + sPath : "");
+        return true;
+    };
+
+    /**
+     * Cookie Key が存在するかを調べる
+     * @for CookieUtil
+     * @method hasItem
+     * @param sKey Cookie key
+     * @return {boolean} true / false
+     * @static
+     */
+    c.hasItem = function (sKey) {
+        return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+    };
+
+    /**
+     * Cookie key 列挙
+     * @for CookieUtil
+     * @method keys
+     * @return {Array} Cookie key 配列を返します
+     * @static
+     */
+    c.keys = /* optional method: you can safely remove it! */ function () {
+        var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+        for (var nIdx = 0; nIdx < aKeys.length; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
+        return aKeys;
     };
 
     inazumatv.CookieUtil = CookieUtil;
@@ -1289,7 +1290,7 @@ var inazumatv = {};
     /**
      * パラメタ取出し
      * @method getParams
-     * @returns {*} 配列を返します
+     * @return {*} 配列を返します
      */
     p.getParams = function (){
         return this.params;
@@ -1344,6 +1345,8 @@ var inazumatv = {};
 
     var p = AjaxEvent.prototype;
 
+    p.constructor = AjaxEvent;
+
     inazumatv.EventDispatcher.initialize( p );
 
     inazumatv.AjaxEvent = AjaxEvent;
@@ -1362,71 +1365,116 @@ var inazumatv = {};
  */
 ( function ( window ){
     "use strict";
-    var document = window.document
+    var inazumatv = window.inazumatv
     ;
-
-//    /**
-//     * get parameter を取得します
-//     * @class QuerySearch
-//     * @constructor
-//     */
-//    function QuerySearch () {
-//        throw "QuerySearch cannot be instantiated";
-//    }
 
     /**
      * get parameter を取得します
      * @class QuerySearch
-     * @type {{search: search}}
+     * @constructor
+     */
+    function QuerySearch () {
+        throw "QuerySearch cannot be instantiated";
+    }
+
+    var q = QuerySearch;
+
+    /**
+     * 指定Keyの値を取得します。
+     * @for QuerySearch
+     * @method search
+     * @param {string} key_name 取得したいkey name
+     * @return {string} search value
      * @static
      */
-    window.inazumatv.QuerySearch = {
-        /**
-         * 指定Keyの値を取得します。
-         * @for QuerySearch
-         * @method search
-         * @param {string} key_name 取得したいkey name
-         * @returns {string} search value
-         * @static
-         */
-        search: function ( key_name ){
-            var query = window.location.search.substring( 1 ),
-                vars = query.split( '&' ),
-                result = "";
+    q.search = function ( key_name ){
+        var query = window.location.search.substring( 1 ),
+            vars = query.split( '&' ),
+            result = "";
 
-            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
-                var pair = vars[ i ].split( '=' );
-                if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
-                    result =  decodeURIComponent( pair[ 1 ] );
-                    break;
-                }
+        for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+            var pair = vars[ i ].split( '=' );
+            if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
+                result =  decodeURIComponent( pair[ 1 ] );
+                break;
             }
-
-            return result;
-        },
-        /**
-         * get parameter を全て取得します。
-         * ＊key=value形式のみです。
-         *
-         * @for QuerySearch
-         * @method searchAll
-         * @returns {object} key: value
-         * @static
-         */
-        searchAll: function (){
-            var query = window.location.search.substring( 1 ),
-                vars = query.split( '&' ),
-                result = {};
-
-            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
-                var pair = vars[ i ].split( '=' );
-
-                result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
-            }
-
-            return result;
         }
+
+        return result;
     };
+
+    /**
+     * get parameter を全て取得します。
+     * ＊key=value形式のみです。
+     *
+     * @for QuerySearch
+     * @method searchAll
+     * @return {object} key: value
+     * @static
+     */
+    q.searchAll = function (){
+        var query = window.location.search.substring( 1 ),
+            vars = query.split( '&' ),
+            result = {};
+
+        for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+            var pair = vars[ i ].split( '=' );
+
+            result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
+        }
+
+        return result;
+    };
+
+    inazumatv.QuerySearch = QuerySearch;
+//
+//    window.inazumatv.QuerySearch = {
+//        /**
+//         * 指定Keyの値を取得します。
+//         * @for QuerySearch
+//         * @method search
+//         * @param {string} key_name 取得したいkey name
+//         * @return {string} search value
+//         * @static
+//         */
+//        search: function ( key_name ){
+//            var query = window.location.search.substring( 1 ),
+//                vars = query.split( '&' ),
+//                result = "";
+//
+//            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+//                var pair = vars[ i ].split( '=' );
+//                if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
+//                    result =  decodeURIComponent( pair[ 1 ] );
+//                    break;
+//                }
+//            }
+//
+//            return result;
+//        },
+//        /**
+//         * get parameter を全て取得します。
+//         * ＊key=value形式のみです。
+//         *
+//         * @for QuerySearch
+//         * @method searchAll
+//         * @return {object} key: value
+//         * @static
+//         */
+//        searchAll: function (){
+//            var query = window.location.search.substring( 1 ),
+//                vars = query.split( '&' ),
+//                result = {};
+//
+//            for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+//                var pair = vars[ i ].split( '=' );
+//
+//                result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
+//            }
+//
+//            return result;
+//        }
+//    };
 }( window ) );/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
@@ -1476,6 +1524,8 @@ var inazumatv = {};
         LoadImage.ERROR = "load_image_error";
 
         var p = LoadImage.prototype;
+
+        p.constructor = inazumatv.LoadImage;
 
         EventDispatcher.initialize( p );
 
@@ -1600,6 +1650,8 @@ var inazumatv = {};
         BulkLoader.COMPLETE = "bulk_loader_complete";
 
         var p = BulkLoader.prototype;
+
+        p.constructor = inazumatv.BulkLoader;
 
         EventDispatcher.initialize( p );
 
@@ -1770,6 +1822,8 @@ var inazumatv = {};
 
     var p = CheckList.prototype;
 
+    p.constructor = inazumatv.CheckList;
+
     /**
      * 管理用配列を再生成します
      * @method reset
@@ -1892,7 +1946,7 @@ var inazumatv = {};
      *
      * @class LoopManager
      * @uses EventDispatcher
-     * @returns {LoopManager} LoopManager instance
+     * @return {LoopManager} LoopManager instance
      * @constructor
      */
     function LoopManager () {
@@ -1912,7 +1966,7 @@ var inazumatv = {};
     /**
      * @static
      * @method getInstance
-     * @returns {LoopManager} LoopManager instance
+     * @return {LoopManager} LoopManager instance
      */
     LoopManager.getInstance = function (){
         if ( typeof _instanceLoopManager === "undefined" ) {
@@ -1932,6 +1986,8 @@ var inazumatv = {};
     LoopManager.ENTER_FRAME = "loopManagerEnterFrame";
 
     var p = LoopManager.prototype;
+
+    p.constructor = inazumatv.LoopManager;
 
     EventDispatcher.initialize( p );
 
@@ -2046,6 +2102,8 @@ var inazumatv = {};
 
     var p = PollingManager.prototype;
 
+    p.constructor = inazumatv.PollingManager;
+
     // mixin
     EventDispatcher.initialize( p );
 
@@ -2111,7 +2169,7 @@ var inazumatv = {};
     /**
      * pollingに達した場合は PollingManager.POLLING_PAST を発火します
      * @method update
-     * @returns {boolean} pollingに達した場合はtrueを返します
+     * @return {boolean} pollingに達した場合はtrueを返します
      */
     p.update = function (){
         var now = new Date().getTime(),
@@ -2225,12 +2283,14 @@ var inazumatv = {};
 
     var p = FPSManager.prototype;
 
+    p.constructor = inazumatv.FPSManager;
+
     // mixin
     EventDispatcher.initialize( p );
 
     /**
      * @method getLoopManager
-     * @returns {LoopManager} LoopManager instance
+     * @return {LoopManager} LoopManager instance
      */
     p.getLoopManager = function (){
         return this._loop;
@@ -2312,7 +2372,7 @@ var inazumatv = {};
 
     /**
      * @method getFPS
-     * @returns {int|*} 現在のFPSを返します
+     * @return {int|*} 現在のFPSを返します
      */
     p.getFPS = function (){
         return this._fps;
@@ -2320,7 +2380,7 @@ var inazumatv = {};
 
     /**
      * @method update
-     * @returns {boolean} FPSに達した場合はtrueを返します
+     * @return {boolean} FPSに達した場合はtrueを返します
      */
     p.update = function (){
         var now = new Date().getTime(),
@@ -2387,7 +2447,7 @@ var inazumatv = {};
          * @static
          * @param {int} length
          * @param {int|string} word
-         * @returns {Array}
+         * @return {Array}
          */
         l.word = function ( length, word ) {
             var arr = [], i;
@@ -2404,7 +2464,7 @@ var inazumatv = {};
          * @method zero
          * @static
          * @param {int} length
-         * @returns {Array}
+         * @return {Array}
          */
         l.zero = function ( length ) {
             return this.word( length, 0 );
@@ -2415,7 +2475,7 @@ var inazumatv = {};
          * @method shuffle
          * @static
          * @param {array} array
-         * @returns {Array} シャッフル後の配列を返します
+         * @return {Array} シャッフル後の配列を返します
          */
         l.shuffle = function ( array ) {
             return inazumatv.shuffle( array );
@@ -2426,7 +2486,7 @@ var inazumatv = {};
          * @method max
          * @static
          * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
-         * @returns {number} 配列内の最大数値を返します
+         * @return {number} 配列内の最大数値を返します
          */
         l.max = function ( arr ) {
             inazumatv.maxValue( arr );
@@ -2468,7 +2528,7 @@ var inazumatv = {};
          * @method kanji
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} 漢字かどうかの真偽値を返します
+         * @return {boolean} 漢字かどうかの真偽値を返します
          */
         k.kanji = function ( txt ) {
             var unicode = txt.charCodeAt( 0 );
@@ -2491,7 +2551,7 @@ var inazumatv = {};
          * @method hiragana
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} ひらがなか否かの真偽値を返します
+         * @return {boolean} ひらがなか否かの真偽値を返します
          */
         k.hiragana = function ( txt ) {
             var unicode = txt.charCodeAt( 0 );
@@ -2503,7 +2563,7 @@ var inazumatv = {};
          * @method kana
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} カナか否かの真偽値を返します
+         * @return {boolean} カナか否かの真偽値を返します
          */
         k.kana = function ( txt ) {
             var unicode = txt.charCodeAt( 0 );
@@ -2515,7 +2575,7 @@ var inazumatv = {};
          * @method han
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} 半角文字か否かの真偽値を返します
+         * @return {boolean} 半角文字か否かの真偽値を返します
          */
         k.han = function ( txt ) {
             var unicode = txt.charCodeAt( 0 );
@@ -2527,7 +2587,7 @@ var inazumatv = {};
          * @method zen
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} 全角か否かの真偽値を返します
+         * @return {boolean} 全角か否かの真偽値を返します
          */
         k.zen = function ( txt ) {
             return k.kanji( txt ) || k.hiragana( txt ) || k.kana( txt );
@@ -2538,7 +2598,7 @@ var inazumatv = {};
          * @method alphabetic
          * @static
          * @param {string} txt 判定文字列
-         * @returns {boolean} アルファベットか否かの真偽値を返します、スペースはfalseです
+         * @return {boolean} アルファベットか否かの真偽値を返します、スペースはfalseです
          */
         k.alphabetic = function ( txt ) {
             return /^[a-zA-Z]+$/.test( txt );
@@ -2612,6 +2672,8 @@ var inazumatv = {};
     }
 
     var p = ShuffleText.prototype;
+
+    p.constructor = ShuffleText;
 
     /**
      * @method initialize
@@ -2878,7 +2940,7 @@ var inazumatv = {};
      *
      * @for jq.ExternalJQ
      * @method exports
-     * @returns {jQuery} jQuery Object
+     * @return {jQuery} jQuery Object
      * @static
      */
     ExternalJQ.exports = function (){
@@ -2921,7 +2983,7 @@ var inazumatv = {};
      * @method imports
      * @param {String} extensionName 拡張機能名称(Class名)
      * @param {jQuery} [jQuery] jQuery Object
-     * @returns {*} 拡張機能を返します
+     * @return {*} 拡張機能を返します
      * @static
      */
     ExternalJQ.imports = function ( extensionName, jQuery ){
@@ -3553,6 +3615,8 @@ var inazumatv = {};
 
     var p = XMLLoader.prototype;
 
+    p.constructor = XMLLoader;
+
     /**
      * 外部ファイル type 設定
      * @method setType
@@ -3655,6 +3719,8 @@ var inazumatv = {};
         this._type = "text";
     }
 
+    TXTLoader.prototype.constructor = TXTLoader;
+
     inazumatv.extend( XMLLoader, TXTLoader );
 
     /**
@@ -3699,6 +3765,8 @@ var inazumatv = {};
         XMLLoader.call( this, url, nocache );
         this._type = "html";
     }
+
+    HTMLLoader.prototype.constructor = HTMLLoader;
 
     inazumatv.extend( XMLLoader, HTMLLoader );
 
@@ -3751,7 +3819,7 @@ var inazumatv = {};
     /**
      * @class WatchDocumentHeight
      * @uses EventDispatcher
-     * @returns {WatchDocumentHeight}
+     * @return {WatchDocumentHeight}
      * @constructor
      */
     function WatchDocumentHeight () {
@@ -3792,7 +3860,7 @@ var inazumatv = {};
     /**
      * @method getInstance
      * @uses EventDispatcher
-     * @returns {WatchDocumentHeight}
+     * @return {WatchDocumentHeight}
      * @static
      */
     WatchDocumentHeight.getInstance = function (){
@@ -3814,12 +3882,14 @@ var inazumatv = {};
 
     var p = WatchDocumentHeight.prototype;
 
+    p.constructor = inazumatv.WatchDocumentHeight;
+
     EventDispatcher.initialize( p );
 
     /**
      * FPSManager instance を取得します
      * @method getFPSManager
-     * @returns {FPSManager} FPSManager instance を返します
+     * @return {FPSManager} FPSManager instance を返します
      */
     p.getFPSManager = function (){
         return this._fps;
@@ -3831,7 +3901,7 @@ var inazumatv = {};
      *
      * @method update
      * @param {boolean} [strong] default false
-     * @returns {boolean} true: 高さ変更
+     * @return {boolean} true: 高さ変更
      */
     p.update = function ( strong ){
         var $window = this._$window,
@@ -3962,10 +4032,12 @@ var inazumatv = {};
 
     var p = FitDocumentHeight.prototype;
 
+    p.constructor = inazumatv.FitDocumentHeight;
+
     /**
      *
      * @method getWatchDocumentHeight
-     * @returns {WatchDocumentHeight} WatchDocumentHeight instance
+     * @return {WatchDocumentHeight} WatchDocumentHeight instance
      */
     p.getWatchDocumentHeight = function (){
         return this._watch;
@@ -4041,7 +4113,7 @@ var inazumatv = {};
     /**
      * @class WatchWindowSize
      * @uses EventDispatcher
-     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @return {WatchWindowSize} WatchWindowSize instance
      * @constructor
      * @singleton
      */
@@ -4073,7 +4145,7 @@ var inazumatv = {};
 
     /**
      * @method getInstance
-     * @returns {WatchDocumentHeight}
+     * @return {WatchDocumentHeight}
      * @static
      */
     WatchWindowSize.getInstance = function (){
@@ -4109,12 +4181,14 @@ var inazumatv = {};
 
     var p = WatchWindowSize.prototype;
 
+    p.constructor = inazumatv.WatchWindowSize;
+
     EventDispatcher.initialize( p );
 
     /**
      * FPSManager instance を取得します
      * @method getFPSManager
-     * @returns {FPSManager} FPSManager instance を返します
+     * @return {FPSManager} FPSManager instance を返します
      */
     p.getFPSManager = function (){
         return this._fps;
@@ -4123,7 +4197,7 @@ var inazumatv = {};
     /**
      * window size を監視し変更があるとイベントを発生させます。
      * @param {boolean=false} [strong] 強制的にイベントを発生させる default: false
-     * @returns {boolean} true: window size 変更あり
+     * @return {boolean} true: window size 変更あり
      */
     p.update = function ( strong ){
         var w = _$window.width(),
@@ -4276,10 +4350,12 @@ var inazumatv = {};
 
     var p = FitWindow.prototype;
 
+    p.constructor = inazumatv.FitWindow;
+
     /**
      *
      * @method getWatchWindowSize
-     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
         return this._watch;
@@ -4415,10 +4491,12 @@ var inazumatv = {};
 
     var p = FitWindowAspect.prototype;
 
+    p.constructor = inazumatv.FitWindowAspect;
+
     /**
      *
      * @method getWatchWindowSize
-     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
         return this._watch;
@@ -4575,10 +4653,12 @@ var inazumatv = {};
 
     var p = FitWindowAspectCenter.prototype;
 
+    p.constructor = FitWindowAspectCenter;
+
     /**
      *
      * @method getWatchWindowSize
-     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
         return this._watch;
@@ -4744,7 +4824,7 @@ var inazumatv = {};
     /**
      *
      * @method getWatchWindowSize
-     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
         return this._watch;

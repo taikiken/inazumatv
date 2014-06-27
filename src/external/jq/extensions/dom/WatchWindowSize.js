@@ -36,7 +36,7 @@
     /**
      * @class WatchWindowSize
      * @uses EventDispatcher
-     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @return {WatchWindowSize} WatchWindowSize instance
      * @constructor
      * @singleton
      */
@@ -68,7 +68,7 @@
 
     /**
      * @method getInstance
-     * @returns {WatchDocumentHeight}
+     * @return {WatchDocumentHeight}
      * @static
      */
     WatchWindowSize.getInstance = function (){
@@ -104,12 +104,14 @@
 
     var p = WatchWindowSize.prototype;
 
+    p.constructor = inazumatv.WatchWindowSize;
+
     EventDispatcher.initialize( p );
 
     /**
      * FPSManager instance を取得します
      * @method getFPSManager
-     * @returns {FPSManager} FPSManager instance を返します
+     * @return {FPSManager} FPSManager instance を返します
      */
     p.getFPSManager = function (){
         return this._fps;
@@ -118,7 +120,7 @@
     /**
      * window size を監視し変更があるとイベントを発生させます。
      * @param {boolean=false} [strong] 強制的にイベントを発生させる default: false
-     * @returns {boolean} true: window size 変更あり
+     * @return {boolean} true: window size 変更あり
      */
     p.update = function ( strong ){
         var w = _$window.width(),

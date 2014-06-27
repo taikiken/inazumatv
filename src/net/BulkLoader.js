@@ -56,6 +56,8 @@
 
         var p = BulkLoader.prototype;
 
+        p.constructor = inazumatv.BulkLoader;
+
         EventDispatcher.initialize( p );
 
         /**

@@ -39,7 +39,7 @@
     /**
      * パラメタ取出し
      * @method getParams
-     * @returns {*} 配列を返します
+     * @return {*} 配列を返します
      */
     p.getParams = function (){
         return this.params;

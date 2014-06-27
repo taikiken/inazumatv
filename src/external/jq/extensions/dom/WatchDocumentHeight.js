@@ -34,7 +34,7 @@
     /**
      * @class WatchDocumentHeight
      * @uses EventDispatcher
-     * @returns {WatchDocumentHeight}
+     * @return {WatchDocumentHeight}
      * @constructor
      */
     function WatchDocumentHeight () {
@@ -75,7 +75,7 @@
     /**
      * @method getInstance
      * @uses EventDispatcher
-     * @returns {WatchDocumentHeight}
+     * @return {WatchDocumentHeight}
      * @static
      */
     WatchDocumentHeight.getInstance = function (){
@@ -97,12 +97,14 @@
 
     var p = WatchDocumentHeight.prototype;
 
+    p.constructor = inazumatv.WatchDocumentHeight;
+
     EventDispatcher.initialize( p );
 
     /**
      * FPSManager instance を取得します
      * @method getFPSManager
-     * @returns {FPSManager} FPSManager instance を返します
+     * @return {FPSManager} FPSManager instance を返します
      */
     p.getFPSManager = function (){
         return this._fps;
@@ -114,7 +116,7 @@
      *
      * @method update
      * @param {boolean} [strong] default false
-     * @returns {boolean} true: 高さ変更
+     * @return {boolean} true: 高さ変更
      */
     p.update = function ( strong ){
         var $window = this._$window,

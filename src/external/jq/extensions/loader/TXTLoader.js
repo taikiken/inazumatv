@@ -28,6 +28,8 @@
         this._type = "text";
     }
 
+    TXTLoader.prototype.constructor = TXTLoader;
+
     inazumatv.extend( XMLLoader, TXTLoader );
 
     /**

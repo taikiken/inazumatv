@@ -44,7 +44,7 @@
      *
      * @for jq.ExternalJQ
      * @method exports
-     * @returns {jQuery} jQuery Object
+     * @return {jQuery} jQuery Object
      * @static
      */
     ExternalJQ.exports = function (){
@@ -87,7 +87,7 @@
      * @method imports
      * @param {String} extensionName 拡張機能名称(Class名)
      * @param {jQuery} [jQuery] jQuery Object
-     * @returns {*} 拡張機能を返します
+     * @return {*} 拡張機能を返します
      * @static
      */
     ExternalJQ.imports = function ( extensionName, jQuery ){

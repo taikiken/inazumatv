@@ -64,6 +64,8 @@
 
     var p = ShuffleText.prototype;
 
+    p.constructor = ShuffleText;
+
     /**
      * @method initialize
      * @param {*} element DOMElement

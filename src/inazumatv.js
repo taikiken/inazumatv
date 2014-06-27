@@ -213,7 +213,7 @@ var inazumatv = {};
      * @for inazumatv
      * @method isNumeric
      * @param {*} obj
-     * @returns {boolean} true: Number, false: not Number
+     * @return {boolean} true: Number, false: not Number
      */
     function isNumeric ( obj ) {
         return !isNaN( parseFloat( obj ) ) && isFinite( obj );
@@ -227,7 +227,7 @@ var inazumatv = {};
      * @method random
      * @param {Number} min 最小値
      * @param {Number} [max] 最大値 optional
-     * @returns {Number} min ~ max 間の乱数(Float)を発生させます
+     * @return {Number} min ~ max 間の乱数(Float)を発生させます
      */
     inazumatv.random = function ( min, max ) {
         if ( !isNumeric( max ) ) {
@@ -245,7 +245,7 @@ var inazumatv = {};
      * @for inazumatv
      * @method maxValue
      * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
-     * @returns {number} 配列内の最大数値を返します
+     * @return {number} 配列内の最大数値を返します
      */
     inazumatv.maxValue = function ( arr ){
         return _max.apply( null, arr );
@@ -276,7 +276,7 @@ var inazumatv = {};
      * @for inazumatv
      * @method shuffle
      * @param {array} array
-     * @returns {Array}
+     * @return {Array}
      */
     function shuffle( array ) {
         var copy = [], n = array.length, i;

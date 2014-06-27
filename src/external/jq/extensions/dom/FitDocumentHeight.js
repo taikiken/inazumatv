@@ -55,10 +55,12 @@
 
     var p = FitDocumentHeight.prototype;
 
+    p.constructor = inazumatv.FitDocumentHeight;
+
     /**
      *
      * @method getWatchDocumentHeight
-     * @returns {WatchDocumentHeight} WatchDocumentHeight instance
+     * @return {WatchDocumentHeight} WatchDocumentHeight instance
      */
     p.getWatchDocumentHeight = function (){
         return this._watch;

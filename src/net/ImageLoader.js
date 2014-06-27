@@ -68,6 +68,8 @@
 
     var p = ImageLoader.prototype;
 
+    p.constructor = inazumatv.ImageLoader;
+
     // mixin
     EventDispatcher.initialize( p );
 

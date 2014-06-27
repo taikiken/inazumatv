@@ -45,6 +45,8 @@
 
     var p = AjaxEvent.prototype;
 
+    p.constructor = AjaxEvent;
+
     inazumatv.EventDispatcher.initialize( p );
 
     inazumatv.AjaxEvent = AjaxEvent;

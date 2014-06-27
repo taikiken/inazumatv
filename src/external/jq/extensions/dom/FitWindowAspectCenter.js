@@ -65,10 +65,12 @@
 
     var p = FitWindowAspectCenter.prototype;
 
+    p.constructor = FitWindowAspectCenter;
+
     /**
      *
      * @method getWatchWindowSize
-     * @returns {WatchWindowSize} WatchWindowSize instance
+     * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
         return this._watch;

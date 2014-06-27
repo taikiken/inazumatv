@@ -80,6 +80,8 @@
 
     var p = XMLLoader.prototype;
 
+    p.constructor = XMLLoader;
+
     /**
      * 外部ファイル type 設定
      * @method setType

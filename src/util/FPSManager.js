@@ -73,12 +73,14 @@
 
     var p = FPSManager.prototype;
 
+    p.constructor = inazumatv.FPSManager;
+
     // mixin
     EventDispatcher.initialize( p );
 
     /**
      * @method getLoopManager
-     * @returns {LoopManager} LoopManager instance
+     * @return {LoopManager} LoopManager instance
      */
     p.getLoopManager = function (){
         return this._loop;
@@ -160,7 +162,7 @@
 
     /**
      * @method getFPS
-     * @returns {int|*} 現在のFPSを返します
+     * @return {int|*} 現在のFPSを返します
      */
     p.getFPS = function (){
         return this._fps;
@@ -168,7 +170,7 @@
 
     /**
      * @method update
-     * @returns {boolean} FPSに達した場合はtrueを返します
+     * @return {boolean} FPSに達した場合はtrueを返します
      */
     p.update = function (){
         var now = new Date().getTime(),

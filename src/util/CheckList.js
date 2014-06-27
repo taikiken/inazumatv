@@ -33,6 +33,8 @@
 
     var p = CheckList.prototype;
 
+    p.constructor = inazumatv.CheckList;
+
     /**
      * 管理用配列を再生成します
      * @method reset

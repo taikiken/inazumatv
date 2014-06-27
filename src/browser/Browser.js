@@ -80,7 +80,7 @@
      * iOS version detection
      * @for Browser
      * @method _iosVersion
-     * @returns {Array} iOS version 配列 3桁
+     * @return {Array} iOS version 配列 3桁
      * @private
      */
     function _iosVersion () {
@@ -100,7 +100,7 @@
      * Android version detection
      * @for Browser
      * @method _androidVersion
-     * @returns {Array} Android version 配列 3桁
+     * @return {Array} Android version 配列 3桁
      * @private
      */
     function _androidVersion () {
@@ -118,7 +118,7 @@
     // Safari version
     /**
      * Safari version detection
-     * @returns {Array} Safari version 配列 2桁~3桁
+     * @return {Array} Safari version 配列 2桁~3桁
      * @private
      */
     function _safariVersion () {
@@ -158,7 +158,7 @@
 
     /**
      *
-     * @type {{iOS: {is: Function, number: Function, major: Function, version: Function}, Android: {is: Function, number: Function, major: Function, version: Function}, IE: {is: Function, version: Function}, Chrome: {is: Function}, Safari: {is: Function}, Firefox: {is: Function}, _ie: Function, _ie6: Function, _ie7: Function, _ie8: Function, _ie9: Function, _ie10: Function, _ie11: Function, _chrome: Function, _firefox: Function, _safari: Function, _legacy: Function, _mobile: Function, _ios: Function, _ios_version: Function, _android_version: Function, _android_version_major: Function, _android_version_num: Function, _android: Function, _iphone: Function, _ipad: Function, _ipod: Function, hideURLBar: Function}}
+     * @type {object}
      */
     Browser = {
         // new version
@@ -173,7 +173,7 @@
             /**
              * @for Browser.iOS
              * @method is
-             * @returns {boolean} iOS か否かを返します
+             * @return {boolean} iOS か否かを返します
              * @static
              */
             is: function (){
@@ -182,7 +182,7 @@
             /**
              * @for Browser.iOS
              * @method number
-             * @returns {Array} iOS version number を返します [ major, minor, build ]
+             * @return {Array} iOS version number を返します [ major, minor, build ]
              * @static
              */
             number: function (){
@@ -191,7 +191,7 @@
             /**
              * @for Browser.iOS
              * @method major
-             * @returns {Number} iOS major version number を返します
+             * @return {Number} iOS major version number を返します
              * @static
              */
             major: function (){
@@ -200,7 +200,7 @@
             /**
              * @for Browser.iOS
              * @method version
-             * @returns {Number} iOS version を返します 9.99
+             * @return {Number} iOS version を返します 9.99
              * @static
              */
             version: function (){
@@ -209,7 +209,7 @@
             /**
              * @for Browser.iOS
              * @method iPhone
-             * @returns {Boolean} iPhone か否かを返します
+             * @return {Boolean} iPhone か否かを返します
              * @static
              */
             iPhone: function (){
@@ -218,7 +218,7 @@
             /**
              * @for Browser.iOS
              * @method iPad
-             * @returns {Boolean} iPad か否かを返します
+             * @return {Boolean} iPad か否かを返します
              * @static
              */
             iPad: function (){
@@ -227,7 +227,7 @@
             /**
              * @for Browser.iOS
              * @method iPod
-             * @returns {Boolean} iPod か否かを返します
+             * @return {Boolean} iPod か否かを返します
              * @static
              */
             iPod: function (){
@@ -236,7 +236,7 @@
             /**
              * @for Browser.iOS
              * @method fullScreen
-             * @returns {boolean} standalone mode か否かを返します
+             * @return {boolean} standalone mode か否かを返します
              * @static
              */
             fullScreen: function (){
@@ -254,7 +254,7 @@
             /**
              * @for Browser.Android
              * @method is
-             * @returns {boolean} Android か否かを返します
+             * @return {boolean} Android か否かを返します
              * @static
              */
             is: function (){
@@ -263,7 +263,7 @@
             /**
              * @for Browser.Android
              * @method number
-             * @returns {Array} Android version number を返します [ major, minor, build ]
+             * @return {Array} Android version number を返します [ major, minor, build ]
              * @static
              */
             number: function (){
@@ -272,7 +272,7 @@
             /**
              * @for Browser.Android
              * @method major
-             * @returns {Number} Android major version number を返します
+             * @return {Number} Android major version number を返します
              * @static
              */
             major: function (){
@@ -281,7 +281,7 @@
             /**
              * @for Browser.Android
              * @method version
-             * @returns {Number} Android version を返します 9.99
+             * @return {Number} Android version を返します 9.99
              * @static
              */
             version: function (){
@@ -290,7 +290,7 @@
             /**
              * @for Browser.Android
              * @method phone
-             * @returns {boolean} Android Phone か否かを返します
+             * @return {boolean} Android Phone か否かを返します
              * @static
              */
             phone: function (){
@@ -299,7 +299,7 @@
             /**
              * @for Browser.Android
              * @method tablet
-             * @returns {boolean} Android Tablet か否かを返します
+             * @return {boolean} Android Tablet か否かを返します
              * @static
              */
             tablet: function (){
@@ -308,7 +308,7 @@
             /**
              * @for Browser.Android
              * @method standard
-             * @returns {boolean} Android standard Browser か否かを返します
+             * @return {boolean} Android standard Browser か否かを返します
              * @static
              */
             standard: function () {
@@ -326,7 +326,7 @@
             /**
              * @for Browser.IE
              * @method is
-             * @returns {boolean} IE か否かを返します
+             * @return {boolean} IE か否かを返します
              * @static
              */
             is: function (){
@@ -335,7 +335,7 @@
             /**
              * @for Browser.IE
              * @method is6
-             * @returns {boolean} IE 6 か否かを返します
+             * @return {boolean} IE 6 か否かを返します
              */
             is6: function (){
                 return _ie6;
@@ -343,7 +343,7 @@
             /**
              * @for Browser.IE
              * @method is7
-             * @returns {boolean} IE 7 か否かを返します
+             * @return {boolean} IE 7 か否かを返します
              */
             is7: function (){
                 return _ie7;
@@ -351,7 +351,7 @@
             /**
              * @for Browser.IE
              * @method is8
-             * @returns {boolean} IE 8 か否かを返します
+             * @return {boolean} IE 8 か否かを返します
              */
             is8: function (){
                 return _ie8;
@@ -359,7 +359,7 @@
             /**
              * @for Browser.IE
              * @method is9
-             * @returns {boolean} IE 9 か否かを返します
+             * @return {boolean} IE 9 か否かを返します
              */
             is9: function (){
                 return _ie9;
@@ -367,7 +367,7 @@
             /**
              * @for Browser.IE
              * @method is10
-             * @returns {boolean} IE 10 か否かを返します
+             * @return {boolean} IE 10 か否かを返します
              */
             is10: function (){
                 return _ie10;
@@ -375,7 +375,7 @@
             /**
              * @for Browser.IE
              * @method is11
-             * @returns {boolean} IE 11 か否かを返します
+             * @return {boolean} IE 11 か否かを返します
              */
             is11: function (){
                 return _ie11;
@@ -383,7 +383,7 @@
             /**
              * @for Browser.IE
              * @method _legacy
-             * @returns {boolean} IE 6 or 7 or 8 か否かを返します
+             * @return {boolean} IE 6 or 7 or 8 か否かを返します
              */
             legacy: function (){
                 return _legacy;
@@ -391,7 +391,7 @@
             /**
              * @for Browser.IE
              * @method version
-             * @returns {Number} IE version を返します int 6 ~ 11, IE 6 ~ IE 11 でない場合は -1 を返します
+             * @return {Number} IE version を返します int 6 ~ 11, IE 6 ~ IE 11 でない場合は -1 を返します
              * @static
              */
             version: function (){
@@ -423,7 +423,7 @@
             /**
              * @for Browser.Chrome
              * @method is
-             * @returns {boolean} Chrome か否かを返します
+             * @return {boolean} Chrome か否かを返します
              * @static
              */
             is: function (){
@@ -432,7 +432,7 @@
             /**
              * @for Browser.Chrome
              * @method version
-             * @returns {string}
+             * @return {string}
              */
             version: function () {
                 return _chrome_version;
@@ -449,7 +449,7 @@
             /**
              * @for Browser.Safari
              * @method is
-             * @returns {boolean} Safari か否かを返します
+             * @return {boolean} Safari か否かを返します
              * @static
              */
             is: function (){
@@ -458,7 +458,7 @@
             /**
              * @for Browser.Safari
              * @method number
-             * @returns {Array} Safari version number を返します [ major, minor, build ]
+             * @return {Array} Safari version number を返します [ major, minor, build ]
              * @static
              */
             number: function (){
@@ -467,7 +467,7 @@
             /**
              * @for Browser.Safari
              * @method major
-             * @returns {Number} Safari major version number を返します
+             * @return {Number} Safari major version number を返します
              * @static
              */
             major: function (){
@@ -476,7 +476,7 @@
             /**
              * @for Browser.Safari
              * @method version
-             * @returns {Number} Safari version を返します 9.99
+             * @return {Number} Safari version を返します 9.99
              * @static
              */
             version: function (){
@@ -494,7 +494,7 @@
             /**
              * @for Browser.Firefox
              * @method is
-             * @returns {boolean} Firefox か否かを返します
+             * @return {boolean} Firefox か否かを返します
              * @static
              */
             is: function (){
@@ -512,7 +512,7 @@
             /**
              * @for Browser.Touch
              * @method is
-             * @returns {boolean} Touch 可能か否かを返します
+             * @return {boolean} Touch 可能か否かを返します
              * @static
              */
             is: function (){
@@ -530,7 +530,7 @@
             /**
              * @for Browser.Mobile
              * @method is
-             * @returns {boolean} mobile(smart phone) か否かを返します
+             * @return {boolean} mobile(smart phone) か否かを返します
              * @static
              */
             is: function (){
@@ -557,7 +557,7 @@
             /**
              * @for Browser.Mobile
              * @method phone
-             * @returns {boolean} Smart Phone(include iPod)か否かを返します
+             * @return {boolean} Smart Phone(include iPod)か否かを返します
              * @static
              */
             phone: function (){
@@ -566,7 +566,7 @@
             /**
              * @for Browser.Mobile
              * @method tablet
-             * @returns {boolean} tablet か否かを返します
+             * @return {boolean} tablet か否かを返します
              * @static
              */
             tablet: function (){
@@ -584,7 +584,7 @@
             /**
              * @for Browser.Canvas
              * @method is
-             * @returns {boolean} canvas 2D が使用可能か否かを返します
+             * @return {boolean} canvas 2D が使用可能か否かを返します
              * @static
              */
             is: function (){
@@ -593,7 +593,7 @@
             /**
              * @for Browser.Canvas
              * @method webgl
-             * @returns {boolean} canvas webgl 使用可能か否かを返します
+             * @return {boolean} canvas webgl 使用可能か否かを返します
              * @static
              */
             webgl: function (){
@@ -614,4 +614,5 @@
 
     // below for compatibility to older version of inazumatv.util
     inazumatv.browser = Browser;
+
 }( window, this.inazumatv || {} ) );

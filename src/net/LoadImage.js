@@ -48,6 +48,8 @@
 
         var p = LoadImage.prototype;
 
+        p.constructor = inazumatv.LoadImage;
+
         EventDispatcher.initialize( p );
 
         /**
