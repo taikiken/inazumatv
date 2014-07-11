@@ -24,7 +24,7 @@
  *
  * Copyright (c) 2010 Yasunobu Ikeda
  *
- * EventDispatcher and LoadManager, ShuffleText are modified by taikiken
+ * EventDispatcher and ShuffleText are modified by taikiken
  *
  * Smooth Scroll - v1.4.11 - 2013-07-15
  * https://github.com/kswedberg/jquery-smooth-scroll
