@@ -328,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Fri, 27 Jun 2014 06:37:24 GMT"; // injected by build process
+    s.buildDate = /*date*/"Tue, 22 Jul 2014 10:56:31 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -3844,7 +3844,7 @@ var inazumatv = {};
      */
     WatchDocumentHeight.activate = function ( jQuery ){
         $ = jQuery;
-        var $document = $( document ),
+        var $document = $( "html" ),
             $window = $( window );
 
         this._$document = $document;
