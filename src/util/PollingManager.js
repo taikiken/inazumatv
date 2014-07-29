@@ -74,6 +74,8 @@
         this._polling = ms;
         this._eventObj = new EventObject( PollingManager.POLLING_PAST );
         this._boundEnterFrame = this._onEnterFrame.bind( this );
+        this._loop = LoopManager.getInstance();
+        this._auto = false;
     }
 
     /**
@@ -108,16 +110,14 @@
     p.start = function ( auto ) {
         auto = !!auto;
 
+        this._auto = auto;
+
         if ( auto ) {
 
-            var loop = LoopManager.getInstance(),
-                boundEnterFrame = this._boundEnterFrame;
+            var loop = this._loop;
 
-            this._loop = loop;
-
-            loop.addEventListener( LoopManager.ENTER_FRAME, boundEnterFrame );
+            loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
             loop.start();
-
         }
 
         this._resetTime();
@@ -129,10 +129,11 @@
     p.stop = function () {
         var loop = this._loop;
 
-        if ( typeof loop !== "undefined" ) {
+//        if ( typeof loop !== "undefined" ) {
+        if ( this._auto ) {
 
             loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-            this._loop = null;
+//            this._loop = null;
         }
 
         this._startTime = Number.MAX_VALUE;

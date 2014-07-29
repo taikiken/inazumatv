@@ -63,7 +63,6 @@
                 modern = typeof document.addEventListener !== "undefined",
                 done = false;
 
-            console.log( "path ", path );
             function dispose () {
                 if ( !modern && done ) {
 

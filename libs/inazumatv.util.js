@@ -328,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Tue, 22 Jul 2014 10:56:31 GMT"; // injected by build process
+    s.buildDate = /*date*/"Thu, 24 Jul 2014 14:19:36 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -1540,7 +1540,6 @@ var inazumatv = {};
                 modern = typeof document.addEventListener !== "undefined",
                 done = false;
 
-            console.log( "path ", path );
             function dispose () {
                 if ( !modern && done ) {
 
@@ -2090,6 +2089,8 @@ var inazumatv = {};
         this._polling = ms;
         this._eventObj = new EventObject( PollingManager.POLLING_PAST );
         this._boundEnterFrame = this._onEnterFrame.bind( this );
+        this._loop = LoopManager.getInstance();
+        this._auto = false;
     }
 
     /**
@@ -2124,16 +2125,14 @@ var inazumatv = {};
     p.start = function ( auto ) {
         auto = !!auto;
 
+        this._auto = auto;
+
         if ( auto ) {
 
-            var loop = LoopManager.getInstance(),
-                boundEnterFrame = this._boundEnterFrame;
+            var loop = this._loop;
 
-            this._loop = loop;
-
-            loop.addEventListener( LoopManager.ENTER_FRAME, boundEnterFrame );
+            loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
             loop.start();
-
         }
 
         this._resetTime();
@@ -2145,10 +2144,11 @@ var inazumatv = {};
     p.stop = function () {
         var loop = this._loop;
 
-        if ( typeof loop !== "undefined" ) {
+//        if ( typeof loop !== "undefined" ) {
+        if ( this._auto ) {
 
             loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-            this._loop = null;
+//            this._loop = null;
         }
 
         this._startTime = Number.MAX_VALUE;
@@ -3844,7 +3844,7 @@ var inazumatv = {};
      */
     WatchDocumentHeight.activate = function ( jQuery ){
         $ = jQuery;
-        var $document = $( "html" ),
+        var $document = $( document ),
             $window = $( window );
 
         this._$document = $document;
