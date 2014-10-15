@@ -328,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Thu, 24 Jul 2014 14:19:36 GMT"; // injected by build process
+    s.buildDate = /*date*/"Tue, 29 Jul 2014 05:22:17 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -369,6 +369,9 @@ var inazumatv = {};
         _firefox = !!_ua.match(/firefox/i),
         _safari = !!_ua.match(/safari/i),
         _android_standard = _android && _safari && !!_ua.match(/version/i),
+
+        _windows = !!_ua.match(/windows/i),
+        _mac = !!_ua.match(/mac os x/i),
 
         _touch = typeof window.ontouchstart !== "undefined",
 
@@ -940,6 +943,27 @@ var inazumatv = {};
                     return false;
                 }
             }
+        },
+        Mac: {
+            /**
+             * @for Browser.Mac
+             * @method is
+             * @return {boolean} Mac OS X or not
+             * @static
+             */
+            is: function () {
+                return _mac;
+            }
+        },
+        Windows: {
+            /**
+             * @for Browser.Windows
+             * @method is
+             * @return {boolean} Windows or not
+             */
+            is: function () {
+                return _windows;
+            }
         }
     };
 
@@ -994,7 +1018,7 @@ var inazumatv = {};
      * @method setItem
      * @param {String} sKey Cookie key
      * @param {String} sValue Cookie value
-     * @param {String} [vEnd] Cookie 期限, [ second, Date.toUTCString ]
+     * @param {String|Number|Date|*} [vEnd] Cookie 期限, [ second, Date.toUTCString ]
      * @param {String} [sPath] Cookie path
      * @param {String} [sDomain] Cookie Domain
      * @param {String} [bSecure] Cookie secure

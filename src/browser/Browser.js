@@ -37,6 +37,9 @@
         _safari = !!_ua.match(/safari/i),
         _android_standard = _android && _safari && !!_ua.match(/version/i),
 
+        _windows = !!_ua.match(/windows/i),
+        _mac = !!_ua.match(/mac os x/i),
+
         _touch = typeof window.ontouchstart !== "undefined",
 
         _fullScreen = typeof navigator.standalone !== "undefined" ? navigator.standalone : false,
@@ -606,6 +609,27 @@
                 } catch( e ) {
                     return false;
                 }
+            }
+        },
+        Mac: {
+            /**
+             * @for Browser.Mac
+             * @method is
+             * @return {boolean} Mac OS X or not
+             * @static
+             */
+            is: function () {
+                return _mac;
+            }
+        },
+        Windows: {
+            /**
+             * @for Browser.Windows
+             * @method is
+             * @return {boolean} Windows or not
+             */
+            is: function () {
+                return _windows;
             }
         }
     };
