@@ -16,7 +16,7 @@
     /**
      * @class EventObject
      * @param {String} eventType Event Type
-     * @param {*} [params] String || Array eventHandler へ送る値をセット。複数の時は配列にセットする
+     * @param {*|Array|string} [params] String || Array eventHandler へ送る値をセット。複数の時は配列にセットする
      * @constructor
      */
     var EventObject = function ( eventType, params ){
@@ -39,7 +39,7 @@
     /**
      * パラメタ取出し
      * @method getParams
-     * @return {*} 配列を返します
+     * @return {Array|*} 配列を返します
      */
     p.getParams = function (){
         return this.params;

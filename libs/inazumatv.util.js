@@ -320,7 +320,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.9.2"; // injected by build process
+    s.version = /*version*/"0.9.3"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -328,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Tue, 29 Jul 2014 05:22:17 GMT"; // injected by build process
+    s.buildDate = /*date*/"Wed, 15 Oct 2014 03:42:17 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -390,8 +390,9 @@ var inazumatv = {};
 
         _chrome_version = -1,
 
-        _canvas = !!window.CanvasRenderingContext2D
-        ;
+        _canvas = !!window.CanvasRenderingContext2D,
+
+        _transition;
 
     if ( _android ) {
         _android_phone = !!_ua.match(/mobile/i);
@@ -482,6 +483,15 @@ var inazumatv = {};
     if (_chrome ) {
         _chrome_version = _chromeVersion();
     }
+
+    // transition support
+    // http://stackoverflow.com/questions/7264899/detect-css-transitions-using-javascript-and-without-modernizr
+    _transition = ( function (){
+        var p = document.createElement( "p" );
+
+        return "transition" in p || "WebkitTransition" in p || "MozTransition" in p || "msTransition" in p || "OTransition" in p;
+
+    }() );
 
     /**
      * Browser 情報を管理します
@@ -768,7 +778,7 @@ var inazumatv = {};
             /**
              * @for Browser.Chrome
              * @method version
-             * @return {string}
+             * @return {string|number}
              */
             version: function () {
                 return _chrome_version;
@@ -963,6 +973,17 @@ var inazumatv = {};
              */
             is: function () {
                 return _windows;
+            }
+        },
+        Transition: {
+            /**
+             * @for Browser.Transition
+             * @method is
+             * @return {boolean} CSS3 transition support or not
+             */
+            is: function () {
+
+                return _transition;
             }
         }
     };
@@ -1291,7 +1312,7 @@ var inazumatv = {};
     /**
      * @class EventObject
      * @param {String} eventType Event Type
-     * @param {*} [params] String || Array eventHandler へ送る値をセット。複数の時は配列にセットする
+     * @param {*|Array|string} [params] String || Array eventHandler へ送る値をセット。複数の時は配列にセットする
      * @constructor
      */
     var EventObject = function ( eventType, params ){
@@ -1314,7 +1335,7 @@ var inazumatv = {};
     /**
      * パラメタ取出し
      * @method getParams
-     * @return {*} 配列を返します
+     * @return {Array|*} 配列を返します
      */
     p.getParams = function (){
         return this.params;
