@@ -320,7 +320,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.9.3"; // injected by build process
+    s.version = /*version*/"0.9.4"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -328,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Wed, 15 Oct 2014 03:42:17 GMT"; // injected by build process
+    s.buildDate = /*date*/"Sun, 23 Nov 2014 11:19:01 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -487,7 +487,7 @@ var inazumatv = {};
     // transition support
     // http://stackoverflow.com/questions/7264899/detect-css-transitions-using-javascript-and-without-modernizr
     _transition = ( function (){
-        var p = document.createElement( "p" );
+        var p = document.createElement( "p" ).style;
 
         return "transition" in p || "WebkitTransition" in p || "MozTransition" in p || "msTransition" in p || "OTransition" in p;
 
