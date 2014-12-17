@@ -216,7 +216,9 @@ var inazumatv = {};
      * @return {boolean} true: Number, false: not Number
      */
     function isNumeric ( obj ) {
-        return !isNaN( parseFloat( obj ) ) && isFinite( obj );
+        //return !isNaN( parseFloat( obj ) ) && isFinite( obj );
+
+        return !Array.isArray( obj ) && obj - parseFloat( obj ) >= 0;
     }
     inazumatv.isNumeric = isNumeric;
 
@@ -275,7 +277,7 @@ var inazumatv = {};
      * 配列をシャッフルします
      * @for inazumatv
      * @method shuffle
-     * @param {array} array
+     * @param {Array} array
      * @return {Array}
      */
     function shuffle( array ) {
@@ -328,7 +330,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Sun, 23 Nov 2014 11:19:01 GMT"; // injected by build process
+    s.buildDate = /*date*/"Wed, 17 Dec 2014 11:21:57 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**

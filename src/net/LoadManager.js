@@ -206,7 +206,7 @@
 
     LoadManager.prototype = {
 
-        costructor: inazumatv.LoadManager,
+        constructor: inazumatv.LoadManager,
 
         /** URLリスト */
         _queueArr:[],
