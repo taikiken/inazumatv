@@ -322,7 +322,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.9.4"; // injected by build process
+    s.version = /*version*/"0.9.5"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -330,7 +330,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Wed, 17 Dec 2014 11:21:57 GMT"; // injected by build process
+    s.buildDate = /*date*/"Wed, 17 Dec 2014 11:24:59 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -4682,6 +4682,8 @@ var inazumatv = {};
 
         this._elementWidth = parseInt( $element.width(), 10 );
         this._elementHeight = parseInt( $element.height(), 10 );
+
+        this._boundOnResize = this._onResize.bind( this );
     }
 
     /**
@@ -4703,11 +4705,22 @@ var inazumatv = {};
     p.constructor = FitWindowAspectCenter;
 
     /**
-     *
+     * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
+        //return this._watch;
+        console.warn( "deprecated, use watch()" );
+        return this.watch();
+    };
+
+    /**
+     * @method watch
+     * @return {WatchDocumentHeight|*|FitWindowAspectCenter._watch}
+     */
+    p.watch = function () {
+
         return this._watch;
     };
 
@@ -4716,9 +4729,10 @@ var inazumatv = {};
      * @method listen
      */
     p.listen = function (){
-        this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+        //this._boundOnResize = this._onResize.bind( this );
+        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -4732,41 +4746,53 @@ var inazumatv = {};
     /**
      * @method setElementWidth
      * @param {Number} w DOMElement width
+     * @return {FitWindowAspectCenter}
      */
     p.setElementWidth = function ( w ){
         if ( isNumeric( w ) ) {
             this._elementWidth = w;
         }
+
+        return this;
     };
 
     /**
      * @method setElementHeight
      * @param {Number} h DOMElement height
+     * @return {FitWindowAspectCenter}
      */
     p.setElementHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._elementHeight = h;
         }
+
+        return this;
     };
 
     /**
      * @method setMinHeight
      * @param {Number} h Minimum height
+     * @return {FitWindowAspectCenter}
      */
     p.setMinHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._minHeight = h;
         }
+
+        return this;
     };
 
     /**
      * @method setMinWidth
-     * @param {Number} h Minimum width
+     * @param {Number} w Minimum width
+     * @return {FitWindowAspectCenter}
      */
     p.setMinWidth = function ( w ){
         if ( isNumeric( w ) ) {
             this._elementWidth = w;
         }
+
+        return this;
     };
 
     /**
@@ -4906,7 +4932,7 @@ var inazumatv = {};
     };
 
     /**
-     * Event Handler, Window width or height resize
+     * Event Handler, Window width or height resizec
      * @method _onResize
      * @param {EventObject} eventObject
      * @protected

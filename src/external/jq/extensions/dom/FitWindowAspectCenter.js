@@ -47,6 +47,8 @@
 
         this._elementWidth = parseInt( $element.width(), 10 );
         this._elementHeight = parseInt( $element.height(), 10 );
+
+        this._boundOnResize = this._onResize.bind( this );
     }
 
     /**
@@ -68,11 +70,22 @@
     p.constructor = FitWindowAspectCenter;
 
     /**
-     *
+     * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
+        //return this._watch;
+        console.warn( "deprecated, use watch()" );
+        return this.watch();
+    };
+
+    /**
+     * @method watch
+     * @return {WatchDocumentHeight|*|FitWindowAspectCenter._watch}
+     */
+    p.watch = function () {
+
         return this._watch;
     };
 
@@ -81,9 +94,10 @@
      * @method listen
      */
     p.listen = function (){
-        this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+        //this._boundOnResize = this._onResize.bind( this );
+        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -97,41 +111,53 @@
     /**
      * @method setElementWidth
      * @param {Number} w DOMElement width
+     * @return {FitWindowAspectCenter}
      */
     p.setElementWidth = function ( w ){
         if ( isNumeric( w ) ) {
             this._elementWidth = w;
         }
+
+        return this;
     };
 
     /**
      * @method setElementHeight
      * @param {Number} h DOMElement height
+     * @return {FitWindowAspectCenter}
      */
     p.setElementHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._elementHeight = h;
         }
+
+        return this;
     };
 
     /**
      * @method setMinHeight
      * @param {Number} h Minimum height
+     * @return {FitWindowAspectCenter}
      */
     p.setMinHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._minHeight = h;
         }
+
+        return this;
     };
 
     /**
      * @method setMinWidth
-     * @param {Number} h Minimum width
+     * @param {Number} w Minimum width
+     * @return {FitWindowAspectCenter}
      */
     p.setMinWidth = function ( w ){
         if ( isNumeric( w ) ) {
             this._elementWidth = w;
         }
+
+        return this;
     };
 
     /**

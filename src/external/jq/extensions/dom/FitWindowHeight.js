@@ -100,7 +100,7 @@
     };
 
     /**
-     * Event Handler, Window width or height resize
+     * Event Handler, Window width or height resizec
      * @method _onResize
      * @param {EventObject} eventObject
      * @protected
