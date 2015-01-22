@@ -122,40 +122,52 @@
     /**
      * 監視を開始します
      * @method listen
+     * @return {FitWindow}
      */
     p.listen = function (){
         var watch = this._watch;
 
         watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
         watch.start();
+
+        return this;
     };
 
     /**
      * 監視を止めます
      * @method abort
+     * @return {FitWindow}
      */
     p.abort = function (){
         this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+
+        return this;
     };
 
     /**
      * @method setMinHeight
      * @param {Number} h Minimum height
+     * @return {FitWindow}
      */
     p.setMinHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._minHeight = h;
         }
+
+        return this;
     };
 
     /**
      * @method setMinWidth
-     * @param {Number} h Minimum width
+     * @param {Number} w Minimum width
+     * @return {FitWindow}
      */
     p.setMinWidth = function ( w ){
         if ( isNumeric( w ) ) {
             this._elementWidth = w;
         }
+
+        return this;
     };
 
     /**

@@ -16,6 +16,13 @@
       _prevHeight = 0,
       _$watchTarget,
       _instance,
+      /**
+       * FPSManager instance, default frame rate is 24.
+       * @property _fps
+       * @type {FPSManager}
+       * @static
+       * @private
+       */
       _fps,
       _isStart = false,
 

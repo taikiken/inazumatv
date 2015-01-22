@@ -128,20 +128,26 @@
     /**
      * 監視を開始します
      * @method listen
+     * @return {FitWindowAspectCenter}
      */
     p.listen = function (){
         var watch = this._watch;
         //this._boundOnResize = this._onResize.bind( this );
         watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
         watch.start();
+
+        return this;
     };
 
     /**
      * 監視を止めます
      * @method abort
+     * @return {FitWindowAspectCenter}
      */
     p.abort = function (){
         this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+
+        return this;
     };
 
     /**

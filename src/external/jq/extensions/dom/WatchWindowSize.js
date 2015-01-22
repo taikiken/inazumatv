@@ -12,27 +12,33 @@
  */
 ( function ( inazumatv ){
     "use strict";
-    var _height = 0,
-        _width = 0,
-        _$window,
-        _instance,
-        _fps,
-        _isStart = false,
+    var
+      _height = 0,
+      _width = 0,
+      _$window,
+      _instance,
+      /**
+       * FPSManager instance, default frame rate is 24.
+       * @property _fps
+       * @type {FPSManager}
+       * @static
+       * @private
+       */
+      _fps,
+      _isStart = false,
 
-        EventObject = inazumatv.EventObject,
-        EventDispatcher = inazumatv.EventDispatcher,
-        FPSManager = inazumatv.FPSManager,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $
-    ;
+      EventObject = inazumatv.EventObject,
+      EventDispatcher = inazumatv.EventDispatcher,
+      FPSManager = inazumatv.FPSManager,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
-    // @class WatchWindowSize
     /**
      * @class WatchWindowSize
      * @uses EventDispatcher

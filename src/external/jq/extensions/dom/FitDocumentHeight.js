@@ -15,15 +15,14 @@
     var
       WatchDocumentHeight,
       _max = Math.max,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-            $
-        ;
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
     /**
      * jQuery Object の高さを document へあわせます
      * @class FitDocumentHeight
@@ -103,20 +102,26 @@
     /**
      * 監視を開始します
      * @method listen
+     * @return {FitDocumentHeight}
      */
     p.listen = function (){
         var watch = this._watch;
 
         watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
         watch.start();
+
+        return this;
     };
 
     /**
      * 監視を止めます
      * @method abort
+     * @return {FitDocumentHeight}
      */
     p.abort = function (){
         this._watch.removeEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
+
+        return this;
     };
 
     /**

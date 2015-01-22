@@ -322,7 +322,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.9.6"; // injected by build process
+    s.version = /*version*/"0.9.7"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -330,7 +330,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Wed, 21 Jan 2015 13:44:29 GMT"; // injected by build process
+    s.buildDate = /*date*/"Thu, 22 Jan 2015 05:00:45 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -3874,6 +3874,13 @@ var inazumatv = {};
       _prevHeight = 0,
       _$watchTarget,
       _instance,
+      /**
+       * FPSManager instance, default frame rate is 24.
+       * @property _fps
+       * @type {FPSManager}
+       * @static
+       * @private
+       */
       _fps,
       _isStart = false,
 
@@ -4065,15 +4072,14 @@ var inazumatv = {};
     var
       WatchDocumentHeight,
       _max = Math.max,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-            $
-        ;
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
     /**
      * jQuery Object の高さを document へあわせます
      * @class FitDocumentHeight
@@ -4153,20 +4159,26 @@ var inazumatv = {};
     /**
      * 監視を開始します
      * @method listen
+     * @return {FitDocumentHeight}
      */
     p.listen = function (){
         var watch = this._watch;
 
         watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
         watch.start();
+
+        return this;
     };
 
     /**
      * 監視を止めます
      * @method abort
+     * @return {FitDocumentHeight}
      */
     p.abort = function (){
         this._watch.removeEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
+
+        return this;
     };
 
     /**
@@ -4198,27 +4210,33 @@ var inazumatv = {};
  */
 ( function ( inazumatv ){
     "use strict";
-    var _height = 0,
-        _width = 0,
-        _$window,
-        _instance,
-        _fps,
-        _isStart = false,
+    var
+      _height = 0,
+      _width = 0,
+      _$window,
+      _instance,
+      /**
+       * FPSManager instance, default frame rate is 24.
+       * @property _fps
+       * @type {FPSManager}
+       * @static
+       * @private
+       */
+      _fps,
+      _isStart = false,
 
-        EventObject = inazumatv.EventObject,
-        EventDispatcher = inazumatv.EventDispatcher,
-        FPSManager = inazumatv.FPSManager,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $
-    ;
+      EventObject = inazumatv.EventObject,
+      EventDispatcher = inazumatv.EventDispatcher,
+      FPSManager = inazumatv.FPSManager,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
-    // @class WatchWindowSize
     /**
      * @class WatchWindowSize
      * @uses EventDispatcher
@@ -4516,40 +4534,52 @@ var inazumatv = {};
     /**
      * 監視を開始します
      * @method listen
+     * @return {FitWindow}
      */
     p.listen = function (){
         var watch = this._watch;
 
         watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
         watch.start();
+
+        return this;
     };
 
     /**
      * 監視を止めます
      * @method abort
+     * @return {FitWindow}
      */
     p.abort = function (){
         this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+
+        return this;
     };
 
     /**
      * @method setMinHeight
      * @param {Number} h Minimum height
+     * @return {FitWindow}
      */
     p.setMinHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._minHeight = h;
         }
+
+        return this;
     };
 
     /**
      * @method setMinWidth
-     * @param {Number} h Minimum width
+     * @param {Number} w Minimum width
+     * @return {FitWindow}
      */
     p.setMinWidth = function ( w ){
         if ( isNumeric( w ) ) {
             this._elementWidth = w;
         }
+
+        return this;
     };
 
     /**
@@ -4622,7 +4652,7 @@ var inazumatv = {};
         }
         /**
          * @property _watch
-         * @type {WatchDocumentHeight}
+         * @type {WatchWindowSize}
          * @private
          */
         this._watch = WatchWindowSize.getInstance();
@@ -4695,70 +4725,96 @@ var inazumatv = {};
     p.constructor = inazumatv.FitWindowAspect;
 
     /**
-     *
+     * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
-        return this._watch;
+        console.warn( "getWatchWindowSize deprecated, instead watch" );
+        return this.watch();
+    };
+    /**
+     * @method watch
+     * @return {WatchWindowSize}
+     */
+    p.watch = function () {
+      return this._watch;
     };
 
     /**
      * 監視を開始します
      * @method listen
+     * @return {FitWindowAspect}
      */
     p.listen = function (){
         var watch = this._watch;
         watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
         watch.start();
+
+        return this;
     };
 
     /**
      * 監視を止めます
      * @method abort
+     * @return {FitWindowAspect}
      */
     p.abort = function (){
         this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+
+        return this;
     };
 
     /**
      * @method setElementWidth
      * @param {Number} w DOMElement width
+     * @return {FitWindowAspect}
      */
     p.setElementWidth = function ( w ){
         if ( isNumeric( w ) ) {
             this._elementWidth = w;
         }
+
+        return this;
     };
 
     /**
      * @method setElementHeight
      * @param {Number} h DOMElement height
+     * @return {FitWindowAspect}
      */
     p.setElementHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._elementHeight = h;
         }
+
+        return this;
     };
 
     /**
      * @method setMinHeight
      * @param {Number} h Minimum height
+     * @return {FitWindowAspect}
      */
     p.setMinHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._minHeight = h;
         }
+
+        return this;
     };
 
     /**
      * @method setMinWidth
-     * @param {Number} h Minimum width
+     * @param {Number} w Minimum width
+     * @return {FitWindowAspect}
      */
     p.setMinWidth = function ( w ){
         if ( isNumeric( w ) ) {
             this._elementWidth = w;
         }
+
+        return this;
     };
 
     /**
@@ -4917,20 +4973,26 @@ var inazumatv = {};
     /**
      * 監視を開始します
      * @method listen
+     * @return {FitWindowAspectCenter}
      */
     p.listen = function (){
         var watch = this._watch;
         //this._boundOnResize = this._onResize.bind( this );
         watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
         watch.start();
+
+        return this;
     };
 
     /**
      * 監視を止めます
      * @method abort
+     * @return {FitWindowAspectCenter}
      */
     p.abort = function (){
         this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+
+        return this;
     };
 
     /**
@@ -5141,30 +5203,39 @@ var inazumatv = {};
     /**
      * 監視を開始します
      * @method listen
+     * @return {FitWindowHeight}
      */
     p.listen = function (){
         var watch = this._watch;
 
         watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
         watch.start();
+
+        return this;
     };
 
     /**
      * 監視を止めます
      * @method abort
+     * @return {FitWindowHeight}
      */
     p.abort = function (){
         this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+
+        return this;
     };
 
     /**
      * @method setMinHeight
      * @param {Number} h Minimum height
+     * @return {FitWindowHeight}
      */
     p.setMinHeight = function ( h ){
         if ( isNumeric( h ) ) {
             this._minHeight = h;
         }
+
+        return this;
     };
 
     /**
