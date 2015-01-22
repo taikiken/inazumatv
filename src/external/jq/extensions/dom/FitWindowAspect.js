@@ -12,16 +12,20 @@
  */
 ( function ( inazumatv ){
     "use strict";
-    var isNumeric = inazumatv.isNumeric,
-        WatchWindowSize,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      isNumeric = inazumatv.isNumeric,
+      _int = parseInt,
+      _ceil = Math.ceil,
+      _max = Math.max,
+      WatchWindowSize,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      *
@@ -46,16 +50,60 @@
         if ( !isNumeric( offsetTop ) ) {
             offsetTop = 0;
         }
-
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchWindowSize.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minWidth
+         * @type {Number}
+         * @private
+         */
         this._minWidth = minWidth;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
+        /**
+         * @property _offsetLeft
+         * @type {Number}
+         * @private
+         */
         this._offsetLeft = offsetLeft;
+        /**
+         * @property _offsetTop
+         * @type {Number}
+         * @private
+         */
         this._offsetTop = offsetTop;
-
-        this._elementWidth = parseInt( $element.width(), 10 );
-        this._elementHeight = parseInt( $element.height(), 10 );
+        /**
+         * @property _elementWidth
+         * @type {Number}
+         * @private
+         */
+        this._elementWidth = _int( $element.width(), 10 );
+        /**
+         * @property _elementHeight
+         * @type {Number}
+         * @private
+         */
+        this._elementHeight = _int( $element.height(), 10 );
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitWindowAspect)|*}
+         * @private
+         */
+        this._boundOnResize = this._onResize.bind( this );
     }
 
     /**
@@ -90,9 +138,9 @@
      * @method listen
      */
     p.listen = function (){
-        this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -159,13 +207,13 @@
             ah,
             aspect;
 
-        w = Math.max( w, this._minWidth );
-        h = Math.max( h, this._minHeight );
+        w = _max( w, this._minWidth );
+        h = _max( h, this._minHeight );
         aw = w / ew;
         ah = h / eh;
-        aspect = Math.max( aw, ah );
+        aspect = _max( aw, ah );
 
-        this._$element.width( Math.ceil( ew * aspect ) ).height( Math.ceil( eh * aspect ) );
+        this._$element.width( _ceil( ew * aspect ) ).height( _ceil( eh * aspect ) );
     };
 
     inazumatv.jq.FitWindowAspect = FitWindowAspect;

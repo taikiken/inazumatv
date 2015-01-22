@@ -12,24 +12,24 @@
  */
 ( function ( inazumatv ){
     "use strict";
-    var _prevHeight = 0,
-        _$watchTarget,
-        _instance,
-        _fps,
-        _isStart = false,
+    var
+      _prevHeight = 0,
+      _$watchTarget,
+      _instance,
+      _fps,
+      _isStart = false,
 
-        EventObject = inazumatv.EventObject,
-        EventDispatcher = inazumatv.EventDispatcher,
-        FPSManager = inazumatv.FPSManager,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $
-    ;
+      EventObject = inazumatv.EventObject,
+      EventDispatcher = inazumatv.EventDispatcher,
+      FPSManager = inazumatv.FPSManager,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      * @class WatchDocumentHeight
@@ -89,7 +89,7 @@
 
     /**
      * document height change event
-     * @const RESIZE_HEIGHT
+     * @event RESIZE_HEIGHT
      * @type {string}
      * @static
      */

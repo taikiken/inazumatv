@@ -25,6 +25,11 @@
      */
     function HTMLLoader ( url, nocache ) {
         XMLLoader.call( this, url, nocache );
+        /**
+         * @property _type
+         * @type {string}
+         * @protected
+         */
         this._type = "html";
     }
 

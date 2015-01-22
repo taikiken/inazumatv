@@ -12,7 +12,9 @@
  */
 ( function ( inazumatv ){
     "use strict";
-    var WatchDocumentHeight,
+    var
+      WatchDocumentHeight,
+      _max = Math.max,
         /**
          * jQuery alias
          * @property $
@@ -33,9 +35,30 @@
         if ( !inazumatv.isNumeric( minHeight ) ) {
             minHeight = 0;
         }
+
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchDocumentHeight.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitDocumentHeight)|*}
+         * @private
+         */
         this._boundOnResize = this._onResize.bind( this );
     }
 
@@ -58,11 +81,22 @@
     p.constructor = inazumatv.FitDocumentHeight;
 
     /**
-     *
-     * @method getWatchDocumentHeight
-     * @return {WatchDocumentHeight} WatchDocumentHeight instance
+     * @deprecated
+     * @method getWatchWindowSize
+     * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchDocumentHeight = function (){
+    p.getWatchWindowSize = function (){
+        //return this._watch;
+        console.warn( "deprecated, use watch()" );
+        return this.watch();
+    };
+
+    /**
+     * @method watch
+     * @return {WatchWindowSize|*|FitDocumentHeight._watch}
+     */
+    p.watch = function () {
+
         return this._watch;
     };
 
@@ -71,8 +105,10 @@
      * @method listen
      */
     p.listen = function (){
-        this._watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+
+        watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -93,7 +129,7 @@
         var params = eventObject.params[ 0 ],
             h = params.height;
 
-        this._$element.height( Math.max( h, this._minHeight ) );
+        this._$element.height( _max( h, this._minHeight ) );
     };
 
     inazumatv.jq.FitDocumentHeight = FitDocumentHeight;

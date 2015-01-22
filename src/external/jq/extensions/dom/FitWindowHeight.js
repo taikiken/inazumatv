@@ -12,16 +12,18 @@
  */
 ( function ( inazumatv ){
     "use strict";
-    var isNumeric = inazumatv.isNumeric,
-        WatchWindowSize,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      isNumeric = inazumatv.isNumeric,
+      _max = Math.max,
+      WatchWindowSize,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      * @class FitWindowHeight
@@ -38,13 +40,42 @@
         if ( !isNumeric( offsetTop ) ) {
             offsetTop = 0;
         }
-
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchWindowSize.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
+        /**
+         * @property _offsetTop
+         * @type {Number}
+         * @private
+         */
         this._offsetTop = offsetTop;
-
+        /**
+         * @property _elementHeight
+         * @type {Number}
+         * @private
+         */
         this._elementHeight = parseInt( $element.height(), 10 );
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitWindowHeight)|*}
+         * @private
+         */
+        this._boundOnResize = this._onResize.bind( this );
     }
     /**
      * FitWindowHeight へ jQuery object を設定。FitWindowHeight を使用する前に実行する必要があります。<br>
@@ -63,11 +94,22 @@
     var p = FitWindowHeight.prototype;
 
     /**
-     *
+     * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
+        //return this._watch;
+        console.warn( "deprecated, use watch()" );
+        return this.watch();
+    };
+
+    /**
+     * @method watch
+     * @return {WatchWindowSize|*|FitWindowHeight._watch}
+     */
+    p.watch = function () {
+
         return this._watch;
     };
 
@@ -76,9 +118,10 @@
      * @method listen
      */
     p.listen = function (){
-        this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+
+        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -106,11 +149,11 @@
      * @protected
      */
     p._onResize = function ( eventObject ){
-        var params = eventObject.params[ 0 ],
-            h = params.height
-        ;
+        var
+          params = eventObject.params[ 0 ],
+          h = params.height;
 
-        this._$element.height( Math.max( h, this._minHeight ) - this._offsetTop );
+        this._$element.height( _max( h, this._minHeight ) - this._offsetTop );
     };
 
     inazumatv.jq.FitWindowHeight = FitWindowHeight;

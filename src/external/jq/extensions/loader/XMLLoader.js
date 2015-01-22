@@ -12,16 +12,17 @@
  */
 ( function ( inazumatv ){
     "use strict";
-    var EventObject = inazumatv.EventObject,
-        AjaxEvent = inazumatv.AjaxEvent,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      EventObject = inazumatv.EventObject,
+      AjaxEvent = inazumatv.AjaxEvent,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      * jQuery.ajax を使用しています。
@@ -50,6 +51,7 @@
             // url defined
             throw "url required";
         }
+
         AjaxEvent.call( this );
 
         if ( typeof nocache === 'undefined' || nocache === null ) {
@@ -58,9 +60,23 @@
         } else {
             this._nocache = nocache;
         }
-
+        /**
+         * @property _url
+         * @type {String}
+         * @protected
+         */
         this._url = url;
+        /**
+         * @property _type
+         * @type {string}
+         * @protected
+         */
         this._type = "xml";
+        /**
+         * @property _option
+         * @type {{}}
+         * @protected
+         */
         this._option = {};
     }
 

@@ -82,21 +82,21 @@
 
     /**
      * window width change Event
-     * @const RESIZE_WIDTH
+     * @event RESIZE_WIDTH
      * @type {string}
      * @static
      */
     WatchWindowSize.RESIZE_WIDTH = "watchWindowSizeResizeWidth";
     /**
      * window height change Event
-     * @const RESIZE_HEIGHT
+     * @event RESIZE_HEIGHT
      * @type {string}
      * @static
      */
     WatchWindowSize.RESIZE_HEIGHT = "watchWindowSizeResizeHeight";
     /**
      * window width or height change Event
-     * @const RESIZE
+     * @event RESIZE
      * @type {string}
      * @static
      */

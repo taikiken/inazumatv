@@ -322,7 +322,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.9.5"; // injected by build process
+    s.version = /*version*/"0.9.6"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -330,7 +330,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Wed, 17 Dec 2014 11:24:59 GMT"; // injected by build process
+    s.buildDate = /*date*/"Wed, 21 Jan 2015 13:44:29 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -3594,16 +3594,17 @@ var inazumatv = {};
  */
 ( function ( inazumatv ){
     "use strict";
-    var EventObject = inazumatv.EventObject,
-        AjaxEvent = inazumatv.AjaxEvent,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      EventObject = inazumatv.EventObject,
+      AjaxEvent = inazumatv.AjaxEvent,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      * jQuery.ajax を使用しています。
@@ -3632,6 +3633,7 @@ var inazumatv = {};
             // url defined
             throw "url required";
         }
+
         AjaxEvent.call( this );
 
         if ( typeof nocache === 'undefined' || nocache === null ) {
@@ -3640,9 +3642,23 @@ var inazumatv = {};
         } else {
             this._nocache = nocache;
         }
-
+        /**
+         * @property _url
+         * @type {String}
+         * @protected
+         */
         this._url = url;
+        /**
+         * @property _type
+         * @type {string}
+         * @protected
+         */
         this._type = "xml";
+        /**
+         * @property _option
+         * @type {{}}
+         * @protected
+         */
         this._option = {};
     }
 
@@ -3763,6 +3779,11 @@ var inazumatv = {};
      */
     function TXTLoader ( url, nocache ) {
         XMLLoader.call( this, url, nocache );
+        /**
+         * @property _type
+         * @type {string}
+         * @protected
+         */
         this._type = "text";
     }
 
@@ -3810,6 +3831,11 @@ var inazumatv = {};
      */
     function HTMLLoader ( url, nocache ) {
         XMLLoader.call( this, url, nocache );
+        /**
+         * @property _type
+         * @type {string}
+         * @protected
+         */
         this._type = "html";
     }
 
@@ -3844,24 +3870,24 @@ var inazumatv = {};
  */
 ( function ( inazumatv ){
     "use strict";
-    var _prevHeight = 0,
-        _$watchTarget,
-        _instance,
-        _fps,
-        _isStart = false,
+    var
+      _prevHeight = 0,
+      _$watchTarget,
+      _instance,
+      _fps,
+      _isStart = false,
 
-        EventObject = inazumatv.EventObject,
-        EventDispatcher = inazumatv.EventDispatcher,
-        FPSManager = inazumatv.FPSManager,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $
-    ;
+      EventObject = inazumatv.EventObject,
+      EventDispatcher = inazumatv.EventDispatcher,
+      FPSManager = inazumatv.FPSManager,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      * @class WatchDocumentHeight
@@ -3921,7 +3947,7 @@ var inazumatv = {};
 
     /**
      * document height change event
-     * @const RESIZE_HEIGHT
+     * @event RESIZE_HEIGHT
      * @type {string}
      * @static
      */
@@ -4036,7 +4062,9 @@ var inazumatv = {};
  */
 ( function ( inazumatv ){
     "use strict";
-    var WatchDocumentHeight,
+    var
+      WatchDocumentHeight,
+      _max = Math.max,
         /**
          * jQuery alias
          * @property $
@@ -4057,9 +4085,30 @@ var inazumatv = {};
         if ( !inazumatv.isNumeric( minHeight ) ) {
             minHeight = 0;
         }
+
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchDocumentHeight.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitDocumentHeight)|*}
+         * @private
+         */
         this._boundOnResize = this._onResize.bind( this );
     }
 
@@ -4082,11 +4131,22 @@ var inazumatv = {};
     p.constructor = inazumatv.FitDocumentHeight;
 
     /**
-     *
-     * @method getWatchDocumentHeight
-     * @return {WatchDocumentHeight} WatchDocumentHeight instance
+     * @deprecated
+     * @method getWatchWindowSize
+     * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchDocumentHeight = function (){
+    p.getWatchWindowSize = function (){
+        //return this._watch;
+        console.warn( "deprecated, use watch()" );
+        return this.watch();
+    };
+
+    /**
+     * @method watch
+     * @return {WatchWindowSize|*|FitDocumentHeight._watch}
+     */
+    p.watch = function () {
+
         return this._watch;
     };
 
@@ -4095,8 +4155,10 @@ var inazumatv = {};
      * @method listen
      */
     p.listen = function (){
-        this._watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+
+        watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -4117,7 +4179,7 @@ var inazumatv = {};
         var params = eventObject.params[ 0 ],
             h = params.height;
 
-        this._$element.height( Math.max( h, this._minHeight ) );
+        this._$element.height( _max( h, this._minHeight ) );
     };
 
     inazumatv.jq.FitDocumentHeight = FitDocumentHeight;
@@ -4206,21 +4268,21 @@ var inazumatv = {};
 
     /**
      * window width change Event
-     * @const RESIZE_WIDTH
+     * @event RESIZE_WIDTH
      * @type {string}
      * @static
      */
     WatchWindowSize.RESIZE_WIDTH = "watchWindowSizeResizeWidth";
     /**
      * window height change Event
-     * @const RESIZE_HEIGHT
+     * @event RESIZE_HEIGHT
      * @type {string}
      * @static
      */
     WatchWindowSize.RESIZE_HEIGHT = "watchWindowSizeResizeHeight";
     /**
      * window width or height change Event
-     * @const RESIZE
+     * @event RESIZE
      * @type {string}
      * @static
      */
@@ -4344,16 +4406,18 @@ var inazumatv = {};
  */
 ( function ( inazumatv ){
     "use strict";
-    var isNumeric = inazumatv.isNumeric,
-        WatchWindowSize,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      isNumeric = inazumatv.isNumeric,
+      _max = Math.max,
+      WatchWindowSize,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
     /**
      *
      * @class FitWindow
@@ -4373,12 +4437,42 @@ var inazumatv = {};
         if ( !isNumeric( offsetLeft ) ) {
             offsetLeft = 0;
         }
-
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchWindowSize.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minWidth
+         * @type {Number}
+         * @private
+         */
         this._minWidth = minWidth;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
+        /**
+         * @property _offsetLeft
+         * @type {Number}
+         * @private
+         */
         this._offsetLeft = offsetLeft;
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitWindow)|*}
+         * @private
+         */
+        this._boundOnResize = this._onResize.bind( this );
     }
 
     /**
@@ -4400,11 +4494,22 @@ var inazumatv = {};
     p.constructor = inazumatv.FitWindow;
 
     /**
-     *
+     * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
+        //return this._watch;
+        console.warn( "deprecated, use watch()" );
+        return this.watch();
+    };
+
+    /**
+     * @method watch
+     * @return {WatchWindowSize|*|FitWindow._watch}
+     */
+    p.watch = function () {
+
         return this._watch;
     };
 
@@ -4413,9 +4518,10 @@ var inazumatv = {};
      * @method listen
      */
     p.listen = function (){
-        this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+
+        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -4457,7 +4563,7 @@ var inazumatv = {};
             w = params.width - this._offsetLeft,
             h = params.height;
 
-        this._$element.width( Math.max( w, this._minWidth ) ).height( Math.max( h, this._minHeight ) );
+        this._$element.width( _max( w, this._minWidth ) ).height(_max( h, this._minHeight ) );
     };
 
     inazumatv.jq.FitWindow = FitWindow;
@@ -4476,16 +4582,20 @@ var inazumatv = {};
  */
 ( function ( inazumatv ){
     "use strict";
-    var isNumeric = inazumatv.isNumeric,
-        WatchWindowSize,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      isNumeric = inazumatv.isNumeric,
+      _int = parseInt,
+      _ceil = Math.ceil,
+      _max = Math.max,
+      WatchWindowSize,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      *
@@ -4510,16 +4620,60 @@ var inazumatv = {};
         if ( !isNumeric( offsetTop ) ) {
             offsetTop = 0;
         }
-
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchWindowSize.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minWidth
+         * @type {Number}
+         * @private
+         */
         this._minWidth = minWidth;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
+        /**
+         * @property _offsetLeft
+         * @type {Number}
+         * @private
+         */
         this._offsetLeft = offsetLeft;
+        /**
+         * @property _offsetTop
+         * @type {Number}
+         * @private
+         */
         this._offsetTop = offsetTop;
-
-        this._elementWidth = parseInt( $element.width(), 10 );
-        this._elementHeight = parseInt( $element.height(), 10 );
+        /**
+         * @property _elementWidth
+         * @type {Number}
+         * @private
+         */
+        this._elementWidth = _int( $element.width(), 10 );
+        /**
+         * @property _elementHeight
+         * @type {Number}
+         * @private
+         */
+        this._elementHeight = _int( $element.height(), 10 );
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitWindowAspect)|*}
+         * @private
+         */
+        this._boundOnResize = this._onResize.bind( this );
     }
 
     /**
@@ -4554,9 +4708,9 @@ var inazumatv = {};
      * @method listen
      */
     p.listen = function (){
-        this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -4623,13 +4777,13 @@ var inazumatv = {};
             ah,
             aspect;
 
-        w = Math.max( w, this._minWidth );
-        h = Math.max( h, this._minHeight );
+        w = _max( w, this._minWidth );
+        h = _max( h, this._minHeight );
         aw = w / ew;
         ah = h / eh;
-        aspect = Math.max( aw, ah );
+        aspect = _max( aw, ah );
 
-        this._$element.width( Math.ceil( ew * aspect ) ).height( Math.ceil( eh * aspect ) );
+        this._$element.width( _ceil( ew * aspect ) ).height( _ceil( eh * aspect ) );
     };
 
     inazumatv.jq.FitWindowAspect = FitWindowAspect;
@@ -4647,16 +4801,20 @@ var inazumatv = {};
  */
 ( function ( inazumatv ){
     "use strict";
-    var isNumeric = inazumatv.isNumeric,
-        WatchWindowSize,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      isNumeric = inazumatv.isNumeric,
+      _int = parseInt,
+      _ceil = Math.ceil,
+      _max = Math.max,
+      WatchWindowSize,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      * window幅に比率を保ち拡大縮小し、常に中央を表示します。
@@ -4674,15 +4832,47 @@ var inazumatv = {};
         if ( !isNumeric( minHeight ) ) {
             minHeight = 0;
         }
-
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchWindowSize.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minWidth
+         * @type {Number}
+         * @private
+         */
         this._minWidth = minWidth;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
-
-        this._elementWidth = parseInt( $element.width(), 10 );
-        this._elementHeight = parseInt( $element.height(), 10 );
-
+        /**
+         * @property _elementWidth
+         * @type {Number}
+         * @private
+         */
+        this._elementWidth = _int( $element.width(), 10 );
+        /**
+         * @property _elementHeight
+         * @type {Number}
+         * @private
+         */
+        this._elementHeight = _int( $element.height(), 10 );
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitWindowAspectCenter)|*}
+         * @private
+         */
         this._boundOnResize = this._onResize.bind( this );
     }
 
@@ -4802,30 +4992,33 @@ var inazumatv = {};
      * @protected
      */
     p._onResize = function ( eventObject ){
-        var ew = this._elementWidth,
-            eh = this._elementHeight,
-            params = eventObject.params[ 0 ],
-            window_w = Math.ceil( params.width ),
-            window_h = Math.ceil( params.height ),
-            w,
-            h,
-            aspect_w,
-            aspect_h,
-            aspect;
+        var
+          ew = this._elementWidth,
+          eh = this._elementHeight,
+          params = eventObject.params[ 0 ],
+          window_w = Math.ceil( params.width ),
+          window_h = Math.ceil( params.height ),
+          w,
+          h,
+          aspect_w,
+          aspect_h,
+          aspect,
+          after_w, after_h, sub_w, sub_h;
 
-        w = Math.max( window_w, this._minWidth );
-        h = Math.max( window_h, this._minHeight );
+        w = _max( window_w, this._minWidth );
+        h = _max( window_h, this._minHeight );
         aspect_w = w / ew;
         aspect_h = h / eh;
-        aspect = Math.max( aspect_w, aspect_h );
+        aspect = _max( aspect_w, aspect_h );
 
         // 計算後のwidth, height
-        var after_w = Math.ceil( ew * aspect ),
-            after_h = Math.ceil( eh * aspect ),
-            sub_w = (window_w - after_w) * 0.5,
-            sub_h = (window_h - after_h) * 0.5;
+        after_w = _ceil( ew * aspect );
+        after_h = _ceil( eh * aspect );
+        sub_w = (window_w - after_w) * 0.5;
+        sub_h = (window_h - after_h) * 0.5;
 
-        this._$element.width( after_w ).height( after_h ).css( { left: sub_w + "px", top: sub_h + "px" } );
+        //this._$element.width( after_w ).height( after_h ).css( { left: sub_w + "px", top: sub_h + "px" } );
+        this._$element.css( { width: after_w + "px", height: after_h + "px", left: sub_w + "px", top: sub_h + "px" } );
     };
 
     inazumatv.jq.FitWindowAspectCenter = FitWindowAspectCenter;
@@ -4844,16 +5037,18 @@ var inazumatv = {};
  */
 ( function ( inazumatv ){
     "use strict";
-    var isNumeric = inazumatv.isNumeric,
-        WatchWindowSize,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      isNumeric = inazumatv.isNumeric,
+      _max = Math.max,
+      WatchWindowSize,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      * @class FitWindowHeight
@@ -4870,13 +5065,42 @@ var inazumatv = {};
         if ( !isNumeric( offsetTop ) ) {
             offsetTop = 0;
         }
-
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchWindowSize.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
+        /**
+         * @property _offsetTop
+         * @type {Number}
+         * @private
+         */
         this._offsetTop = offsetTop;
-
+        /**
+         * @property _elementHeight
+         * @type {Number}
+         * @private
+         */
         this._elementHeight = parseInt( $element.height(), 10 );
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitWindowHeight)|*}
+         * @private
+         */
+        this._boundOnResize = this._onResize.bind( this );
     }
     /**
      * FitWindowHeight へ jQuery object を設定。FitWindowHeight を使用する前に実行する必要があります。<br>
@@ -4895,11 +5119,22 @@ var inazumatv = {};
     var p = FitWindowHeight.prototype;
 
     /**
-     *
+     * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
     p.getWatchWindowSize = function (){
+        //return this._watch;
+        console.warn( "deprecated, use watch()" );
+        return this.watch();
+    };
+
+    /**
+     * @method watch
+     * @return {WatchWindowSize|*|FitWindowHeight._watch}
+     */
+    p.watch = function () {
+
         return this._watch;
     };
 
@@ -4908,9 +5143,10 @@ var inazumatv = {};
      * @method listen
      */
     p.listen = function (){
-        this._boundOnResize = this._onResize.bind( this );
-        this._watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        this._watch.start();
+        var watch = this._watch;
+
+        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+        watch.start();
     };
 
     /**
@@ -4938,11 +5174,11 @@ var inazumatv = {};
      * @protected
      */
     p._onResize = function ( eventObject ){
-        var params = eventObject.params[ 0 ],
-            h = params.height
-        ;
+        var
+          params = eventObject.params[ 0 ],
+          h = params.height;
 
-        this._$element.height( Math.max( h, this._minHeight ) - this._offsetTop );
+        this._$element.height( _max( h, this._minHeight ) - this._offsetTop );
     };
 
     inazumatv.jq.FitWindowHeight = FitWindowHeight;

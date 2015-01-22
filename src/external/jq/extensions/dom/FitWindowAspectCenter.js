@@ -12,16 +12,20 @@
  */
 ( function ( inazumatv ){
     "use strict";
-    var isNumeric = inazumatv.isNumeric,
-        WatchWindowSize,
-        /**
-         * jQuery alias
-         * @property $
-         * @type {jQuery}
-         * @private
-         * @static
-         */
-        $;
+    var
+      isNumeric = inazumatv.isNumeric,
+      _int = parseInt,
+      _ceil = Math.ceil,
+      _max = Math.max,
+      WatchWindowSize,
+      /**
+       * jQuery alias
+       * @property $
+       * @type {jQuery}
+       * @private
+       * @static
+       */
+      $;
 
     /**
      * window幅に比率を保ち拡大縮小し、常に中央を表示します。
@@ -39,15 +43,47 @@
         if ( !isNumeric( minHeight ) ) {
             minHeight = 0;
         }
-
+        /**
+         * @property _watch
+         * @type {WatchDocumentHeight}
+         * @private
+         */
         this._watch = WatchWindowSize.getInstance();
+        /**
+         * @property _$element
+         * @type {jQuery}
+         * @private
+         */
         this._$element = $element;
+        /**
+         * @property _minWidth
+         * @type {Number}
+         * @private
+         */
         this._minWidth = minWidth;
+        /**
+         * @property _minHeight
+         * @type {Number}
+         * @private
+         */
         this._minHeight = minHeight;
-
-        this._elementWidth = parseInt( $element.width(), 10 );
-        this._elementHeight = parseInt( $element.height(), 10 );
-
+        /**
+         * @property _elementWidth
+         * @type {Number}
+         * @private
+         */
+        this._elementWidth = _int( $element.width(), 10 );
+        /**
+         * @property _elementHeight
+         * @type {Number}
+         * @private
+         */
+        this._elementHeight = _int( $element.height(), 10 );
+        /**
+         * @property _boundOnResize
+         * @type {function(this:FitWindowAspectCenter)|*}
+         * @private
+         */
         this._boundOnResize = this._onResize.bind( this );
     }
 
@@ -167,30 +203,33 @@
      * @protected
      */
     p._onResize = function ( eventObject ){
-        var ew = this._elementWidth,
-            eh = this._elementHeight,
-            params = eventObject.params[ 0 ],
-            window_w = Math.ceil( params.width ),
-            window_h = Math.ceil( params.height ),
-            w,
-            h,
-            aspect_w,
-            aspect_h,
-            aspect;
+        var
+          ew = this._elementWidth,
+          eh = this._elementHeight,
+          params = eventObject.params[ 0 ],
+          window_w = Math.ceil( params.width ),
+          window_h = Math.ceil( params.height ),
+          w,
+          h,
+          aspect_w,
+          aspect_h,
+          aspect,
+          after_w, after_h, sub_w, sub_h;
 
-        w = Math.max( window_w, this._minWidth );
-        h = Math.max( window_h, this._minHeight );
+        w = _max( window_w, this._minWidth );
+        h = _max( window_h, this._minHeight );
         aspect_w = w / ew;
         aspect_h = h / eh;
-        aspect = Math.max( aspect_w, aspect_h );
+        aspect = _max( aspect_w, aspect_h );
 
         // 計算後のwidth, height
-        var after_w = Math.ceil( ew * aspect ),
-            after_h = Math.ceil( eh * aspect ),
-            sub_w = (window_w - after_w) * 0.5,
-            sub_h = (window_h - after_h) * 0.5;
+        after_w = _ceil( ew * aspect );
+        after_h = _ceil( eh * aspect );
+        sub_w = (window_w - after_w) * 0.5;
+        sub_h = (window_h - after_h) * 0.5;
 
-        this._$element.width( after_w ).height( after_h ).css( { left: sub_w + "px", top: sub_h + "px" } );
+        //this._$element.width( after_w ).height( after_h ).css( { left: sub_w + "px", top: sub_h + "px" } );
+        this._$element.css( { width: after_w + "px", height: after_h + "px", left: sub_w + "px", top: sub_h + "px" } );
     };
 
     inazumatv.jq.FitWindowAspectCenter = FitWindowAspectCenter;
