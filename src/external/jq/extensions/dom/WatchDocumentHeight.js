@@ -20,7 +20,7 @@
        * @private
        */
       _prevHeight = 0,
-      _$watchTarget,
+      //_$watchTarget,
       _instance,
       /**
        * FPSManager instance, default frame rate is 24.
@@ -42,7 +42,8 @@
        * @private
        * @static
        */
-      $;
+      $,
+      _max = Math.max;
 
     /**
      * @class WatchDocumentHeight
@@ -78,11 +79,11 @@
         this._$document = $document;
         this._$window = $window;
 
-        if ( $window.height() > $document.height() ) {
-            _$watchTarget = $window;
-        } else {
-            _$watchTarget = $document;
-        }
+        //if ( $window.height() > $document.height() ) {
+        //    _$watchTarget = $window;
+        //} else {
+        //    _$watchTarget = $document;
+        //}
     };
 
     /**
@@ -139,13 +140,14 @@
           isChange,
           params;
 
-        if ( $window.height() > $document.height() ) {
-            _$watchTarget = $window;
-        } else {
-            _$watchTarget = $document;
-        }
-
-        h = _$watchTarget.height();
+        //if ( $window.height() > $document.height() ) {
+        //    _$watchTarget = $window;
+        //} else {
+        //    _$watchTarget = $document;
+        //}
+        //
+        //h = _$watchTarget.height();
+        h = _max( $window.height(), $document.height() );
         isChange = h !== _prevHeight;
 
         params = {
