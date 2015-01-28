@@ -10,9 +10,15 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
+( function ( window, inazumatv ){
     "use strict";
     var
+      document = window.document,
+      /**
+       * @property _prevHeight
+       * @type {number}
+       * @private
+       */
       _prevHeight = 0,
       _$watchTarget,
       _instance,
@@ -66,7 +72,7 @@
      */
     WatchDocumentHeight.activate = function ( jQuery ){
         $ = jQuery;
-        var $document = $( document ),
+        var $document = $( document.body ),
             $window = $( window );
 
         this._$document = $document;
@@ -126,8 +132,12 @@
      * @return {boolean} true: 高さ変更
      */
     p.update = function ( strong ){
-        var $window = this._$window,
-            $document = this._$document;
+        var
+          $window = this._$window,
+          $document = this._$document,
+          h,
+          isChange,
+          params;
 
         if ( $window.height() > $document.height() ) {
             _$watchTarget = $window;
@@ -135,14 +145,13 @@
             _$watchTarget = $document;
         }
 
-        var h = _$watchTarget.height(),
-            isChange = h !== _prevHeight,
+        h = _$watchTarget.height();
+        isChange = h !== _prevHeight;
 
-            params = {
-                strong: strong,
-                height: h
-            }
-        ;
+        params = {
+            strong: strong,
+            height: h
+        };
 
         _prevHeight = h;
         if ( isChange || strong ) {
@@ -197,4 +206,4 @@
     };
 
     inazumatv.jq.WatchDocumentHeight = WatchDocumentHeight;
-}( this.inazumatv ) );
+}( window, window.inazumatv ) );
