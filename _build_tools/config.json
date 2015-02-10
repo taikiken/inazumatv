@@ -22,6 +22,7 @@
 
         "../src/util/List.js",
         "../src/util/Kana.js",
+        "../src/util/Num.js",
 
         "../src/motion/ShuffleText.js",
 

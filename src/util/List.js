@@ -15,6 +15,11 @@
     var inazumatv = window.inazumatv;
 
     inazumatv.List = ( function (){
+      var
+        _shuffle = inazumatv.shuffle,
+
+        _maxValue = inazumatv.maxValue;
+
         /**
          * Array ヘルパー
          * @class List
@@ -59,24 +64,26 @@
 
         /**
          * 配列をシャッフルします
+         * <br>inazumatv.shuffle alias
          * @method shuffle
          * @static
-         * @param {array} array
+         * @param {Array} array
          * @return {Array} シャッフル後の配列を返します
          */
         l.shuffle = function ( array ) {
-            return inazumatv.shuffle( array );
+            return _shuffle( array );
         };
 
         /**
          * 配列内の最大数値を返します
+         * <br>inazumatv.maxValue alias
          * @method max
          * @static
          * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
          * @return {number} 配列内の最大数値を返します
          */
         l.max = function ( arr ) {
-            inazumatv.maxValue( arr );
+            _maxValue( arr );
         };
 
         return List;

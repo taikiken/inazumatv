@@ -199,6 +199,7 @@ var inazumatv = {};
      * 継承に使用します
      * @for inazumatv
      * @method extend
+     * @static
      * @param {Function} P 親クラス
      * @param {Function} C 子クラス
      */
@@ -212,6 +213,7 @@ var inazumatv = {};
      * 数値チェック
      * @for inazumatv
      * @method isNumeric
+     * @static
      * @param {*} obj
      * @return {boolean} true: Number, false: not Number
      */
@@ -227,6 +229,7 @@ var inazumatv = {};
      * 範囲指定乱数生成
      * @for inazumatv
      * @method random
+     * @static
      * @param {Number} min 最小値
      * @param {Number} [max] 最大値 optional
      * @return {Number} min ~ max 間の乱数(Float)を発生させます
@@ -246,6 +249,7 @@ var inazumatv = {};
      * 配列内の最大数値を返します
      * @for inazumatv
      * @method maxValue
+     * @static
      * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
      * @return {number} 配列内の最大数値を返します
      */
@@ -260,6 +264,7 @@ var inazumatv = {};
      *
      * @for inazumatv
      * @method logAbort
+     * @static
      */
     inazumatv.logAbort = function (){
         self.console = {
@@ -277,6 +282,7 @@ var inazumatv = {};
      * 配列をシャッフルします
      * @for inazumatv
      * @method shuffle
+     * @static
      * @param {Array} array
      * @return {Array}
      */
