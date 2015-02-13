@@ -155,9 +155,11 @@
      * @version 2.0.0 alpha
      * @author Yasunobu Ikeda ( http://clockmaker.jp )
      * @class LoadManager
+     * @deprecated
      * @constructor
      */
     function LoadManager() {
+      console.warn( "LoadManager deprecated, instead use BulkLoader or LoadImage" );
     }
 
     /**
