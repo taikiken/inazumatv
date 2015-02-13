@@ -64,18 +64,59 @@
      *
      *      loop();
      *
+     * [3]
+     * 自動実行, loop が必要ない
+     *
+     *      function eventHandler () {
+     *           // after 1 sec.
+     *           // do something
+     *      }
+     *      var polling1 = new PollingManager( 1000 );
+     *      polling1.addEventListener( PollingManager.POLLING_PAST, eventHandler );
+     *      polling1.start( true );
+     *
      * @class PollingManager
      * @uses EventDispatcher
      * @param {Number} ms milliseconds 指定
      * @constructor
      */
     function PollingManager ( ms ) {
-        this._startTime = 0;
-        this._polling = ms;
-        this._eventObj = new EventObject( PollingManager.POLLING_PAST );
-        this._boundEnterFrame = this._onEnterFrame.bind( this );
-        this._loop = LoopManager.getInstance();
-        this._auto = false;
+      /**
+       * @property _startTime
+       * @type {number}
+       * @default 0
+       * @private
+       */
+      this._startTime = 0;
+      /**
+       * @property _polling
+       * @type {Number}
+       * @private
+       */
+      this._polling = ms;
+      /**
+       * @property _eventObj
+       * @type {inazumatv.EventObject}
+       * @private
+       */
+      this._eventObj = new EventObject( PollingManager.POLLING_PAST );
+      /**
+       * @property _boundEnterFrame
+       * @type {function(this:PollingManager)|*}
+       * @private
+       */
+      this._boundEnterFrame = this._onEnterFrame.bind( this );
+      /**
+       * @property _loop
+       */
+      this._loop = LoopManager.getInstance();
+      /**
+       * @property _auto
+       * @type {boolean}
+       * @default false
+       * @private
+       */
+      this._auto = false;
     }
 
     /**
@@ -129,11 +170,9 @@
     p.stop = function () {
         var loop = this._loop;
 
-//        if ( typeof loop !== "undefined" ) {
         if ( this._auto ) {
 
             loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-//            this._loop = null;
         }
 
         this._startTime = Number.MAX_VALUE;
@@ -147,7 +186,6 @@
     p.change = function ( ms ){
         this._startTime = 0;
         this._polling = ms;
-//        this.start();
         this._resetTime();
     };
 

@@ -45,243 +45,358 @@
 //  modified by (at)taikiken
 // -----------------------------------
 ( function ( inazumatv ){
-    "use strict";
+  "use strict";
 
-    var rand = Math.random,
-        floor = Math.floor,
+  var
+    rand = Math.random,
+    floor = Math.floor,
 
-        FPSManager = inazumatv.FPSManager;
+    FPSManager = inazumatv.FPSManager,
+    EventDispatcher = inazumatv.EventDispatcher,
+    EventObject = inazumatv.EventObject;
 
-    /**
-     * テキストをシャッフルし表示します
-     * @class ShuffleText
-     * @constructor
-     */
-    function ShuffleText () {
-        this._boundUpdate = this.update.bind( this );
-        this._fps = new FPSManager( 60 );
-    }
-
-    var p = ShuffleText.prototype;
-
-    p.constructor = ShuffleText;
-
-    /**
-     * @method initialize
-     * @param {*} element DOMElement
-     */
-    p.initialize = function ( element ){
-        this._element = element;
-    };
-
-    /**
-     * ランダムテキストに用いる文字列
-     * @property sourceRandomCharacter
-     * @type {string}
-     * @default ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
-     * */
-    p.sourceRandomCharacter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
-    p.setRandomChar = function ( randomChar ){
-        this.sourceRandomCharacter = randomChar;
-    };
-    /**
-     * 空白に用いる文字列
-     * @property emptyCharacter
-     * @type {string}
-     * @default "*"
-     * */
-    p.emptyCharacter = "*";
+  /**
+   * テキストをシャッフルし表示します
+   * @class ShuffleText
+   * @constructor
+   */
+  function ShuffleText () {
     /**
      * フレームレート
      * @property fps
-     * @type {Number}
      * @default 60
-     * */
-    p.fps = 60;
+     * @type {number}
+     */
+    this.fps = 60;
+    /**
+     * ランダムテキストに用いる文字列
+     * @property randomChar
+     * @default "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+     * @type {string}
+     */
+    this.randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    /**
+     * 空白に用いる文字列
+     * @property emptyCharacter
+     * @default "*"
+     * @type {string}
+     */
+    this.emptyCharacter = "*";
     /**
      * 再生中かどうかを示すブール値
      * @property isRunning
+     * @default false
      * @type {boolean}
-     * */
-    p.isRunning = false;
+     */
+    this.isRunning = false;
+    /**
+     * @property duration
+     * @default 500
+     * @type {number}
+     */
+    this.duration = 500;
     /**
      * エフェクトの実行時間(millisecond)
-     * @property duration
-     * @type {Number}
-     * @default 500 (500ms)
-     * */
-    p.duration = 500;
-
-    /**
-     * @method setDuration
-     * @param {Number} ms millisecond
+     * @property _boundUpdate
+     * @type {function(this:ShuffleText)|*}
+     * @private
      */
-    p.setDuration = function ( ms ){
-        this.duration = ms;
-    };
-
-    p._originalStr = "";
-    p._originalLength = "";
-    p._intervalId = 0;
-    p._timeCurrent = 0;
-    p._timeStart = 0;
-    p._randomIndex = [];
-
+    this._boundUpdate = this.update.bind( this );
     /**
-     * テキストを設定します。
-     * @method setText
-     * @param {string} text
+     * 60fps で処理します
+     * @property _fps
+     * @type {null|FPSManager}
+     * @private
      */
-    p.setText = function ( text ) {
-        this._originalStr = text;
-        this._originalLength = text.length;
-    };
-
+    this._fps = null;
     /**
-     *
-     * 再生を開始します。
-     * @method start
-     * @param {boolean=false} [is_keep]
-     * */
-    p.start = function ( is_keep ) {
-        var element = this._element;
+     * @property _originalStr
+     * @type {string}
+     * @private
+     */
+    this._originalStr = "";
+    /**
+     * @property _originalLength
+     * @type {string}
+     * @private
+     */
+    this._originalLength = "";
+    /**
+     * @property _intervalId
+     * @type {number}
+     * @private
+     */
+    this._intervalId = 0;
+    /**
+     * @property _timeCurrent
+     * @type {number}
+     * @private
+     */
+    this._timeCurrent = 0;
+    /**
+     * @property _timeStart
+     * @type {number}
+     * @private
+     */
+    this._timeStart = 0;
+    /**
+     * @property _randomIndex
+     * @type {Array}
+     * @private
+     */
+    this._randomIndex = [];
+    /**
+     * @property _keep
+     * @type {boolean}
+     * @private
+     */
+    this._keep = false;
+    /**
+     * @property _endStr
+     * @type {string}
+     * @private
+     */
+    this._endStr = "";
+    /**
+     * @property _element
+     * @type {null} HTMLElement
+     * @private
+     */
+    this._element = null;
+  }
 
-        if (typeof element === "undefined") {
-            return;
-        }
+  /**
+   * @event CHANGE
+   * @static
+   * @type {string}
+   */
+  ShuffleText.CHANGE = "shuffleTextChange";
+  /**
+   * @event COMPLETE
+   * @static
+   * @type {string}
+   */
+  ShuffleText.COMPLETE = "shuffleTextComplete";
 
-        is_keep = !!is_keep;
+  var p = ShuffleText.prototype;
 
-        this._keep = is_keep;
+  EventDispatcher.initialize( p );
 
-        if ( this.isRunning ) {
-            this.stop( true );
-        }
+  p.constructor = ShuffleText;
 
-        this._randomIndex = [];
+  /**
+   * 初期処理
+   * @method initialize
+   * @param {*|HTMLElement} element DOMElement
+   * @return ShuffleText
+   */
+  p.initialize = function ( element ){
+    this._element = element;
+    this._fps = new FPSManager( this.fps );
 
-        var str = "",
-            random_index = this._randomIndex,
-            empty_char = this.emptyCharacter,
-            origin_length = this._originalLength;
+    return this;
+  };
 
-        this._endStr = this._originalStr;
+  /**
+   * @method setDuration
+   * @param {Number} ms millisecond
+   * @return ShuffleText
+   */
+  p.setDuration = function ( ms ){
+    this.duration = ms;
+    return this;
+  };
 
-        for ( var i = 0; i < origin_length; i++ ) {
+  /**
+   * 置き換え文字列（テキスト）を設定します。
+   * @method setText
+   * @param {string} text
+   * @return ShuffleText
+   */
+  p.setText = function ( text ) {
+    this._originalStr = text;
+    this._originalLength = text.length;
 
-            var rate = i / origin_length;
+    return this;
+  };
+  /**
+   * フレームレートを設定します
+   * @method setFPS
+   * @param {number} fps
+   * @return {ShuffleText}
+   */
+  p.setFPS = function ( fps ) {
+    this.fps = fps;
 
-            random_index[ i ] = rand() * ( 1 - rate ) + rate;
+    return this;
+  };
+  /**
+   * ランダムテキストに用いる文字列を置き換えます
+   * @method setRandomChar
+   * @param {string} char
+   * @return {ShuffleText}
+   */
+  p.setRandomChar = function ( char ) {
+    this.randomChar = char;
+    return this;
+  };
+
+  /**
+   *
+   * 再生を開始します。
+   * @method start
+   * @param {boolean=false} [is_keep]
+   * */
+  p.start = function ( is_keep ) {
+    var
+      element = this._element,
+      str = "",
+      random_index,
+      empty_char = this.emptyCharacter,
+      origin_length = this._originalLength,
+      i, _fps, rate;
+
+    if ( typeof element === "undefined" || element === null ) {
+      return;
+    }
+
+    is_keep = !!is_keep;
+
+    this._keep = is_keep;
+
+    if ( this.isRunning ) {
+      this.stop( true );
+    }
+
+    this._randomIndex = [];
+    random_index = this._randomIndex;
+
+    //var str = "",
+    //  random_index = this._randomIndex,
+    //  empty_char = this.emptyCharacter,
+    //  origin_length = this._originalLength;
+
+
+    this._endStr = this._originalStr;
+
+    for ( i = 0; i < origin_length; i++ ) {
+
+      rate = i / origin_length;
+
+      random_index[ i ] = rand() * ( 1 - rate ) + rate;
+
+      str += empty_char;
+    }
+
+    _fps = this._fps;
+
+    _fps.changeFPS( this.fps );
+    _fps.addEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
+
+    this.isRunning = true;
+
+    if ( !is_keep ) {
+      element.innerHTML = str;
+    }
+
+    this._timeStart = new Date().getTime();
+    _fps.start();
+  };
+
+  /**
+   * 停止します。
+   * @method stop
+   * */
+  p.stop = function ( strong ) {
+    strong = !!strong;
+
+    if ( this.isRunning ) {
+
+      this._fps.removeEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
+      this._fps.stop();
+
+      if ( strong ) {
+
+        this._element.innerHTML = this._endStr;
+      }
+    }
+
+    this.isRunning = false;
+  };
+
+  /**
+   *
+   * @method update
+   */
+  p.update = function () {
+    var
+      timeCurrent = new Date().getTime() - this._timeStart,
+      percent = timeCurrent / this.duration,
+      random_index = this._randomIndex,
+      origin_str = this._originalStr,
+      empty_char = this.emptyCharacter,
+      random_char = this.randomChar,
+      random_char_length = random_char.length,
+      is_keep = this._keep,
+      str = "",
+      i, limit;
+
+    for ( i = 0, limit = this._originalLength; i < limit; i++ ) {
+
+      if ( percent >= random_index[ i ] ) {
+
+        str += origin_str.charAt(i);
+
+      } else {
+        if ( !is_keep ) {
+          if ( percent < random_index[ i ] / 3 ) {
 
             str += empty_char;
+          } else {
+
+            str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
+          }
+        } else {
+
+          if ( percent < random_index[ i ] / 3 ) {
+
+            str += origin_str.charAt(i);
+          } else {
+
+            str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
+          }
         }
+      }
+    }
 
-        var _fps = this._fps;
+    this._element.innerHTML = str;
+    this.onChange( str );
+    this.dispatchEvent( new EventObject( ShuffleText.CHANGE, [ str ] ), this );
 
-        _fps.changeFPS( this.fps );
-        _fps.addEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
+    if ( percent > 1 ) {
 
-        this.isRunning = true;
+      this.stop( true );
+      this.onComplete();
+      this.dispatchEvent( new EventObject( ShuffleText.COMPLETE, [] ), this );
+    }
+  };
 
-        if ( !is_keep ) {
-            element.innerHTML = str;
-        }
+  /**
+   * shuffle 終了 callback 関数, override して使用します
+   * @method onComplete
+   */
+  p.onComplete = function () {
 
-        this._timeStart = new Date().getTime();
-        _fps.start();
-    };
+  };
 
-    /**
-     * 停止します。
-     * @method stop
-     * */
-    p.stop = function ( strong ) {
-        strong = !!strong;
+  /**
+   * shuffle update callback 関数, override して使用します
+   * @method onChange
+   * @param {string} str 変更された文字
+   */
+  p.onChange = function ( str ) {
 
-        if ( this.isRunning ) {
-
-            this._fps.removeEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
-            this._fps.stop();
-
-            if ( strong ) {
-
-                this._element.innerHTML = this._endStr;
-            }
-        }
-
-        this.isRunning = false;
-    };
-
-    /**
-     *
-     * @method update
-     */
-    p.update = function () {
-        var timeCurrent = new Date().getTime() - this._timeStart,
-            percent = timeCurrent / this.duration,
-            random_index = this._randomIndex,
-            origin_str = this._originalStr,
-            empty_char = this.emptyCharacter,
-            random_char = this.sourceRandomCharacter,
-            random_char_length = random_char.length,
-            is_keep = this._keep;
-
-        var str = "";
-        for ( var i = 0, limit = this._originalLength; i < limit; i++ ) {
-
-            if ( percent >= random_index[ i ] ) {
-
-                str += origin_str.charAt(i);
-
-            } else {
-                if ( !is_keep ) {
-                    if ( percent < random_index[ i ] / 3 ) {
-
-                        str += empty_char;
-                    } else {
-
-                        str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
-                    }
-                } else {
-
-                    if ( percent < random_index[ i ] / 3 ) {
-
-                        str += origin_str.charAt(i);
-                    } else {
-
-                        str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
-                    }
-                }
-            }
-        }
-
-        this._element.innerHTML = str;
-        this.onChange( str );
-
-        if ( percent > 1 ) {
-
-            this.stop( true );
-            this.onComplete();
-        }
-    };
-
-    /**
-     * shuffle 終了 callback 関数, override して使用します
-     * @method onComplete
-     */
-    p.onComplete = function () {
-
-    };
-
-    /**
-     * shuffle update callback 関数, override して使用します
-     * @method onChange
-     * @param {string} str 変更された文字
-     */
-    p.onChange = function ( str ) {
-
-    };
+  };
 
     inazumatv.ShuffleText = ShuffleText;
 

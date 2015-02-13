@@ -52,15 +52,34 @@
      * @class FPSManager
      * @uses EventDispatcher
      * @param {int} fps frame rate 指定（整数）
-     * @param {Boolean} [manual] abort auto start, default: false
+     * @param {Boolean=false} [manual] abort auto start, default: false
      * @constructor
      */
     function FPSManager ( fps, manual ) {
-        this.setFPS( fps );
-        this._manualStart = !!manual;
-        this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
-        this._loop = LoopManager.getInstance();
-        this._boundEnterFrame = this._onEnterFrame.bind( this );
+      this.setFPS( fps );
+      /**
+       * @property _manualStart
+       * @type {boolean}
+       * @private
+       */
+      this._manualStart = !!manual;
+      /**
+       * @property _eventObj
+       * @type {inazumatv.EventObject}
+       * @private
+       */
+      this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
+      /**
+       * @property _loop
+       * @type {LoopManager} LoopManager instance
+       */
+      this._loop = LoopManager.getInstance();
+      /**
+       * @property _boundEnterFrame
+       * @type {function(this:FPSManager)|*}
+       * @private
+       */
+      this._boundEnterFrame = this._onEnterFrame.bind( this );
     }
 
     /**

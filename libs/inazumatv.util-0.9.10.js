@@ -2819,10 +2819,10 @@ var inazumatv = {};
      * @type {string}
      * @default ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
      * */
-    p.sourceRandomCharacter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    p.randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
     p.setRandomChar = function ( randomChar ){
-        this.sourceRandomCharacter = randomChar;
+        this.randomChar = randomChar;
     };
     /**
      * 空白に用いる文字列
@@ -2962,7 +2962,7 @@ var inazumatv = {};
             random_index = this._randomIndex,
             origin_str = this._originalStr,
             empty_char = this.emptyCharacter,
-            random_char = this.sourceRandomCharacter,
+            random_char = this.randomChar,
             random_char_length = random_char.length,
             is_keep = this._keep;
 

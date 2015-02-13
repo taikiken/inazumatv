@@ -22,17 +22,22 @@
          * 画像を読み込みイベントを発火します
          * @class LoadImage
          * @uses EventDispatcher
-         * @param path
+         * @param {string} path
          * @constructor
          */
         function LoadImage ( path ) {
-            this._path = path;
+          /**
+           * @property _path
+           * @type {string}
+           * @private
+           */
+          this._path = path;
         }
 
         /**
          * 画像読み込み完了イベント
          * @for LoadImage
-         * @const COMPLETE
+         * @event COMPLETE
          * @static
          * @type {string}
          */
@@ -40,7 +45,7 @@
         /**
          * 画像読み込みエラーイベント
          * @for LoadImage
-         * @const ERROR
+         * @event ERROR
          * @static
          * @type {string}
          */

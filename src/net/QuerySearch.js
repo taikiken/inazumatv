@@ -12,8 +12,9 @@
  */
 ( function ( window ){
     "use strict";
-    var inazumatv = window.inazumatv
-    ;
+    var
+      inazumatv = window.inazumatv,
+      _decode = window.decodeURIComponent;
 
     /**
      * get parameter を取得します
@@ -21,8 +22,10 @@
      * @constructor
      */
     function QuerySearch () {
-        throw "QuerySearch cannot be instantiated";
+        throw new Error( "QuerySearch cannot be instantiated" );
     }
+
+  QuerySearch.prototype.constructor = QuerySearch;
 
     var q = QuerySearch;
 
@@ -41,8 +44,8 @@
 
         for ( var i = 0, limit = vars.length; i < limit; i++ ) {
             var pair = vars[ i ].split( '=' );
-            if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
-                result =  decodeURIComponent( pair[ 1 ] );
+            if ( _decode( pair[ 0 ] ) === key_name ) {
+                result =  _decode( pair[ 1 ] );
                 break;
             }
         }
@@ -67,7 +70,7 @@
         for ( var i = 0, limit = vars.length; i < limit; i++ ) {
             var pair = vars[ i ].split( '=' );
 
-            result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
+            result[ _decode( pair[ 0 ] ) ] = _decode( pair[ 1 ] );
         }
 
         return result;

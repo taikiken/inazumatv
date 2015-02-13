@@ -169,17 +169,20 @@
         throw "Browser cannot be instantiated";
     };
 
-    /**
-     *
-     * @type {object}
-     */
+  var p = Browser.prototype;
+  p.constructor = Browser;
+
+  /**
+   *
+   * @type {{iOS: {is: Function, number: Function, major: Function, version: Function, iPhone: Function, iPad: Function, iPod: Function, fullScreen: Function}, Android: {is: Function, number: Function, major: Function, version: Function, phone: Function, tablet: Function, standard: Function}, IE: {is: Function, is6: Function, is7: Function, is8: Function, is9: Function, is10: Function, is11: Function, legacy: Function, version: Function}, Chrome: {is: Function, version: Function}, Safari: {is: Function, number: Function, major: Function, version: Function}, Firefox: {is: Function}, Touch: {is: Function}, Mobile: {is: Function, hideURLBar: Function, phone: Function, tablet: Function}, Canvas: {is: Function, webgl: Function}, Mac: {is: Function}, Windows: {is: Function}, Transition: {is: Function}}}
+   */
     Browser = {
         // new version
         /**
          * iOS に関する情報
          * @for Browser
          * @property iOS
-         * @type Object
+         * @type {Object}
          * @static
          */
         iOS: {
@@ -260,7 +263,7 @@
          * Android に関する情報
          * @for Browser
          * @property Android
-         * @type Object
+         * @type {Object}
          * @static
          */
         Android: {
@@ -332,7 +335,7 @@
          * IE に関する情報
          * @for Browser
          * @property IE
-         * @type Object
+         * @type {Object}
          * @static
          */
         IE: {
@@ -429,7 +432,7 @@
          * Chrome に関する情報
          * @for Browser
          * @property Chrome
-         * @type Object
+         * @type {Object}
          * @static
          */
         Chrome: {
@@ -455,7 +458,7 @@
          * Safari に関する情報
          * @for Browser
          * @property Safari
-         * @type Object
+         * @type {Object}
          * @static
          */
         Safari: {
@@ -500,7 +503,7 @@
          * Firefox に関する情報
          * @for Browser
          * @property Firefox
-         * @type Object
+         * @type {Object}
          * @static
          */
         Firefox: {
@@ -518,7 +521,7 @@
          * Touch action に関する情報
          * @for Browser
          * @property Touch
-         * @type Object
+         * @type {Object}
          * @static
          */
         Touch: {
@@ -536,7 +539,7 @@
          * Mobile action に関する情報
          * @for Browser
          * @property Mobile
-         * @type Object
+         * @type {Object}
          * @static
          */
         Mobile: {
@@ -590,7 +593,7 @@
          * Canvas に関する情報
          * @for Browser
          * @property Canvas
-         * @type Object
+         * @type {Object}
          * @static
          */
         Canvas: {

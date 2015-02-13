@@ -26,29 +26,50 @@
          * @constructor
          */
         function BulkLoader ( paths ) {
-            this._paths = paths;
-            this._connections = 6;
-            this._boundLoad = this._load.bind( this );
-            this._boundError = this._error.bind( this );
+          /**
+           * @property _paths
+           * @type {Array}
+           * @private
+           */
+          this._paths = paths;
+          /**
+           * @property _connections
+           * @type {number}
+           * @default 6
+           * @private
+           */
+          this._connections = 6;
+          /**
+           * @property _boundLoad
+           * @type {function(this:BulkLoader)|*}
+           * @private
+           */
+          this._boundLoad = this._load.bind( this );
+          /**
+           * @property _boundError
+           * @type {function(this:BulkLoader)|*}
+           * @private
+           */
+          this._boundError = this._error.bind( this );
         }
 
         /**
          * 個別画像ロード完了時イベント
-         * @const LOAD
+         * @event LOAD
          * @static
          * @type {string}
          */
         BulkLoader.LOAD = "bulk_loader_load";
         /**
          * 個別画像ロードエラー時イベント
-         * @const ERROR
+         * @event ERROR
          * @static
          * @type {string}
          */
         BulkLoader.ERROR = "bulk_loader_error";
         /**
          * 全画像ロード完了時イベント
-         * @const COMPLETE
+         * @event COMPLETE
          * @static
          * @type {string}
          */
@@ -115,7 +136,7 @@
 
         /**
          * @method _dispose
-         * @param {LoadImage} target
+         * @param {*} target LoadImage
          * @private
          */
         p._dispose = function ( target ) {
@@ -126,7 +147,7 @@
 
         /**
          * @method _load
-         * @param {EventObject} e
+         * @param {*} e EventObject
          * @private
          */
         p._load = function ( e ) {
@@ -156,8 +177,6 @@
          */
         p._check = function () {
             var paths = this._paths;
-
-
 
             --this._loading;
 

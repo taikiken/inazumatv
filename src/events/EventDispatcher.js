@@ -77,7 +77,7 @@
     /**
      * @protected
      * @property _listeners
-     * @type Object
+     * @type {Object}
      **/
     p._listeners = null;
 

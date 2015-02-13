@@ -25,10 +25,39 @@
     // ---------------------------------------------------
     //  LoopManager
     // ---------------------------------------------------
-    var _instanceLoopManager,
-        _eventObj,
-        _loopId,
-        _this;
+    var
+      /**
+       * @for LoopManager
+       * @property _instanceLoopManager
+       * @type {LoopManager}
+       * @static
+       * @private
+       */
+      _instanceLoopManager,
+      /**
+       * @for LoopManager
+       * @property _eventObj
+       * @type {EventObject}
+       * @static
+       * @private
+       */
+      _eventObj,
+      /**
+       * @for LoopManager
+       * @property _loopId
+       * @type {number}
+       * @static
+       * @private
+       */
+      _loopId,
+      /**
+       * @for LoopManager
+       * @property _this
+       * @type {LoopManager}
+       * @static
+       * @private
+       */
+      _this;
 
     /**
      * ループ処理内部関数
@@ -58,17 +87,23 @@
      * @constructor
      */
     function LoopManager () {
-        if ( typeof _instanceLoopManager !== "undefined" ) {
+      if ( typeof _instanceLoopManager !== "undefined" ) {
 
-            return _instanceLoopManager;
-        }
-
-        _this = this;
-        this._started = false;
-        _eventObj = new EventObject( LoopManager.ENTER_FRAME, [] );
-
-        _instanceLoopManager = this;
         return _instanceLoopManager;
+      }
+
+      _this = this;
+      /**
+       * @property _started
+       * @type {boolean}
+       * @default false
+       * @private
+       */
+      this._started = false;
+      _eventObj = new EventObject( LoopManager.ENTER_FRAME, [] );
+
+      _instanceLoopManager = this;
+      return _instanceLoopManager;
     }
 
     /**

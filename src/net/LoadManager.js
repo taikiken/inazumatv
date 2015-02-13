@@ -61,18 +61,18 @@
     _libs.LoadingData = function (url, extra) {
         /**
          * URLです。
-         * @type String
+         * @type {String}
          */
         this.url = url;
         /**
          * エキストラオブジェクト(何でも保持可能)です。
-         * @type Object
+         * @type {Object}
          */
         this.extra = extra;
 
         /**
          * Image オブジェクトです。
-         * @type Image
+         * @type {Image}
          */
         this.image = null;
     };
@@ -139,7 +139,7 @@
     _libs.ErrorEvent = function () {
         /**
          * 読み込み処理に関するデータオブジェクトです。
-         * @type _libs.LoadingData
+         * @type {_libs.LoadingData}
          */
         this.data = null;
         /**

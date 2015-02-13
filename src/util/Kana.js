@@ -10,6 +10,7 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
+/*jshint -W092 */
 ( function ( window ){
     "use strict";
     var inazumatv = window.inazumatv;

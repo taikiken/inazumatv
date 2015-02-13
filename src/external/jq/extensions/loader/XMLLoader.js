@@ -104,12 +104,12 @@
      * @param {String} type
      */
     p.setType = function ( type ){
-        if ( typeof type === "undefined" || type === null ) {
-            // type defined
-            return;
-        }
+      if ( typeof type === "undefined" || type === null ) {
+        // type defined
+        return;
+      }
 
-        this._type = type;
+      this._type = type;
     };
 
     /**
