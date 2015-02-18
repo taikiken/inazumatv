@@ -11,72 +11,80 @@
  * This notice shall be included in all copies or substantial portions of the Software.
  */
 ( function ( window ){
-    "use strict";
-    var
-      inazumatv = window.inazumatv,
-      _decode = window.decodeURIComponent;
+  "use strict";
+  var
+    inazumatv = window.inazumatv,
+    _decode = window.decodeURIComponent;
 
-    /**
-     * get parameter を取得します
-     * @class QuerySearch
-     * @constructor
-     */
-    function QuerySearch () {
-        throw new Error( "QuerySearch cannot be instantiated" );
-    }
+  /**
+   * get parameter を取得します
+   * @class QuerySearch
+   * @constructor
+   */
+  function QuerySearch () {
+    throw new Error( "QuerySearch cannot be instantiated" );
+  }
 
   QuerySearch.prototype.constructor = QuerySearch;
 
-    var q = QuerySearch;
+  var q = QuerySearch;
 
-    /**
-     * 指定Keyの値を取得します。
-     * @for QuerySearch
-     * @method search
-     * @param {string} key_name 取得したいkey name
-     * @return {string} search value
-     * @static
-     */
-    q.search = function ( key_name ){
-        var query = window.location.search.substring( 1 ),
-            vars = query.split( '&' ),
-            result = "";
+  /**
+   * 指定Keyの値を取得します。
+   * @for QuerySearch
+   * @method search
+   * @param {string} key_name 取得したいkey name
+   * @return {string} search value
+   * @static
+   */
+  q.search = function ( key_name ){
+    var query = window.location.search.substring( 1 ),
+      vars = query.split( '&' ),
+      result = "";
 
-        for ( var i = 0, limit = vars.length; i < limit; i++ ) {
-            var pair = vars[ i ].split( '=' );
-            if ( _decode( pair[ 0 ] ) === key_name ) {
-                result =  _decode( pair[ 1 ] );
-                break;
-            }
-        }
+    for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+      var pair = vars[ i ].split( '=' );
+      if ( _decode( pair[ 0 ] ) === key_name ) {
+        result =  _decode( pair[ 1 ] );
+        break;
+      }
+    }
 
-        return result;
-    };
+    return result;
+  };
 
-    /**
-     * get parameter を全て取得します。
-     * ＊key=value形式のみです。
-     *
-     * @for QuerySearch
-     * @method searchAll
-     * @return {object} key: value
-     * @static
-     */
-    q.searchAll = function (){
-        var query = window.location.search.substring( 1 ),
-            vars = query.split( '&' ),
-            result = {};
+  /**
+   * get parameter を全て取得します。
+   * ＊key=value形式のみです。
+   *
+   * @for QuerySearch
+   * @method searchAll
+   * @return {object} key: value
+   * @static
+   */
+  q.searchAll = function (){
+    var query = window.location.search.substring( 1 ),
+      vars = query.split( '&' ),
+      result = {};
 
-        for ( var i = 0, limit = vars.length; i < limit; i++ ) {
-            var pair = vars[ i ].split( '=' );
+    for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+      var pair = vars[ i ].split( '=' );
 
-            result[ _decode( pair[ 0 ] ) ] = _decode( pair[ 1 ] );
-        }
+      result[ _decode( pair[ 0 ] ) ] = _decode( pair[ 1 ] );
+    }
 
-        return result;
-    };
+    return result;
+  };
+  /**
+   * @method raw
+   * @static
+   * @return {Function|string}
+   */
+  q.raw = function () {
+    return window.location.search;
+  };
 
-    inazumatv.QuerySearch = QuerySearch;
+  inazumatv.QuerySearch = QuerySearch;
 //
 //    window.inazumatv.QuerySearch = {
 //        /**

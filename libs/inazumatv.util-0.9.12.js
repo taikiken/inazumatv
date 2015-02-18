@@ -199,6 +199,7 @@ var inazumatv = {};
      * 継承に使用します
      * @for inazumatv
      * @method extend
+     * @static
      * @param {Function} P 親クラス
      * @param {Function} C 子クラス
      */
@@ -212,6 +213,7 @@ var inazumatv = {};
      * 数値チェック
      * @for inazumatv
      * @method isNumeric
+     * @static
      * @param {*} obj
      * @return {boolean} true: Number, false: not Number
      */
@@ -227,6 +229,7 @@ var inazumatv = {};
      * 範囲指定乱数生成
      * @for inazumatv
      * @method random
+     * @static
      * @param {Number} min 最小値
      * @param {Number} [max] 最大値 optional
      * @return {Number} min ~ max 間の乱数(Float)を発生させます
@@ -246,6 +249,7 @@ var inazumatv = {};
      * 配列内の最大数値を返します
      * @for inazumatv
      * @method maxValue
+     * @static
      * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
      * @return {number} 配列内の最大数値を返します
      */
@@ -260,6 +264,7 @@ var inazumatv = {};
      *
      * @for inazumatv
      * @method logAbort
+     * @static
      */
     inazumatv.logAbort = function (){
         self.console = {
@@ -277,6 +282,7 @@ var inazumatv = {};
      * 配列をシャッフルします
      * @for inazumatv
      * @method shuffle
+     * @static
      * @param {Array} array
      * @return {Array}
      */
@@ -322,7 +328,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.9.7"; // injected by build process
+    s.version = /*version*/"0.9.11"; // injected by build process
 
     /**
      * The build date for this release in UTC format.
@@ -330,7 +336,7 @@ var inazumatv = {};
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Thu, 22 Jan 2015 05:00:45 GMT"; // injected by build process
+    s.buildDate = /*date*/"Fri, 13 Feb 2015 12:33:35 GMT"; // injected by build process
 
 })( this.inazumatv );
 /**
@@ -504,17 +510,20 @@ var inazumatv = {};
         throw "Browser cannot be instantiated";
     };
 
-    /**
-     *
-     * @type {object}
-     */
+  var p = Browser.prototype;
+  p.constructor = Browser;
+
+  /**
+   *
+   * @type {{iOS: {is: Function, number: Function, major: Function, version: Function, iPhone: Function, iPad: Function, iPod: Function, fullScreen: Function}, Android: {is: Function, number: Function, major: Function, version: Function, phone: Function, tablet: Function, standard: Function}, IE: {is: Function, is6: Function, is7: Function, is8: Function, is9: Function, is10: Function, is11: Function, legacy: Function, version: Function}, Chrome: {is: Function, version: Function}, Safari: {is: Function, number: Function, major: Function, version: Function}, Firefox: {is: Function}, Touch: {is: Function}, Mobile: {is: Function, hideURLBar: Function, phone: Function, tablet: Function}, Canvas: {is: Function, webgl: Function}, Mac: {is: Function}, Windows: {is: Function}, Transition: {is: Function}}}
+   */
     Browser = {
         // new version
         /**
          * iOS に関する情報
          * @for Browser
          * @property iOS
-         * @type Object
+         * @type {Object}
          * @static
          */
         iOS: {
@@ -595,7 +604,7 @@ var inazumatv = {};
          * Android に関する情報
          * @for Browser
          * @property Android
-         * @type Object
+         * @type {Object}
          * @static
          */
         Android: {
@@ -667,7 +676,7 @@ var inazumatv = {};
          * IE に関する情報
          * @for Browser
          * @property IE
-         * @type Object
+         * @type {Object}
          * @static
          */
         IE: {
@@ -764,7 +773,7 @@ var inazumatv = {};
          * Chrome に関する情報
          * @for Browser
          * @property Chrome
-         * @type Object
+         * @type {Object}
          * @static
          */
         Chrome: {
@@ -790,7 +799,7 @@ var inazumatv = {};
          * Safari に関する情報
          * @for Browser
          * @property Safari
-         * @type Object
+         * @type {Object}
          * @static
          */
         Safari: {
@@ -835,7 +844,7 @@ var inazumatv = {};
          * Firefox に関する情報
          * @for Browser
          * @property Firefox
-         * @type Object
+         * @type {Object}
          * @static
          */
         Firefox: {
@@ -853,7 +862,7 @@ var inazumatv = {};
          * Touch action に関する情報
          * @for Browser
          * @property Touch
-         * @type Object
+         * @type {Object}
          * @static
          */
         Touch: {
@@ -871,7 +880,7 @@ var inazumatv = {};
          * Mobile action に関する情報
          * @for Browser
          * @property Mobile
-         * @type Object
+         * @type {Object}
          * @static
          */
         Mobile: {
@@ -925,7 +934,7 @@ var inazumatv = {};
          * Canvas に関する情報
          * @for Browser
          * @property Canvas
-         * @type Object
+         * @type {Object}
          * @static
          */
         Canvas: {
@@ -1189,7 +1198,7 @@ var inazumatv = {};
     /**
      * @protected
      * @property _listeners
-     * @type Object
+     * @type {Object}
      **/
     p._listeners = null;
 
@@ -1411,69 +1420,80 @@ var inazumatv = {};
  * This notice shall be included in all copies or substantial portions of the Software.
  */
 ( function ( window ){
-    "use strict";
-    var inazumatv = window.inazumatv
-    ;
+  "use strict";
+  var
+    inazumatv = window.inazumatv,
+    _decode = window.decodeURIComponent;
 
-    /**
-     * get parameter を取得します
-     * @class QuerySearch
-     * @constructor
-     */
-    function QuerySearch () {
-        throw "QuerySearch cannot be instantiated";
+  /**
+   * get parameter を取得します
+   * @class QuerySearch
+   * @constructor
+   */
+  function QuerySearch () {
+    throw new Error( "QuerySearch cannot be instantiated" );
+  }
+
+  QuerySearch.prototype.constructor = QuerySearch;
+
+  var q = QuerySearch;
+
+  /**
+   * 指定Keyの値を取得します。
+   * @for QuerySearch
+   * @method search
+   * @param {string} key_name 取得したいkey name
+   * @return {string} search value
+   * @static
+   */
+  q.search = function ( key_name ){
+    var query = window.location.search.substring( 1 ),
+      vars = query.split( '&' ),
+      result = "";
+
+    for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+      var pair = vars[ i ].split( '=' );
+      if ( _decode( pair[ 0 ] ) === key_name ) {
+        result =  _decode( pair[ 1 ] );
+        break;
+      }
     }
 
-    var q = QuerySearch;
+    return result;
+  };
 
-    /**
-     * 指定Keyの値を取得します。
-     * @for QuerySearch
-     * @method search
-     * @param {string} key_name 取得したいkey name
-     * @return {string} search value
-     * @static
-     */
-    q.search = function ( key_name ){
-        var query = window.location.search.substring( 1 ),
-            vars = query.split( '&' ),
-            result = "";
+  /**
+   * get parameter を全て取得します。
+   * ＊key=value形式のみです。
+   *
+   * @for QuerySearch
+   * @method searchAll
+   * @return {object} key: value
+   * @static
+   */
+  q.searchAll = function (){
+    var query = window.location.search.substring( 1 ),
+      vars = query.split( '&' ),
+      result = {};
 
-        for ( var i = 0, limit = vars.length; i < limit; i++ ) {
-            var pair = vars[ i ].split( '=' );
-            if ( decodeURIComponent( pair[ 0 ] ) === key_name ) {
-                result =  decodeURIComponent( pair[ 1 ] );
-                break;
-            }
-        }
+    for ( var i = 0, limit = vars.length; i < limit; i++ ) {
+      var pair = vars[ i ].split( '=' );
 
-        return result;
-    };
+      result[ _decode( pair[ 0 ] ) ] = _decode( pair[ 1 ] );
+    }
 
-    /**
-     * get parameter を全て取得します。
-     * ＊key=value形式のみです。
-     *
-     * @for QuerySearch
-     * @method searchAll
-     * @return {object} key: value
-     * @static
-     */
-    q.searchAll = function (){
-        var query = window.location.search.substring( 1 ),
-            vars = query.split( '&' ),
-            result = {};
+    return result;
+  };
+  /**
+   * @method raw
+   * @static
+   * @return {Function|string}
+   */
+  q.raw = function () {
+    return window.location.search;
+  };
 
-        for ( var i = 0, limit = vars.length; i < limit; i++ ) {
-            var pair = vars[ i ].split( '=' );
-
-            result[ decodeURIComponent( pair[ 0 ] ) ] = decodeURIComponent( pair[ 1 ] );
-        }
-
-        return result;
-    };
-
-    inazumatv.QuerySearch = QuerySearch;
+  inazumatv.QuerySearch = QuerySearch;
 //
 //    window.inazumatv.QuerySearch = {
 //        /**
@@ -1546,17 +1566,22 @@ var inazumatv = {};
          * 画像を読み込みイベントを発火します
          * @class LoadImage
          * @uses EventDispatcher
-         * @param path
+         * @param {string} path
          * @constructor
          */
         function LoadImage ( path ) {
-            this._path = path;
+          /**
+           * @property _path
+           * @type {string}
+           * @private
+           */
+          this._path = path;
         }
 
         /**
          * 画像読み込み完了イベント
          * @for LoadImage
-         * @const COMPLETE
+         * @event COMPLETE
          * @static
          * @type {string}
          */
@@ -1564,7 +1589,7 @@ var inazumatv = {};
         /**
          * 画像読み込みエラーイベント
          * @for LoadImage
-         * @const ERROR
+         * @event ERROR
          * @static
          * @type {string}
          */
@@ -1667,29 +1692,50 @@ var inazumatv = {};
          * @constructor
          */
         function BulkLoader ( paths ) {
-            this._paths = paths;
-            this._connections = 6;
-            this._boundLoad = this._load.bind( this );
-            this._boundError = this._error.bind( this );
+          /**
+           * @property _paths
+           * @type {Array}
+           * @private
+           */
+          this._paths = paths;
+          /**
+           * @property _connections
+           * @type {number}
+           * @default 6
+           * @private
+           */
+          this._connections = 6;
+          /**
+           * @property _boundLoad
+           * @type {function(this:BulkLoader)|*}
+           * @private
+           */
+          this._boundLoad = this._load.bind( this );
+          /**
+           * @property _boundError
+           * @type {function(this:BulkLoader)|*}
+           * @private
+           */
+          this._boundError = this._error.bind( this );
         }
 
         /**
          * 個別画像ロード完了時イベント
-         * @const LOAD
+         * @event LOAD
          * @static
          * @type {string}
          */
         BulkLoader.LOAD = "bulk_loader_load";
         /**
          * 個別画像ロードエラー時イベント
-         * @const ERROR
+         * @event ERROR
          * @static
          * @type {string}
          */
         BulkLoader.ERROR = "bulk_loader_error";
         /**
          * 全画像ロード完了時イベント
-         * @const COMPLETE
+         * @event COMPLETE
          * @static
          * @type {string}
          */
@@ -1756,7 +1802,7 @@ var inazumatv = {};
 
         /**
          * @method _dispose
-         * @param {LoadImage} target
+         * @param {*} target LoadImage
          * @private
          */
         p._dispose = function ( target ) {
@@ -1767,7 +1813,7 @@ var inazumatv = {};
 
         /**
          * @method _load
-         * @param {EventObject} e
+         * @param {*} e EventObject
          * @private
          */
         p._load = function ( e ) {
@@ -1797,8 +1843,6 @@ var inazumatv = {};
          */
         p._check = function () {
             var paths = this._paths;
-
-
 
             --this._loading;
 
@@ -1963,10 +2007,39 @@ var inazumatv = {};
     // ---------------------------------------------------
     //  LoopManager
     // ---------------------------------------------------
-    var _instanceLoopManager,
-        _eventObj,
-        _loopId,
-        _this;
+    var
+      /**
+       * @for LoopManager
+       * @property _instanceLoopManager
+       * @type {LoopManager}
+       * @static
+       * @private
+       */
+      _instanceLoopManager,
+      /**
+       * @for LoopManager
+       * @property _eventObj
+       * @type {EventObject}
+       * @static
+       * @private
+       */
+      _eventObj,
+      /**
+       * @for LoopManager
+       * @property _loopId
+       * @type {number}
+       * @static
+       * @private
+       */
+      _loopId,
+      /**
+       * @for LoopManager
+       * @property _this
+       * @type {LoopManager}
+       * @static
+       * @private
+       */
+      _this;
 
     /**
      * ループ処理内部関数
@@ -1996,17 +2069,23 @@ var inazumatv = {};
      * @constructor
      */
     function LoopManager () {
-        if ( typeof _instanceLoopManager !== "undefined" ) {
+      if ( typeof _instanceLoopManager !== "undefined" ) {
 
-            return _instanceLoopManager;
-        }
-
-        _this = this;
-        this._started = false;
-        _eventObj = new EventObject( LoopManager.ENTER_FRAME, [] );
-
-        _instanceLoopManager = this;
         return _instanceLoopManager;
+      }
+
+      _this = this;
+      /**
+       * @property _started
+       * @type {boolean}
+       * @default false
+       * @private
+       */
+      this._started = false;
+      _eventObj = new EventObject( LoopManager.ENTER_FRAME, [] );
+
+      _instanceLoopManager = this;
+      return _instanceLoopManager;
     }
 
     /**
@@ -2126,18 +2205,59 @@ var inazumatv = {};
      *
      *      loop();
      *
+     * [3]
+     * 自動実行, loop が必要ない
+     *
+     *      function eventHandler () {
+     *           // after 1 sec.
+     *           // do something
+     *      }
+     *      var polling1 = new PollingManager( 1000 );
+     *      polling1.addEventListener( PollingManager.POLLING_PAST, eventHandler );
+     *      polling1.start( true );
+     *
      * @class PollingManager
      * @uses EventDispatcher
      * @param {Number} ms milliseconds 指定
      * @constructor
      */
     function PollingManager ( ms ) {
-        this._startTime = 0;
-        this._polling = ms;
-        this._eventObj = new EventObject( PollingManager.POLLING_PAST );
-        this._boundEnterFrame = this._onEnterFrame.bind( this );
-        this._loop = LoopManager.getInstance();
-        this._auto = false;
+      /**
+       * @property _startTime
+       * @type {number}
+       * @default 0
+       * @private
+       */
+      this._startTime = 0;
+      /**
+       * @property _polling
+       * @type {Number}
+       * @private
+       */
+      this._polling = ms;
+      /**
+       * @property _eventObj
+       * @type {inazumatv.EventObject}
+       * @private
+       */
+      this._eventObj = new EventObject( PollingManager.POLLING_PAST );
+      /**
+       * @property _boundEnterFrame
+       * @type {function(this:PollingManager)|*}
+       * @private
+       */
+      this._boundEnterFrame = this._onEnterFrame.bind( this );
+      /**
+       * @property _loop
+       */
+      this._loop = LoopManager.getInstance();
+      /**
+       * @property _auto
+       * @type {boolean}
+       * @default false
+       * @private
+       */
+      this._auto = false;
     }
 
     /**
@@ -2191,11 +2311,9 @@ var inazumatv = {};
     p.stop = function () {
         var loop = this._loop;
 
-//        if ( typeof loop !== "undefined" ) {
         if ( this._auto ) {
 
             loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-//            this._loop = null;
         }
 
         this._startTime = Number.MAX_VALUE;
@@ -2209,7 +2327,6 @@ var inazumatv = {};
     p.change = function ( ms ){
         this._startTime = 0;
         this._polling = ms;
-//        this.start();
         this._resetTime();
     };
 
@@ -2309,15 +2426,34 @@ var inazumatv = {};
      * @class FPSManager
      * @uses EventDispatcher
      * @param {int} fps frame rate 指定（整数）
-     * @param {Boolean} [manual] abort auto start, default: false
+     * @param {Boolean=false} [manual] abort auto start, default: false
      * @constructor
      */
     function FPSManager ( fps, manual ) {
-        this.setFPS( fps );
-        this._manualStart = !!manual;
-        this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
-        this._loop = LoopManager.getInstance();
-        this._boundEnterFrame = this._onEnterFrame.bind( this );
+      this.setFPS( fps );
+      /**
+       * @property _manualStart
+       * @type {boolean}
+       * @private
+       */
+      this._manualStart = !!manual;
+      /**
+       * @property _eventObj
+       * @type {inazumatv.EventObject}
+       * @private
+       */
+      this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
+      /**
+       * @property _loop
+       * @type {LoopManager} LoopManager instance
+       */
+      this._loop = LoopManager.getInstance();
+      /**
+       * @property _boundEnterFrame
+       * @type {function(this:FPSManager)|*}
+       * @private
+       */
+      this._boundEnterFrame = this._onEnterFrame.bind( this );
     }
 
     /**
@@ -2475,6 +2611,11 @@ var inazumatv = {};
     var inazumatv = window.inazumatv;
 
     inazumatv.List = ( function (){
+      var
+        _shuffle = inazumatv.shuffle,
+
+        _maxValue = inazumatv.maxValue;
+
         /**
          * Array ヘルパー
          * @class List
@@ -2519,24 +2660,26 @@ var inazumatv = {};
 
         /**
          * 配列をシャッフルします
+         * <br>inazumatv.shuffle alias
          * @method shuffle
          * @static
-         * @param {array} array
+         * @param {Array} array
          * @return {Array} シャッフル後の配列を返します
          */
         l.shuffle = function ( array ) {
-            return inazumatv.shuffle( array );
+            return _shuffle( array );
         };
 
         /**
          * 配列内の最大数値を返します
+         * <br>inazumatv.maxValue alias
          * @method max
          * @static
          * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
          * @return {number} 配列内の最大数値を返します
          */
         l.max = function ( arr ) {
-            inazumatv.maxValue( arr );
+            _maxValue( arr );
         };
 
         return List;
@@ -2554,6 +2697,7 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
+/*jshint -W092 */
 ( function ( window ){
     "use strict";
     var inazumatv = window.inazumatv;
@@ -2657,6 +2801,76 @@ var inazumatv = {};
 }( window ) );/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
+ * date 2015/02/06 - 16:01
+ *
+ * Copyright (c) 2011-2015 inazumatv.com, inc.
+ *
+ * Distributed under the terms of the MIT license.
+ * http://www.opensource.org/licenses/mit-license.html
+ *
+ * This notice shall be included in all copies or substantial portions of the Software.
+ *
+ * Number utility
+ */
+( function ( window ){
+  "use strict";
+  var inazumatv = window.inazumatv;
+
+  inazumatv.Num = ( function (){
+
+    /**
+     * @class Num
+     * @constructor
+     */
+    function Num () {
+      throw new Error( "Num can't create instance." );
+    }
+
+    var p = Num.prototype;
+
+    p.constructor = Num;
+
+    /**
+     * 3桁毎にカンマ(,)を挿入します
+     * @method comma
+     * @static
+     * @param {number|string} n
+     * @return {string} カンマ挿入後の文字列を返します
+     */
+    Num.comma = function ( n ) {
+
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    /**
+     * 範囲指定乱数生成
+     * <br>inazumatv.random alias
+     * @method random
+     * @static
+     * @param {Number} min 最小値
+     * @param {Number} [max] 最大値 optional
+     * @return {Number} min ~ max 間の乱数(Float)を発生させます
+     */
+    Num.random = function ( min, max ) {
+      return inazumatv.random( min, max );
+    };
+    /**
+     * 数値チェック
+     * <br>inazumatv.isNumeric alias
+     * @method is
+     * @static
+     * @param {*} obj
+     * @return {boolean} true: Number, false: not Number
+     */
+    Num.is = function ( obj ) {
+      return inazumatv.isNumeric( obj );
+    };
+
+    return Num;
+  }() );
+}( window ) );/**
+ * license inazumatv.com
+ * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 16:58
  *
  * Copyright (c) 2011-2013 inazumatv.com, inc.
@@ -2701,243 +2915,358 @@ var inazumatv = {};
 //  modified by (at)taikiken
 // -----------------------------------
 ( function ( inazumatv ){
-    "use strict";
+  "use strict";
 
-    var rand = Math.random,
-        floor = Math.floor,
+  var
+    rand = Math.random,
+    floor = Math.floor,
 
-        FPSManager = inazumatv.FPSManager;
+    FPSManager = inazumatv.FPSManager,
+    EventDispatcher = inazumatv.EventDispatcher,
+    EventObject = inazumatv.EventObject;
 
-    /**
-     * テキストをシャッフルし表示します
-     * @class ShuffleText
-     * @constructor
-     */
-    function ShuffleText () {
-        this._boundUpdate = this.update.bind( this );
-        this._fps = new FPSManager( 60 );
-    }
-
-    var p = ShuffleText.prototype;
-
-    p.constructor = ShuffleText;
-
-    /**
-     * @method initialize
-     * @param {*} element DOMElement
-     */
-    p.initialize = function ( element ){
-        this._element = element;
-    };
-
-    /**
-     * ランダムテキストに用いる文字列
-     * @property sourceRandomCharacter
-     * @type {string}
-     * @default ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
-     * */
-    p.randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
-    p.setRandomChar = function ( randomChar ){
-        this.randomChar = randomChar;
-    };
-    /**
-     * 空白に用いる文字列
-     * @property emptyCharacter
-     * @type {string}
-     * @default "*"
-     * */
-    p.emptyCharacter = "*";
+  /**
+   * テキストをシャッフルし表示します
+   * @class ShuffleText
+   * @constructor
+   */
+  function ShuffleText () {
     /**
      * フレームレート
      * @property fps
-     * @type {Number}
      * @default 60
-     * */
-    p.fps = 60;
+     * @type {number}
+     */
+    this.fps = 60;
+    /**
+     * ランダムテキストに用いる文字列
+     * @property randomChar
+     * @default "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+     * @type {string}
+     */
+    this.randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    /**
+     * 空白に用いる文字列
+     * @property emptyCharacter
+     * @default "*"
+     * @type {string}
+     */
+    this.emptyCharacter = "*";
     /**
      * 再生中かどうかを示すブール値
      * @property isRunning
+     * @default false
      * @type {boolean}
-     * */
-    p.isRunning = false;
+     */
+    this.isRunning = false;
+    /**
+     * @property duration
+     * @default 500
+     * @type {number}
+     */
+    this.duration = 500;
     /**
      * エフェクトの実行時間(millisecond)
-     * @property duration
-     * @type {Number}
-     * @default 500 (500ms)
-     * */
-    p.duration = 500;
-
-    /**
-     * @method setDuration
-     * @param {Number} ms millisecond
+     * @property _boundUpdate
+     * @type {function(this:ShuffleText)|*}
+     * @private
      */
-    p.setDuration = function ( ms ){
-        this.duration = ms;
-    };
-
-    p._originalStr = "";
-    p._originalLength = "";
-    p._intervalId = 0;
-    p._timeCurrent = 0;
-    p._timeStart = 0;
-    p._randomIndex = [];
-
+    this._boundUpdate = this.update.bind( this );
     /**
-     * テキストを設定します。
-     * @method setText
-     * @param {string} text
+     * 60fps で処理します
+     * @property _fps
+     * @type {null|FPSManager}
+     * @private
      */
-    p.setText = function ( text ) {
-        this._originalStr = text;
-        this._originalLength = text.length;
-    };
-
+    this._fps = null;
     /**
-     *
-     * 再生を開始します。
-     * @method start
-     * @param {boolean=false} [is_keep]
-     * */
-    p.start = function ( is_keep ) {
-        var element = this._element;
+     * @property _originalStr
+     * @type {string}
+     * @private
+     */
+    this._originalStr = "";
+    /**
+     * @property _originalLength
+     * @type {string}
+     * @private
+     */
+    this._originalLength = "";
+    /**
+     * @property _intervalId
+     * @type {number}
+     * @private
+     */
+    this._intervalId = 0;
+    /**
+     * @property _timeCurrent
+     * @type {number}
+     * @private
+     */
+    this._timeCurrent = 0;
+    /**
+     * @property _timeStart
+     * @type {number}
+     * @private
+     */
+    this._timeStart = 0;
+    /**
+     * @property _randomIndex
+     * @type {Array}
+     * @private
+     */
+    this._randomIndex = [];
+    /**
+     * @property _keep
+     * @type {boolean}
+     * @private
+     */
+    this._keep = false;
+    /**
+     * @property _endStr
+     * @type {string}
+     * @private
+     */
+    this._endStr = "";
+    /**
+     * @property _element
+     * @type {null} HTMLElement
+     * @private
+     */
+    this._element = null;
+  }
 
-        if (typeof element === "undefined") {
-            return;
-        }
+  /**
+   * @event CHANGE
+   * @static
+   * @type {string}
+   */
+  ShuffleText.CHANGE = "shuffleTextChange";
+  /**
+   * @event COMPLETE
+   * @static
+   * @type {string}
+   */
+  ShuffleText.COMPLETE = "shuffleTextComplete";
 
-        is_keep = !!is_keep;
+  var p = ShuffleText.prototype;
 
-        this._keep = is_keep;
+  EventDispatcher.initialize( p );
 
-        if ( this.isRunning ) {
-            this.stop( true );
-        }
+  p.constructor = ShuffleText;
 
-        this._randomIndex = [];
+  /**
+   * 初期処理
+   * @method initialize
+   * @param {*|HTMLElement} element DOMElement
+   * @return ShuffleText
+   */
+  p.initialize = function ( element ){
+    this._element = element;
+    this._fps = new FPSManager( this.fps );
 
-        var str = "",
-            random_index = this._randomIndex,
-            empty_char = this.emptyCharacter,
-            origin_length = this._originalLength;
+    return this;
+  };
 
-        this._endStr = this._originalStr;
+  /**
+   * @method setDuration
+   * @param {Number} ms millisecond
+   * @return ShuffleText
+   */
+  p.setDuration = function ( ms ){
+    this.duration = ms;
+    return this;
+  };
 
-        for ( var i = 0; i < origin_length; i++ ) {
+  /**
+   * 置き換え文字列（テキスト）を設定します。
+   * @method setText
+   * @param {string} text
+   * @return ShuffleText
+   */
+  p.setText = function ( text ) {
+    this._originalStr = text;
+    this._originalLength = text.length;
 
-            var rate = i / origin_length;
+    return this;
+  };
+  /**
+   * フレームレートを設定します
+   * @method setFPS
+   * @param {number} fps
+   * @return {ShuffleText}
+   */
+  p.setFPS = function ( fps ) {
+    this.fps = fps;
 
-            random_index[ i ] = rand() * ( 1 - rate ) + rate;
+    return this;
+  };
+  /**
+   * ランダムテキストに用いる文字列を置き換えます
+   * @method setRandomChar
+   * @param {string} char
+   * @return {ShuffleText}
+   */
+  p.setRandomChar = function ( char ) {
+    this.randomChar = char;
+    return this;
+  };
+
+  /**
+   *
+   * 再生を開始します。
+   * @method start
+   * @param {boolean=false} [is_keep]
+   * */
+  p.start = function ( is_keep ) {
+    var
+      element = this._element,
+      str = "",
+      random_index,
+      empty_char = this.emptyCharacter,
+      origin_length = this._originalLength,
+      i, _fps, rate;
+
+    if ( typeof element === "undefined" || element === null ) {
+      return;
+    }
+
+    is_keep = !!is_keep;
+
+    this._keep = is_keep;
+
+    if ( this.isRunning ) {
+      this.stop( true );
+    }
+
+    this._randomIndex = [];
+    random_index = this._randomIndex;
+
+    //var str = "",
+    //  random_index = this._randomIndex,
+    //  empty_char = this.emptyCharacter,
+    //  origin_length = this._originalLength;
+
+
+    this._endStr = this._originalStr;
+
+    for ( i = 0; i < origin_length; i++ ) {
+
+      rate = i / origin_length;
+
+      random_index[ i ] = rand() * ( 1 - rate ) + rate;
+
+      str += empty_char;
+    }
+
+    _fps = this._fps;
+
+    _fps.changeFPS( this.fps );
+    _fps.addEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
+
+    this.isRunning = true;
+
+    if ( !is_keep ) {
+      element.innerHTML = str;
+    }
+
+    this._timeStart = new Date().getTime();
+    _fps.start();
+  };
+
+  /**
+   * 停止します。
+   * @method stop
+   * */
+  p.stop = function ( strong ) {
+    strong = !!strong;
+
+    if ( this.isRunning ) {
+
+      this._fps.removeEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
+      this._fps.stop();
+
+      if ( strong ) {
+
+        this._element.innerHTML = this._endStr;
+      }
+    }
+
+    this.isRunning = false;
+  };
+
+  /**
+   *
+   * @method update
+   */
+  p.update = function () {
+    var
+      timeCurrent = new Date().getTime() - this._timeStart,
+      percent = timeCurrent / this.duration,
+      random_index = this._randomIndex,
+      origin_str = this._originalStr,
+      empty_char = this.emptyCharacter,
+      random_char = this.randomChar,
+      random_char_length = random_char.length,
+      is_keep = this._keep,
+      str = "",
+      i, limit;
+
+    for ( i = 0, limit = this._originalLength; i < limit; i++ ) {
+
+      if ( percent >= random_index[ i ] ) {
+
+        str += origin_str.charAt(i);
+
+      } else {
+        if ( !is_keep ) {
+          if ( percent < random_index[ i ] / 3 ) {
 
             str += empty_char;
+          } else {
+
+            str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
+          }
+        } else {
+
+          if ( percent < random_index[ i ] / 3 ) {
+
+            str += origin_str.charAt(i);
+          } else {
+
+            str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
+          }
         }
+      }
+    }
 
-        var _fps = this._fps;
+    this._element.innerHTML = str;
+    this.onChange( str );
+    this.dispatchEvent( new EventObject( ShuffleText.CHANGE, [ str ] ), this );
 
-        _fps.changeFPS( this.fps );
-        _fps.addEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
+    if ( percent > 1 ) {
 
-        this.isRunning = true;
+      this.stop( true );
+      this.onComplete();
+      this.dispatchEvent( new EventObject( ShuffleText.COMPLETE, [] ), this );
+    }
+  };
 
-        if ( !is_keep ) {
-            element.innerHTML = str;
-        }
+  /**
+   * shuffle 終了 callback 関数, override して使用します
+   * @method onComplete
+   */
+  p.onComplete = function () {
 
-        this._timeStart = new Date().getTime();
-        _fps.start();
-    };
+  };
 
-    /**
-     * 停止します。
-     * @method stop
-     * */
-    p.stop = function ( strong ) {
-        strong = !!strong;
+  /**
+   * shuffle update callback 関数, override して使用します
+   * @method onChange
+   * @param {string} str 変更された文字
+   */
+  p.onChange = function ( str ) {
 
-        if ( this.isRunning ) {
-
-            this._fps.removeEventListener( FPSManager.FPS_FRAME, this._boundUpdate );
-            this._fps.stop();
-
-            if ( strong ) {
-
-                this._element.innerHTML = this._endStr;
-            }
-        }
-
-        this.isRunning = false;
-    };
-
-    /**
-     *
-     * @method update
-     */
-    p.update = function () {
-        var timeCurrent = new Date().getTime() - this._timeStart,
-            percent = timeCurrent / this.duration,
-            random_index = this._randomIndex,
-            origin_str = this._originalStr,
-            empty_char = this.emptyCharacter,
-            random_char = this.randomChar,
-            random_char_length = random_char.length,
-            is_keep = this._keep;
-
-        var str = "";
-        for ( var i = 0, limit = this._originalLength; i < limit; i++ ) {
-
-            if ( percent >= random_index[ i ] ) {
-
-                str += origin_str.charAt(i);
-
-            } else {
-                if ( !is_keep ) {
-                    if ( percent < random_index[ i ] / 3 ) {
-
-                        str += empty_char;
-                    } else {
-
-                        str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
-                    }
-                } else {
-
-                    if ( percent < random_index[ i ] / 3 ) {
-
-                        str += origin_str.charAt(i);
-                    } else {
-
-                        str += random_char.charAt( floor( rand() * ( random_char_length ) ) );
-                    }
-                }
-            }
-        }
-
-        this._element.innerHTML = str;
-        this.onChange( str );
-
-        if ( percent > 1 ) {
-
-            this.stop( true );
-            this.onComplete();
-        }
-    };
-
-    /**
-     * shuffle 終了 callback 関数, override して使用します
-     * @method onComplete
-     */
-    p.onComplete = function () {
-
-    };
-
-    /**
-     * shuffle update callback 関数, override して使用します
-     * @method onChange
-     * @param {string} str 変更された文字
-     */
-    p.onChange = function ( str ) {
-
-    };
+  };
 
     inazumatv.ShuffleText = ShuffleText;
 
@@ -3092,201 +3421,196 @@ var inazumatv = {};
  * This notice shall be included in all copies or substantial portions of the Software.
  */
 ( function ( inazumatv ){
-    "use strict";
+  "use strict";
 
-    /**
-     * @class Easing
-     * @constructor
-     * @static
-     */
-    var Easing = function () {
-        throw "Easing cannot be instantiated";
-    };
+  /**
+   * @class Easing
+   * @constructor
+   */
+  var Easing = function () {
+    throw new Error( "Easing cannot be instantiated" );
+  };
 
-    /**
-     * jQuery.easing 拡張 easing
-     * quart
-     * easeInQuad
-     * easeOutQuad
-     * easeInOutQuad
-     * easeInCubic
-     * easeOutCubic
-     * easeInOutCubic
-     * easeInQuart
-     * easeOutQuart
-     * easeInOutQuart
-     * easeInQuint
-     * easeOutQuint
-     * easeInOutQuint
-     * easeInSine
-     * easeOutSine
-     * easeInOutSine
-     * easeInExpo
-     * easeOutExpo
-     * easeInOutExpo
-     * easeInCirc
-     * easeOutCirc
-     * easeInOutCirc
-     * easeInElastic
-     * easeOutElastic
-     * easeInOutElastic
-     * easeInBack
-     * easeOutBack
-     * easeInOutBack
-     * easeInBounce
-     * easeOutBounce
-     * easeInOutBounce
-     *
-     * @type {{activate: Function}}
-     */
-    Easing = {
-        /**
-         * Easing plugin を活性化します
-         * @method activate
-         * @param {jQuery} jQuery
-         * @static
-         */
-        activate: function ( jQuery ){
-            var je = jQuery.easing;
-            je.quart = function (x, t, b, c, d) {
-                return -c * ((t = t / d - 1) * t * t * t - 1) + b;
-            };
-            je.easeInQuad = function (x, t, b, c, d) {
-                return c*(t/=d)*t + b;
-            };
-            je.easeOutQuad = function (x, t, b, c, d) {
-                return -c *(t/=d)*(t-2) + b;
-            };
-            je.easeInOutQuad = function (x, t, b, c, d) {
-                if ((t /= d/2) < 1) {return c/2*t*t + b;}
-                return -c/2 * ((--t)*(t-2) - 1) + b;
-            };
-            je.easeInCubic = function (x, t, b, c, d) {
-                return c*(t/=d)*t*t + b;
-            };
-            je.easeOutCubic = function (x, t, b, c, d) {
-                return c*((t=t/d-1)*t*t + 1) + b;
-            };
-            je.easeInOutCubic = function (x, t, b, c, d) {
-                if ((t /= d/2) < 1) {return c/2*t*t*t + b;}
-                return c/2*((t-=2)*t*t + 2) + b;
-            };
-            je.easeInQuart = function (x, t, b, c, d) {
-                return c*(t/=d)*t*t*t + b;
-            };
-            je.easeOutQuart = function (x, t, b, c, d) {
-                return -c * ((t=t/d-1)*t*t*t - 1) + b;
-            };
-            je.easeInOutQuart = function (x, t, b, c, d) {
-                if ((t /= d/2) < 1) {return c/2*t*t*t*t + b;}
-                return -c/2 * ((t-=2)*t*t*t - 2) + b;
-            };
-            je.easeInQuint = function (x, t, b, c, d) {
-                return c*(t/=d)*t*t*t*t + b;
-            };
-            je.easeOutQuint = function (x, t, b, c, d) {
-                return c*((t=t/d-1)*t*t*t*t + 1) + b;
-            };
-            je.easeInOutQuint = function (x, t, b, c, d) {
-                if ((t /= d/2) < 1) {return c/2*t*t*t*t*t + b;}
-                return c/2*((t-=2)*t*t*t*t + 2) + b;
-            };
-            je.easeInSine = function (x, t, b, c, d) {
-                return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
-            };
-            je.easeOutSine = function (x, t, b, c, d) {
-                return c * Math.sin(t/d * (Math.PI/2)) + b;
-            };
-            je.easeInOutSine = function (x, t, b, c, d) {
-                return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
-            };
-            je.easeInExpo = function (x, t, b, c, d) {
-                return (t===0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
-            };
-            je.easeOutExpo = function (x, t, b, c, d) {
-                return (t===d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
-            };
-            je.easeInOutExpo = function (x, t, b, c, d) {
-                if (t===0) {return b;}
-                if (t===d) {return b+c;}
-                if ((t /= d/2) < 1) {return c/2 * Math.pow(2, 10 * (t - 1)) + b;}
-                return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
-            };
-            je.easeInCirc = function (x, t, b, c, d) {
-                return -c * (Math.sqrt(1 - (t/=d)*t) - 1) + b;
-            };
-            je.easeOutCirc = function (x, t, b, c, d) {
-                return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
-            };
-            je.easeInOutCirc = function (x, t, b, c, d) {
-                if ((t /= d/2) < 1) {return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;}
-                return c/2 * (Math.sqrt(1 - (t-=2)*t) + 1) + b;
-            };
-            je.easeInElastic = function (x, t, b, c, d) {
-                var s=1.70158,p= 0,a=c;
-                if (t===0) {return b;}
-                if ((t/=d)===1) {return b+c;}
-                if (!p) {p=d*0.3;}
-                if (a < Math.abs(c)) { a=c;s=p/4; }
-                else {
-                    s = p/(2*Math.PI) * Math.asin (c/a);
-                    return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
-                }
-            };
-            je.easeOutElastic = function (x, t, b, c, d) {
-                var s=1.70158,p= 0,a=c;
-                if (t===0) {return b; }
-                if ((t/=d)===1) {return b+c;}
-                if (!p) {p=d*0.3;}
-                if (a < Math.abs(c)) { a=c; s=p/4; }
-                else { s = p/(2*Math.PI) * Math.asin (c/a);
-                    return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;}
-            };
-            je.easeInOutElastic = function (x, t, b, c, d) {
-                var s=1.70158,p=0,a=c;
-                if (t===0) {return b;}
-                if ((t /= d/2)===2) {return b+c;}
-                if (!p) {p=d*(0.3*1.5);}
-                if (a < Math.abs(c)) { a=c;s=p/4; }
-                else {
-                    s = p/(2*Math.PI) * Math.asin (c/a);
-                    if (t < 1) {return -0.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;}
-                    return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*0.5 + c + b;
-                }
-            };
-            je.easeInBack = function (x, t, b, c, d, s) {
-                if (s === undefined) {s = 1.70158;}
-                return c*(t/=d)*t*((s+1)*t - s) + b;
-            };
-            je.easeOutBack = function (x, t, b, c, d, s) {
-                if (s === undefined) {s = 1.70158;}
-                return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
-            };
-            je.easeInOutBack = function (x, t, b, c, d, s) {
-                if (s === undefined) {s = 1.70158; }
-                if ((t /= d/2) < 1) {return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;}
-                return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
-            };
-            je.easeInBounce = function (x, t, b, c, d) {
-                return c - jQuery.easing.easeOutBounce (x, d-t, 0, c, d) + b;
-            };
-            je.easeOutBounce = function (x, t, b, c, d) {
-                if ((t/=d) < (1/2.75)) {
-                    return c*(7.5625*t*t) + b;
-                } else if (t < (2/2.75)) {
-                    return c*(7.5625*(t-=(1.5/2.75))*t + 0.75) + b;
-                } else if (t < (2.5/2.75)) {
-                    return c*(7.5625*(t-=(2.25/2.75))*t + 0.9375) + b;
-                } else {
-                    return c*(7.5625*(t-=(2.625/2.75))*t + 0.984375) + b;
-                }
-            };
-            je.easeInOutBounce = function (x, t, b, c, d) {
-                if (t < d/2) {return jQuery.easing.easeInBounce (x, t*2, 0, c, d) * 0.5 + b;}
-                return jQuery.easing.easeOutBounce (x, t*2-d, 0, c, d) * 0.5 + c * 0.5 + b;
-            };
-        }
+  /**
+   * Easing plugin を活性化します<br>
+   * jQuery.easing 拡張 easing<br>
+   * <br>
+   * quart<br>
+   * easeInQuad<br>
+   * easeOutQuad<br>
+   * easeInOutQuad<br>
+   * easeInCubic<br>
+   * easeOutCubic<br>
+   * easeInOutCubic<br>
+   * easeInQuart<br>
+   * easeOutQuart<br>
+   * easeInOutQuart<br>
+   * easeInQuint<br>
+   * easeOutQuint<br>
+   * easeInOutQuint<br>
+   * easeInSine<br>
+   * easeOutSine<br>
+   * easeInOutSine<br>
+   * easeInExpo<br>
+   * easeOutExpo<br>
+   * easeInOutExpo<br>
+   * easeInCirc<br>
+   * easeOutCirc<br>
+   * easeInOutCirc<br>
+   * easeInElastic<br>
+   * easeOutElastic<br>
+   * easeInOutElastic<br>
+   * easeInBack<br>
+   * easeOutBack<br>
+   * easeInOutBack<br>
+   * easeInBounce<br>
+   * easeOutBounce<br>
+   * easeInOutBounce
+   *
+   * @method activate
+   * @param {jQuery} jQuery
+   * @static
+   */
+  Easing.activate = function ( jQuery ) {
+    var je = jQuery.easing;
+    je.quart = function (x, t, b, c, d) {
+      return -c * ((t = t / d - 1) * t * t * t - 1) + b;
     };
+    je.easeInQuad = function (x, t, b, c, d) {
+      return c*(t/=d)*t + b;
+    };
+    je.easeOutQuad = function (x, t, b, c, d) {
+      return -c *(t/=d)*(t-2) + b;
+    };
+    je.easeInOutQuad = function (x, t, b, c, d) {
+      if ((t /= d/2) < 1) {return c/2*t*t + b;}
+      return -c/2 * ((--t)*(t-2) - 1) + b;
+    };
+    je.easeInCubic = function (x, t, b, c, d) {
+      return c*(t/=d)*t*t + b;
+    };
+    je.easeOutCubic = function (x, t, b, c, d) {
+      return c*((t=t/d-1)*t*t + 1) + b;
+    };
+    je.easeInOutCubic = function (x, t, b, c, d) {
+      if ((t /= d/2) < 1) {return c/2*t*t*t + b;}
+      return c/2*((t-=2)*t*t + 2) + b;
+    };
+    je.easeInQuart = function (x, t, b, c, d) {
+      return c*(t/=d)*t*t*t + b;
+    };
+    je.easeOutQuart = function (x, t, b, c, d) {
+      return -c * ((t=t/d-1)*t*t*t - 1) + b;
+    };
+    je.easeInOutQuart = function (x, t, b, c, d) {
+      if ((t /= d/2) < 1) {return c/2*t*t*t*t + b;}
+      return -c/2 * ((t-=2)*t*t*t - 2) + b;
+    };
+    je.easeInQuint = function (x, t, b, c, d) {
+      return c*(t/=d)*t*t*t*t + b;
+    };
+    je.easeOutQuint = function (x, t, b, c, d) {
+      return c*((t=t/d-1)*t*t*t*t + 1) + b;
+    };
+    je.easeInOutQuint = function (x, t, b, c, d) {
+      if ((t /= d/2) < 1) {return c/2*t*t*t*t*t + b;}
+      return c/2*((t-=2)*t*t*t*t + 2) + b;
+    };
+    je.easeInSine = function (x, t, b, c, d) {
+      return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
+    };
+    je.easeOutSine = function (x, t, b, c, d) {
+      return c * Math.sin(t/d * (Math.PI/2)) + b;
+    };
+    je.easeInOutSine = function (x, t, b, c, d) {
+      return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
+    };
+    je.easeInExpo = function (x, t, b, c, d) {
+      return (t===0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
+    };
+    je.easeOutExpo = function (x, t, b, c, d) {
+      return (t===d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+    };
+    je.easeInOutExpo = function (x, t, b, c, d) {
+      if (t===0) {return b;}
+      if (t===d) {return b+c;}
+      if ((t /= d/2) < 1) {return c/2 * Math.pow(2, 10 * (t - 1)) + b;}
+      return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
+    };
+    je.easeInCirc = function (x, t, b, c, d) {
+      return -c * (Math.sqrt(1 - (t/=d)*t) - 1) + b;
+    };
+    je.easeOutCirc = function (x, t, b, c, d) {
+      return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
+    };
+    je.easeInOutCirc = function (x, t, b, c, d) {
+      if ((t /= d/2) < 1) {return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;}
+      return c/2 * (Math.sqrt(1 - (t-=2)*t) + 1) + b;
+    };
+    je.easeInElastic = function (x, t, b, c, d) {
+      var s=1.70158,p= 0,a=c;
+      if (t===0) {return b;}
+      if ((t/=d)===1) {return b+c;}
+      if (!p) {p=d*0.3;}
+      if (a < Math.abs(c)) { a=c;s=p/4; }
+      else {
+        s = p/(2*Math.PI) * Math.asin (c/a);
+        return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+      }
+    };
+    je.easeOutElastic = function (x, t, b, c, d) {
+      var s=1.70158,p= 0,a=c;
+      if (t===0) {return b; }
+      if ((t/=d)===1) {return b+c;}
+      if (!p) {p=d*0.3;}
+      if (a < Math.abs(c)) { a=c; s=p/4; }
+      else { s = p/(2*Math.PI) * Math.asin (c/a);
+        return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;}
+    };
+    je.easeInOutElastic = function (x, t, b, c, d) {
+      var s=1.70158,p=0,a=c;
+      if (t===0) {return b;}
+      if ((t /= d/2)===2) {return b+c;}
+      if (!p) {p=d*(0.3*1.5);}
+      if (a < Math.abs(c)) { a=c;s=p/4; }
+      else {
+        s = p/(2*Math.PI) * Math.asin (c/a);
+        if (t < 1) {return -0.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;}
+        return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*0.5 + c + b;
+      }
+    };
+    je.easeInBack = function (x, t, b, c, d, s) {
+      if (s === undefined) {s = 1.70158;}
+      return c*(t/=d)*t*((s+1)*t - s) + b;
+    };
+    je.easeOutBack = function (x, t, b, c, d, s) {
+      if (s === undefined) {s = 1.70158;}
+      return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+    };
+    je.easeInOutBack = function (x, t, b, c, d, s) {
+      if (s === undefined) {s = 1.70158; }
+      if ((t /= d/2) < 1) {return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;}
+      return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+    };
+    je.easeInBounce = function (x, t, b, c, d) {
+      return c - jQuery.easing.easeOutBounce (x, d-t, 0, c, d) + b;
+    };
+    je.easeOutBounce = function (x, t, b, c, d) {
+      if ((t/=d) < (1/2.75)) {
+        return c*(7.5625*t*t) + b;
+      } else if (t < (2/2.75)) {
+        return c*(7.5625*(t-=(1.5/2.75))*t + 0.75) + b;
+      } else if (t < (2.5/2.75)) {
+        return c*(7.5625*(t-=(2.25/2.75))*t + 0.9375) + b;
+      } else {
+        return c*(7.5625*(t-=(2.625/2.75))*t + 0.984375) + b;
+      }
+    };
+    je.easeInOutBounce = function (x, t, b, c, d) {
+      if (t < d/2) {return jQuery.easing.easeInBounce (x, t*2, 0, c, d) * 0.5 + b;}
+      return jQuery.easing.easeOutBounce (x, t*2-d, 0, c, d) * 0.5 + c * 0.5 + b;
+    };
+  };
 
     inazumatv.jq.Easing = Easing;
 }( this.inazumatv ) );/**
@@ -3686,12 +4010,12 @@ var inazumatv = {};
      * @param {String} type
      */
     p.setType = function ( type ){
-        if ( typeof type === "undefined" || type === null ) {
-            // type defined
-            return;
-        }
+      if ( typeof type === "undefined" || type === null ) {
+        // type defined
+        return;
+      }
 
-        this._type = type;
+      this._type = type;
     };
 
     /**
@@ -3868,11 +4192,17 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
+( function ( window, inazumatv ){
     "use strict";
     var
+      document = window.document,
+      /**
+       * @property _prevHeight
+       * @type {number}
+       * @private
+       */
       _prevHeight = 0,
-      _$watchTarget,
+      //_$watchTarget,
       _instance,
       /**
        * FPSManager instance, default frame rate is 24.
@@ -3894,7 +4224,8 @@ var inazumatv = {};
        * @private
        * @static
        */
-      $;
+      $,
+      _max = Math.max;
 
     /**
      * @class WatchDocumentHeight
@@ -3924,17 +4255,17 @@ var inazumatv = {};
      */
     WatchDocumentHeight.activate = function ( jQuery ){
         $ = jQuery;
-        var $document = $( document ),
+        var $document = $( document.body ),
             $window = $( window );
 
         this._$document = $document;
         this._$window = $window;
 
-        if ( $window.height() > $document.height() ) {
-            _$watchTarget = $window;
-        } else {
-            _$watchTarget = $document;
-        }
+        //if ( $window.height() > $document.height() ) {
+        //    _$watchTarget = $window;
+        //} else {
+        //    _$watchTarget = $document;
+        //}
     };
 
     /**
@@ -3984,23 +4315,27 @@ var inazumatv = {};
      * @return {boolean} true: 高さ変更
      */
     p.update = function ( strong ){
-        var $window = this._$window,
-            $document = this._$document;
+        var
+          $window = this._$window,
+          $document = this._$document,
+          h,
+          isChange,
+          params;
 
-        if ( $window.height() > $document.height() ) {
-            _$watchTarget = $window;
-        } else {
-            _$watchTarget = $document;
-        }
+        //if ( $window.height() > $document.height() ) {
+        //    _$watchTarget = $window;
+        //} else {
+        //    _$watchTarget = $document;
+        //}
+        //
+        //h = _$watchTarget.height();
+        h = _max( $window.height(), $document.height() );
+        isChange = h !== _prevHeight;
 
-        var h = _$watchTarget.height(),
-            isChange = h !== _prevHeight,
-
-            params = {
-                strong: strong,
-                height: h
-            }
-        ;
+        params = {
+            strong: strong,
+            height: h
+        };
 
         _prevHeight = h;
         if ( isChange || strong ) {
@@ -4055,7 +4390,7 @@ var inazumatv = {};
     };
 
     inazumatv.jq.WatchDocumentHeight = WatchDocumentHeight;
-}( this.inazumatv ) );/**
+}( window, window.inazumatv ) );/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/15 - 22:13
