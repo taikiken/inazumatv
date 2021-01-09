@@ -128,11 +128,16 @@
    * @private
    */
   function _get_androidVersion () {
-    var v, versions;
+    var v, versions = [0, 0, 0];
     v = (navigator.appVersion).match(/Android (\d+)\.(\d+)\.?(\d+)?/);
-    versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3] || 0, 10)];
-    _android_version = _float( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
-
+    if (Array.isArray(v)) {
+      versions = [
+        _int(v[1], 10),
+        _int(v[2], 10),
+        _int(v[3] || 0, 10)
+      ];
+      _android_version = _float( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
+    }
     return versions;
   }
 
