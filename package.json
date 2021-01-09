@@ -1,6 +1,6 @@
 {
   "name": "inazumatv.util",
-  "version": "0.9.14",
+  "version": "0.9.15",
   "description": "ES5 utility",
   "main": "index.js",
   "directories": {
