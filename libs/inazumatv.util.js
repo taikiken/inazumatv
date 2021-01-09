@@ -12,263 +12,267 @@
  *
  * inspired by three.js / http://threejs.org and CreateJS / http://createjs.com/
  */
-/*jshint bitwise: false*/
+/* jshint bitwise: false*/
 var inazumatv = {};
 
 // polyfill
-( function ( self ){
-    "use strict";
+( function( self ) {
+  'use strict';
 
-    // console
-    if ( !self.console ) {
-        self.console = {
-            info: function (){},
-            log: function  (){},
-            debug: function (){},
-            warn: function (){},
-            error: function (){},
-            table: function (){}
-        };
+  // console
+  if ( !self.console ) {
+    self.console = {
+      info: function() {},
+      log: function() {},
+      debug: function() {},
+      warn: function() {},
+      error: function() {},
+      table: function() {}
+    };
+  }
+
+  // Date.now
+  if ( !Date.now ) {
+    Date.now = function now() {
+      return new Date().getTime();
+    };
+  }
+
+  ( function() {
+    // requestAnimationFrame
+    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+    // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+    var lastTime = 0;
+    var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
+
+    for ( var x = 0; x < vendors.length && !self.requestAnimationFrame; ++x ) {
+
+      self.requestAnimationFrame = self[ vendors[ x ] + 'RequestAnimationFrame' ];
+      self.cancelAnimationFrame = self[ vendors[ x ] + 'CancelAnimationFrame' ] || self[ vendors[ x ] + 'CancelRequestAnimationFrame' ];
     }
 
-    // Date.now
-    if ( !Date.now ) {
-        Date.now = function now() {
-            return new Date().getTime();
-        };
+    if ( self.requestAnimationFrame === undefined && self.setTimeout !== undefined ) {
+
+      self.requestAnimationFrame = function( callback ) {
+
+        var currTime = Date.now(), timeToCall = Math.max( 0, 16 - ( currTime - lastTime ) );
+        var id = self.setTimeout( function() {
+          callback( currTime + timeToCall );
+        }, timeToCall );
+        lastTime = currTime + timeToCall;
+        return id;
+      };
+
     }
 
-    ( function() {
-        // requestAnimationFrame
-        // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-        // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-        var lastTime = 0;
-        var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
+    if( self.cancelAnimationFrame === undefined && self.clearTimeout !== undefined ) {
 
-        for ( var x = 0; x < vendors.length && !self.requestAnimationFrame; ++ x ) {
+      self.cancelAnimationFrame = function( id ) {
+        self.clearTimeout( id );
+      };
+    }
 
-            self.requestAnimationFrame = self[ vendors[ x ] + 'RequestAnimationFrame' ];
-            self.cancelAnimationFrame = self[ vendors[ x ] + 'CancelAnimationFrame' ] || self[ vendors[ x ] + 'CancelRequestAnimationFrame' ];
-        }
-
-        if ( self.requestAnimationFrame === undefined && self.setTimeout !== undefined ) {
-
-            self.requestAnimationFrame = function ( callback ) {
-
-                var currTime = Date.now(), timeToCall = Math.max( 0, 16 - ( currTime - lastTime ) );
-                var id = self.setTimeout( function() { callback( currTime + timeToCall ); }, timeToCall );
-                lastTime = currTime + timeToCall;
-                return id;
-            };
-
-        }
-
-        if( self.cancelAnimationFrame === undefined && self.clearTimeout !== undefined ) {
-
-            self.cancelAnimationFrame = function ( id ) { self.clearTimeout( id ); };
-        }
-
-      // Object.create
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
-      if (typeof Object.create !== 'function') {
-        Object.create = (function() {
-          var Temp = function() {};
-          return function (prototype) {
-            if (arguments.length > 1) {
-              throw Error('Second argument not supported');
-            }
-            if (typeof prototype !== 'object') {
-              throw TypeError('Argument must be an object');
-            }
-            Temp.prototype = prototype;
-            var result = new Temp();
-            Temp.prototype = null;
-            return result;
-          };
-        })();
-      }
-
-        // Array.isArray
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
-        if(!Array.isArray) {
-            Array.isArray = function (vArg) {
-                return Object.prototype.toString.call(vArg) === "[object Array]";
-            };
-        }
-
-      // Array.indexOf
-      // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
-      // Production steps of ECMA-262, Edition 5, 15.4.4.14
-      // Reference: http://es5.github.io/#x15.4.4.14
-      if (!Array.prototype.indexOf) {
-        Array.prototype.indexOf = function(searchElement, fromIndex) {
-
-          var k;
-
-          // 1. Let O be the result of calling ToObject passing
-          //    the this value as the argument.
-          if (this == null) {
-            throw new TypeError('"this" is null or not defined');
-          }
-
-          var O = Object(this);
-
-          // 2. Let lenValue be the result of calling the Get
-          //    internal method of O with the argument "length".
-          // 3. Let len be ToUint32(lenValue).
-          var len = O.length >>> 0;
-
-          // 4. If len is 0, return -1.
-          if (len === 0) {
-            return -1;
-          }
-
-          // 5. If argument fromIndex was passed let n be
-          //    ToInteger(fromIndex); else let n be 0.
-          var n = +fromIndex || 0;
-
-          if (Math.abs(n) === Infinity) {
-            n = 0;
-          }
-
-          // 6. If n >= len, return -1.
-          if (n >= len) {
-            return -1;
-          }
-
-          // 7. If n >= 0, then Let k be n.
-          // 8. Else, n<0, Let k be len - abs(n).
-          //    If k is less than 0, then let k be 0.
-          k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-
-          // 9. Repeat, while k < len
-          while (k < len) {
-            // a. Let Pk be ToString(k).
-            //   This is implicit for LHS operands of the in operator
-            // b. Let kPresent be the result of calling the
-            //    HasProperty internal method of O with argument Pk.
-            //   This step can be combined with c
-            // c. If kPresent is true, then
-            //    i.  Let elementK be the result of calling the Get
-            //        internal method of O with the argument ToString(k).
-            //   ii.  Let same be the result of applying the
-            //        Strict Equality Comparison Algorithm to
-            //        searchElement and elementK.
-            //  iii.  If same is true, return k.
-            if (k in O && O[k] === searchElement) {
-              return k;
-            }
-            k++;
-          }
-          return -1;
-        };
-      }
-
-      // Array.forEach
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
-      // Production steps of ECMA-262, Edition 5, 15.4.4.18
-      // Reference: http://es5.github.io/#x15.4.4.18
-      if (!Array.prototype.forEach) {
-
-        Array.prototype.forEach = function(callback, thisArg) {
-
-          var T, k;
-
-          if (this == null) {
-            throw new TypeError(' this is null or not defined');
-          }
-
-          // 1. Let O be the result of calling ToObject passing the |this| value as the argument.
-          var O = Object(this);
-
-          // 2. Let lenValue be the result of calling the Get internal method of O with the argument "length".
-          // 3. Let len be ToUint32(lenValue).
-          var len = O.length >>> 0;
-
-          // 4. If IsCallable(callback) is false, throw a TypeError exception.
-          // See: http://es5.github.com/#x9.11
-          if (typeof callback !== "function") {
-            throw new TypeError(callback + ' is not a function');
-          }
-
-          // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+    // Object.create
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+    if (typeof Object.create !== 'function') {
+      Object.create = (function() {
+        var Temp = function() {};
+        return function(prototype) {
           if (arguments.length > 1) {
-            T = thisArg;
+            throw Error('Second argument not supported');
           }
-
-          // 6. Let k be 0
-          k = 0;
-
-          // 7. Repeat, while k < len
-          while (k < len) {
-
-            var kValue;
-
-            // a. Let Pk be ToString(k).
-            //   This is implicit for LHS operands of the in operator
-            // b. Let kPresent be the result of calling the HasProperty internal method of O with argument Pk.
-            //   This step can be combined with c
-            // c. If kPresent is true, then
-            if (k in O) {
-
-              // i. Let kValue be the result of calling the Get internal method of O with argument Pk.
-              kValue = O[k];
-
-              // ii. Call the Call internal method of callback with T as the this value and
-              // argument list containing kValue, k, and O.
-              callback.call(T, kValue, k, O);
-            }
-            // d. Increase k by 1.
-            k++;
+          if (typeof prototype !== 'object') {
+            throw TypeError('Argument must be an object');
           }
-          // 8. return undefined
+          Temp.prototype = prototype;
+          var result = new Temp();
+          Temp.prototype = null;
+          return result;
         };
-      }
+      }());
+    }
 
-        // Function.prototype.bind
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
-        if (!Function.prototype.bind) {
-            Function.prototype.bind = function (oThis) {
-                if (typeof this !== "function") {
-                    // closest thing possible to the ECMAScript 5 internal IsCallable function
-                    throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-                }
+    // Array.isArray
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
+    if(!Array.isArray) {
+      Array.isArray = function(vArg) {
+        return Object.prototype.toString.call(vArg) === '[object Array]';
+      };
+    }
 
-                var aArgs = Array.prototype.slice.call(arguments, 1),
-                    fToBind = this,
-                    fNOP = function () {},
-                    fBound = function () {
-                        return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
-                    };
+    // Array.indexOf
+    // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
+    // Production steps of ECMA-262, Edition 5, 15.4.4.14
+    // Reference: http://es5.github.io/#x15.4.4.14
+    if (!Array.prototype.indexOf) {
+      Array.prototype.indexOf = function(searchElement, fromIndex) {
 
-                fNOP.prototype = this.prototype;
-                fBound.prototype = new fNOP();
+        var k;
 
-                return fBound;
-            };
+        // 1. Let O be the result of calling ToObject passing
+        //    the this value as the argument.
+        if (this == null) {
+          throw new TypeError('"this" is null or not defined');
         }
 
-        // trim
-        // three.js
-        String.prototype.trim = String.prototype.trim || function () {
+        var O = Object(this);
 
-            return this.replace( /^\s+|\s+$/g, '' );
+        // 2. Let lenValue be the result of calling the Get
+        //    internal method of O with the argument "length".
+        // 3. Let len be ToUint32(lenValue).
+        var len = O.length >>> 0;
 
-        };
+        // 4. If len is 0, return -1.
+        if (len === 0) {
+          return -1;
+        }
 
-        // getUserMedia
-        navigator.getUserMedia =
+        // 5. If argument fromIndex was passed let n be
+        //    ToInteger(fromIndex); else let n be 0.
+        var n = +fromIndex || 0;
+
+        if (Math.abs(n) === Infinity) {
+          n = 0;
+        }
+
+        // 6. If n >= len, return -1.
+        if (n >= len) {
+          return -1;
+        }
+
+        // 7. If n >= 0, then Let k be n.
+        // 8. Else, n<0, Let k be len - abs(n).
+        //    If k is less than 0, then let k be 0.
+        k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+        // 9. Repeat, while k < len
+        while (k < len) {
+          // a. Let Pk be ToString(k).
+          //   This is implicit for LHS operands of the in operator
+          // b. Let kPresent be the result of calling the
+          //    HasProperty internal method of O with argument Pk.
+          //   This step can be combined with c
+          // c. If kPresent is true, then
+          //    i.  Let elementK be the result of calling the Get
+          //        internal method of O with the argument ToString(k).
+          //   ii.  Let same be the result of applying the
+          //        Strict Equality Comparison Algorithm to
+          //        searchElement and elementK.
+          //  iii.  If same is true, return k.
+          if (k in O && O[k] === searchElement) {
+            return k;
+          }
+          k++;
+        }
+        return -1;
+      };
+    }
+
+    // Array.forEach
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+    // Production steps of ECMA-262, Edition 5, 15.4.4.18
+    // Reference: http://es5.github.io/#x15.4.4.18
+    if (!Array.prototype.forEach) {
+
+      Array.prototype.forEach = function(callback, thisArg) {
+
+        var T, k;
+
+        if (this == null) {
+          throw new TypeError(' this is null or not defined');
+        }
+
+        // 1. Let O be the result of calling ToObject passing the |this| value as the argument.
+        var O = Object(this);
+
+        // 2. Let lenValue be the result of calling the Get internal method of O with the argument "length".
+        // 3. Let len be ToUint32(lenValue).
+        var len = O.length >>> 0;
+
+        // 4. If IsCallable(callback) is false, throw a TypeError exception.
+        // See: http://es5.github.com/#x9.11
+        if (typeof callback !== 'function') {
+          throw new TypeError(callback + ' is not a function');
+        }
+
+        // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+        if (arguments.length > 1) {
+          T = thisArg;
+        }
+
+        // 6. Let k be 0
+        k = 0;
+
+        // 7. Repeat, while k < len
+        while (k < len) {
+
+          var kValue;
+
+          // a. Let Pk be ToString(k).
+          //   This is implicit for LHS operands of the in operator
+          // b. Let kPresent be the result of calling the HasProperty internal method of O with argument Pk.
+          //   This step can be combined with c
+          // c. If kPresent is true, then
+          if (k in O) {
+
+            // i. Let kValue be the result of calling the Get internal method of O with argument Pk.
+            kValue = O[k];
+
+            // ii. Call the Call internal method of callback with T as the this value and
+            // argument list containing kValue, k, and O.
+            callback.call(T, kValue, k, O);
+          }
+          // d. Increase k by 1.
+          k++;
+        }
+        // 8. return undefined
+      };
+    }
+
+    // Function.prototype.bind
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+    if (!Function.prototype.bind) {
+      Function.prototype.bind = function(oThis) {
+        if (typeof this !== 'function') {
+          // closest thing possible to the ECMAScript 5 internal IsCallable function
+          throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+        }
+
+        var aArgs = Array.prototype.slice.call(arguments, 1),
+          fToBind = this,
+          fNOP = function() {},
+          fBound = function() {
+            return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
+          };
+
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+
+        return fBound;
+      };
+    }
+
+    // trim
+    // three.js
+    String.prototype.trim = String.prototype.trim || function() {
+
+      return this.replace( /^\s+|\s+$/g, '' );
+
+    };
+
+    // getUserMedia
+    navigator.getUserMedia =
             navigator.getUserMedia ||
             navigator.webkitGetUserMedia ||
             navigator.mozGetUserMedia ||
             navigator.msGetUserMedia;
 
-        // URL
-        window.URL = window.URL ||
+    // URL
+    window.URL = window.URL ||
             window.webkitURL ||
             window.mozURL ||
             window.msURL;
-    }());
+  }());
 
 }( window.self ) );
 
@@ -276,14 +280,14 @@ var inazumatv = {};
 //  Top Level function
 // ==================================
 
-( function ( inazumatv, self ){
-    "use strict";
+( function( inazumatv, self ) {
+  'use strict';
 
-    var _rand = Math.random,
-        _floor = Math.floor,
-        _max = Math.max;
+  var _rand = Math.random,
+    _floor = Math.floor,
+    _max = Math.max;
 
-    /**
+  /**
      * Top Level
      * 継承に使用します
      * @for inazumatv
@@ -292,12 +296,12 @@ var inazumatv = {};
      * @param {Function} P 親クラス
      * @param {Function} C 子クラス
      */
-    inazumatv.extend = function ( P, C ) {
-        C.prototype = Object.create( P.prototype );
-        C.prototype.constructor = C;
-    };
+  inazumatv.extend = function( P, C ) {
+    C.prototype = Object.create( P.prototype );
+    C.prototype.constructor = C;
+  };
 
-    /**
+  /**
      * Top Level
      * 数値チェック
      * @for inazumatv
@@ -306,14 +310,14 @@ var inazumatv = {};
      * @param {*} obj
      * @return {boolean} true: Number, false: not Number
      */
-    function isNumeric ( obj ) {
-        //return !isNaN( parseFloat( obj ) ) && isFinite( obj );
+  function isNumeric( obj ) {
+    // return !isNaN( parseFloat( obj ) ) && isFinite( obj );
 
-        return !Array.isArray( obj ) && obj - parseFloat( obj ) >= 0;
-    }
-    inazumatv.isNumeric = isNumeric;
+    return !Array.isArray( obj ) && obj - parseFloat( obj ) >= 0;
+  }
+  inazumatv.isNumeric = isNumeric;
 
-    /**
+  /**
      * Top Level
      * 範囲指定乱数生成
      * @for inazumatv
@@ -323,17 +327,17 @@ var inazumatv = {};
      * @param {Number} [max] 最大値 optional
      * @return {Number} min ~ max 間の乱数(Float)を発生させます
      */
-    inazumatv.random = function ( min, max ) {
-        if ( !isNumeric( max ) ) {
-            // max が無い場合は 0 ~ min の範囲
-            max = min;
-            min = 0;
-        }
+  inazumatv.random = function( min, max ) {
+    if ( !isNumeric( max ) ) {
+      // max が無い場合は 0 ~ min の範囲
+      max = min;
+      min = 0;
+    }
 
-        return min + _floor( _rand() * ( max - min + 1 ) );
-    };
+    return min + _floor( _rand() * ( max - min + 1 ) );
+  };
 
-    /**
+  /**
      * Top Level
      * 配列内の最大数値を返します
      * @for inazumatv
@@ -342,11 +346,11 @@ var inazumatv = {};
      * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
      * @return {number} 配列内の最大数値を返します
      */
-    inazumatv.maxValue = function ( arr ){
-        return _max.apply( null, arr );
-    };
+  inazumatv.maxValue = function( arr ) {
+    return _max.apply( null, arr );
+  };
 
-    /**
+  /**
      * Top Level
      * log 出力を抑制します。<br>
      * <strong>注意</strong> 実行後にログ出力を行うことはできません。
@@ -355,19 +359,19 @@ var inazumatv = {};
      * @method logAbort
      * @static
      */
-    inazumatv.logAbort = function (){
-        self.console = {
-            info: function (){},
-            log: function  (){},
-            debug: function (){},
-            warn: function (){},
-            error: function (){},
-            table: function (){}
-        };
+  inazumatv.logAbort = function() {
+    self.console = {
+      info: function() {},
+      log: function() {},
+      debug: function() {},
+      warn: function() {},
+      error: function() {},
+      table: function() {}
     };
+  };
 
-    // http://bost.ocks.org/mike/shuffle/
-    /**
+  // http://bost.ocks.org/mike/shuffle/
+  /**
      * 配列をシャッフルします
      * @for inazumatv
      * @method shuffle
@@ -375,59 +379,61 @@ var inazumatv = {};
      * @param {Array} array
      * @return {Array}
      */
-    function shuffle( array ) {
-        var copy = [], n = array.length, i;
+  function shuffle( array ) {
+    var copy = [], n = array.length, i;
 
-        // While there remain elements to shuffle…
-        while ( n ) {
+    // While there remain elements to shuffle…
+    while ( n ) {
 
-            // Pick a remaining element…
-            i = _floor( _rand() * array.length );
+      // Pick a remaining element…
+      i = _floor( _rand() * array.length );
 
-            // If not already shuffled, move it to the new array.
-            if ( i in array ) {
+      // If not already shuffled, move it to the new array.
+      if ( i in array ) {
 
-                copy.push( array[ i ] );
-                delete array[ i ];
-                --n;
-            }
-        }
-
-        return copy;
+        copy.push( array[ i ] );
+        delete array[ i ];
+        --n;
+      }
     }
-    inazumatv.shuffle = shuffle;
+
+    return copy;
+  }
+  inazumatv.shuffle = shuffle;
 
 }( inazumatv, window.self ) );
+
 /**
  * @module inazumatv
  */
 (function( inazumatv ) {
-    "use strict";
+  'use strict';
 
-    /**
+  /**
      * Static class holding library specific information such as the version and buildDate of
      * the library.
      * @class inazumatv
      **/
-    var s = inazumatv.build = inazumatv.build || {};
+  var s = inazumatv.build = inazumatv.build || {};
 
-    /**
+  /**
      * The version string for this release.
      * @property version
      * @type String
      * @static
      **/
-    s.version = /*version*/"0.9.13"; // injected by build process
+  s.version = /* version*/'0.9.14'; // injected by build process
 
-    /**
+  /**
      * The build date for this release in UTC format.
      * @property buildDate
      * @type String
      * @static
      **/
-    s.buildDate = /*date*/"Wed, 11 Mar 2015 08:41:00 GMT"; // injected by build process
+  s.buildDate = /* date*/'Wed, 11 Mar 2015 10:14:25 GMT'; // injected by build process
 
-})( this.inazumatv );
+}( this.inazumatv ));
+
 /**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
@@ -440,8 +446,8 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window, inazumatv ){
-    "use strict";
+( function( window, inazumatv ) {
+  'use strict';
   var
     _float = parseFloat,
     _int = parseInt,
@@ -456,7 +462,7 @@ var inazumatv = {};
     _ie10 = !!_ua.match(/msie [10]/i),
     _ie11 = !!_ua.match(/trident\/[7]/i) && !!_ua.match(/rv:[11]/i),
     _ie = !!_ua.match(/msie/i) || _ie11,
-    _legacy = _ie6 || _ie7|| _ie8,
+    _legacy = _ie6 || _ie7 || _ie8,
 
     _ipad = !!_ua.match(/ipad/i),
     _ipod = !!_ua.match(/ipod/i),
@@ -466,7 +472,7 @@ var inazumatv = {};
     _android = !!_ua.match(/android/i),
     _mobile = _ios || _android,
 
-  // for ios chrome
+    // for ios chrome
     _crios = !!_ua.match(/crios/i),
 
     _chrome = !!_ua.match(/chrome/i),
@@ -477,9 +483,9 @@ var inazumatv = {};
     _windows = !!_ua.match(/windows/i),
     _mac = !!_ua.match(/mac os x/i),
 
-    _touch = typeof window.ontouchstart !== "undefined",
+    _touch = typeof window.ontouchstart !== 'undefined',
 
-    _fullScreen = typeof navigator.standalone !== "undefined" ? navigator.standalone : false,
+    _fullScreen = typeof navigator.standalone !== 'undefined' ? navigator.standalone : false,
 
     _android_phone = false,
     _android_tablet = false,
@@ -534,13 +540,13 @@ var inazumatv = {};
    * @returns {Array} iOS version 配列 3桁
    * @private
    */
-  function _iosVersion () {
+  function _iosVersion() {
     var v, versions;
 
     // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
     v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
     versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3] || 0, 10)];
-    _ios_version = _float( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
+    _ios_version = _float( versions[ 0 ] + '.' + versions[ 1 ] + versions[ 2 ] );
 
     return versions;
   }
@@ -557,12 +563,17 @@ var inazumatv = {};
    * @returns {Array} Android version 配列 3桁
    * @private
    */
-  function _get_androidVersion () {
-    var v, versions;
+  function _get_androidVersion() {
+    var v, versions = [0, 0, 0];
     v = (navigator.appVersion).match(/Android (\d+)\.(\d+)\.?(\d+)?/);
-    versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3] || 0, 10)];
-    _android_version = _float( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
-
+    if (Array.isArray(v)) {
+      versions = [
+        _int(v[1], 10),
+        _int(v[2], 10),
+        _int(v[3] || 0, 10)
+      ];
+      _android_version = _float( versions[ 0 ] + '.' + versions[ 1 ] + versions[ 2 ] );
+    }
     return versions;
   }
 
@@ -576,28 +587,28 @@ var inazumatv = {};
    * @returns {Array} Safari version 配列 2桁~3桁
    * @private
    */
-  function _safariVersion () {
+  function _safariVersion() {
     var v, versions;
 
     v = (navigator.appVersion).match(/Version\/(\d+)\.(\d+)\.?(\d+)?/);
     versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3] || 0, 10)];
-    _safari_version = _float( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
+    _safari_version = _float( versions[ 0 ] + '.' + versions[ 1 ] + versions[ 2 ] );
     return versions;
   }
 
-  //if ( _safari && !_mobile ) {
+  // if ( _safari && !_mobile ) {
   if ( _safari ) {
-    //// not _mobile and _safari
+    // // not _mobile and _safari
     // _safari, include mobile
     _safari_versions = _safariVersion();
   }
 
-  function _chromeVersion () {
+  function _chromeVersion() {
     var v, versions;
 
     v = (navigator.appVersion).match(/Chrome\/(\d+)\.(\d+)\.(\d+)\.?(\d+)?/);
     versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3], 10), _int(v[4], 10)];
-    return versions.join( "." );
+    return versions.join( '.' );
   }
 
   // exclude iOS chrome
@@ -605,12 +616,12 @@ var inazumatv = {};
     _chrome_version = _chromeVersion();
   }
 
-  function _criosVersion () {
+  function _criosVersion() {
     var v, versions;
 
     v = (navigator.appVersion).match(/CriOS\/(\d+)\.(\d+)\.(\d+)\.?(\d+)?/);
     versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3], 10), _int(v[4], 10)];
-    return versions.join( "." );
+    return versions.join( '.' );
   }
 
   if ( _crios ) {
@@ -621,18 +632,18 @@ var inazumatv = {};
 
   // transition support
   // http://stackoverflow.com/questions/7264899/detect-css-transitions-using-javascript-and-without-modernizr
-  _transition = ( function (){
-    var p = document.createElement( "p" ).style;
+  _transition = ( function() {
+    var p = document.createElement( 'p' ).style;
 
-    return "transition" in p || "WebkitTransition" in p || "MozTransition" in p || "msTransition" in p || "OTransition" in p;
+    return 'transition' in p || 'WebkitTransition' in p || 'MozTransition' in p || 'msTransition' in p || 'OTransition' in p;
 
   }() );
 
   // transform support
-  _transform = ( function (){
-    var p = document.createElement( "p" ).style;
+  _transform = ( function() {
+    var p = document.createElement( 'p' ).style;
 
-    return "transform" in p || "WebkitTransform" in p || "MozTransform" in p || "OTransform" in p || "msTransform" in p;
+    return 'transform' in p || 'WebkitTransform' in p || 'MozTransform' in p || 'OTransform' in p || 'msTransform' in p;
 
   }() );
 
@@ -641,8 +652,8 @@ var inazumatv = {};
    * @class Browser
    * @constructor
    */
-  var Browser = function () {
-    throw "Browser cannot be instantiated";
+  var Browser = function() {
+    throw 'Browser cannot be instantiated';
   };
 
   /**
@@ -665,7 +676,7 @@ var inazumatv = {};
        * @returns {boolean} iOS か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _ios;
       },
       /**
@@ -674,7 +685,7 @@ var inazumatv = {};
        * @returns {Array} iOS version number を返します [ major, minor, build ]
        * @static
        */
-      number: function (){
+      number: function() {
         return _ios_versions;
       },
       /**
@@ -683,7 +694,7 @@ var inazumatv = {};
        * @returns {Number} iOS major version number を返します
        * @static
        */
-      major: function (){
+      major: function() {
         return _ios_versions[ 0 ];
       },
       /**
@@ -692,7 +703,7 @@ var inazumatv = {};
        * @returns {Number} iOS version を返します 9.99
        * @static
        */
-      version: function (){
+      version: function() {
         return _ios_version;
       },
       /**
@@ -701,7 +712,7 @@ var inazumatv = {};
        * @returns {Boolean} iPhone か否かを返します
        * @static
        */
-      iPhone: function (){
+      iPhone: function() {
         return _iphone;
       },
       /**
@@ -710,7 +721,7 @@ var inazumatv = {};
        * @returns {Boolean} iPad か否かを返します
        * @static
        */
-      iPad: function (){
+      iPad: function() {
         return _ipad;
       },
       /**
@@ -719,7 +730,7 @@ var inazumatv = {};
        * @returns {Boolean} iPod か否かを返します
        * @static
        */
-      iPod: function (){
+      iPod: function() {
         return _ipod;
       },
       /**
@@ -728,7 +739,7 @@ var inazumatv = {};
        * @returns {boolean} standalone mode か否かを返します
        * @static
        */
-      fullScreen: function (){
+      fullScreen: function() {
         return _fullScreen;
       }
     },
@@ -746,7 +757,7 @@ var inazumatv = {};
        * @returns {boolean} Android か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _android;
       },
       /**
@@ -755,7 +766,7 @@ var inazumatv = {};
        * @returns {Array} Android version number を返します [ major, minor, build ]
        * @static
        */
-      number: function (){
+      number: function() {
         return _android_versions;
       },
       /**
@@ -764,7 +775,7 @@ var inazumatv = {};
        * @returns {Number} Android major version number を返します
        * @static
        */
-      major: function (){
+      major: function() {
         return _android_versions[ 0 ];
       },
       /**
@@ -773,7 +784,7 @@ var inazumatv = {};
        * @returns {Number} Android version を返します 9.99
        * @static
        */
-      version: function (){
+      version: function() {
         return _android_version;
       },
       /**
@@ -782,7 +793,7 @@ var inazumatv = {};
        * @returns {boolean} Android Phone か否かを返します
        * @static
        */
-      phone: function (){
+      phone: function() {
         return _android_phone;
       },
       /**
@@ -791,7 +802,7 @@ var inazumatv = {};
        * @returns {boolean} Android Tablet か否かを返します
        * @static
        */
-      tablet: function (){
+      tablet: function() {
         return _android_tablet;
       },
       /**
@@ -800,7 +811,7 @@ var inazumatv = {};
        * @returns {boolean} Android standard Browser か否かを返します
        * @static
        */
-      standard: function () {
+      standard: function() {
         return _android_standard;
       }
     },
@@ -818,7 +829,7 @@ var inazumatv = {};
        * @returns {boolean} IE か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _ie;
       },
       /**
@@ -826,7 +837,7 @@ var inazumatv = {};
        * @method is6
        * @returns {boolean} IE 6 か否かを返します
        */
-      is6: function (){
+      is6: function() {
         return _ie6;
       },
       /**
@@ -834,7 +845,7 @@ var inazumatv = {};
        * @method is7
        * @returns {boolean} IE 7 か否かを返します
        */
-      is7: function (){
+      is7: function() {
         return _ie7;
       },
       /**
@@ -842,7 +853,7 @@ var inazumatv = {};
        * @method is8
        * @returns {boolean} IE 8 か否かを返します
        */
-      is8: function (){
+      is8: function() {
         return _ie8;
       },
       /**
@@ -850,7 +861,7 @@ var inazumatv = {};
        * @method is9
        * @returns {boolean} IE 9 か否かを返します
        */
-      is9: function (){
+      is9: function() {
         return _ie9;
       },
       /**
@@ -858,7 +869,7 @@ var inazumatv = {};
        * @method is10
        * @returns {boolean} IE 10 か否かを返します
        */
-      is10: function (){
+      is10: function() {
         return _ie10;
       },
       /**
@@ -866,7 +877,7 @@ var inazumatv = {};
        * @method is11
        * @returns {boolean} IE 11 か否かを返します
        */
-      is11: function (){
+      is11: function() {
         return _ie11;
       },
       /**
@@ -874,7 +885,7 @@ var inazumatv = {};
        * @method _legacy
        * @returns {boolean} IE 6 or 7 or 8 か否かを返します
        */
-      legacy: function (){
+      legacy: function() {
         return _legacy;
       },
       /**
@@ -883,7 +894,7 @@ var inazumatv = {};
        * @returns {Number} IE version を返します int 6 ~ 11, IE 6 ~ IE 11 でない場合は -1 を返します
        * @static
        */
-      version: function (){
+      version: function() {
         var v = -1;
         if ( _ie11 ) {
           v = 11;
@@ -915,7 +926,7 @@ var inazumatv = {};
        * @returns {boolean} Chrome か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _chrome;
       },
       /**
@@ -923,7 +934,7 @@ var inazumatv = {};
        * @method version
        * @returns {string|number}
        */
-      version: function () {
+      version: function() {
         return _chrome_version;
       }
     },
@@ -941,7 +952,7 @@ var inazumatv = {};
        * @returns {boolean} Safari か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _safari;
       },
       /**
@@ -950,7 +961,7 @@ var inazumatv = {};
        * @returns {Array} Safari version number を返します [ major, minor, build ]
        * @static
        */
-      number: function (){
+      number: function() {
         return _safari_versions;
       },
       /**
@@ -959,7 +970,7 @@ var inazumatv = {};
        * @returns {Number} Safari major version number を返します
        * @static
        */
-      major: function (){
+      major: function() {
         return _safari_versions[ 0 ];
       },
       /**
@@ -968,7 +979,7 @@ var inazumatv = {};
        * @returns {Number} Safari version を返します 9.99
        * @static
        */
-      version: function (){
+      version: function() {
         return _safari_version;
       }
     },
@@ -986,7 +997,7 @@ var inazumatv = {};
        * @returns {boolean} Firefox か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _firefox;
       }
     },
@@ -1004,7 +1015,7 @@ var inazumatv = {};
        * @returns {boolean} Touch 可能か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _touch;
       }
     },
@@ -1022,7 +1033,7 @@ var inazumatv = {};
        * @returns {boolean} mobile(smart phone) か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _mobile;
       },
       /**
@@ -1040,8 +1051,10 @@ var inazumatv = {};
        * @method hideURLBar
        * @static
        */
-      hideURLBar : function (){
-        setTimeout( function (){ scrollBy( 0, 1 ); }, 0);
+      hideURLBar: function() {
+        setTimeout( function() {
+          scrollBy( 0, 1 );
+        }, 0);
       },
       /**
        * @for Browser.Mobile
@@ -1049,7 +1062,7 @@ var inazumatv = {};
        * @returns {boolean} Smart Phone(include iPod)か否かを返します
        * @static
        */
-      phone: function (){
+      phone: function() {
         return _ipod || _iphone || _android_phone;
       },
       /**
@@ -1058,7 +1071,7 @@ var inazumatv = {};
        * @returns {boolean} tablet か否かを返します
        * @static
        */
-      tablet: function (){
+      tablet: function() {
         return _ipad || _android_tablet;
       }
     },
@@ -1076,7 +1089,7 @@ var inazumatv = {};
        * @returns {boolean} canvas 2D が使用可能か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _canvas;
       },
       /**
@@ -1085,7 +1098,7 @@ var inazumatv = {};
        * @returns {boolean} canvas webgl 使用可能か否かを返します
        * @static
        */
-      webgl: function (){
+      webgl: function() {
         if ( !_canvas ) {
           return false;
         }
@@ -1104,7 +1117,7 @@ var inazumatv = {};
        * @return {boolean} Mac OS X or not
        * @static
        */
-      is: function () {
+      is: function() {
         return _mac;
       }
     },
@@ -1114,7 +1127,7 @@ var inazumatv = {};
        * @method is
        * @return {boolean} Windows or not
        */
-      is: function () {
+      is: function() {
         return _windows;
       }
     },
@@ -1124,7 +1137,7 @@ var inazumatv = {};
        * @method is
        * @return {boolean} CSS3 transition support or not
        */
-      is: function () {
+      is: function() {
 
         return _transition;
       }
@@ -1135,7 +1148,7 @@ var inazumatv = {};
        * @method is
        * @return {boolean} CSS3 transition support or not
        */
-      is: function () {
+      is: function() {
 
         return _transform;
       }
@@ -1147,7 +1160,9 @@ var inazumatv = {};
   // below for compatibility to older version of inazumatv.util
   inazumatv.browser = Browser;
 
-}( window, this.inazumatv || {} ) );/**
+}( window, this.inazumatv || {} ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 13:57
@@ -1159,23 +1174,23 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window, inazumatv ){
-    "use strict";
-    var document = window.document;
+( function( window, inazumatv ) {
+  'use strict';
+  var document = window.document;
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
-    /**
+  // https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
+  /**
      * @class CookieUtil
      * @constructor
      * @static
      */
-    function CookieUtil () {
-        throw "CookieUtil cannot be instantiated";
-    }
+  function CookieUtil() {
+    throw 'CookieUtil cannot be instantiated';
+  }
 
-    var c = CookieUtil;
+  var c = CookieUtil;
 
-    /**
+  /**
      * Cookie 取得
      * @for CookieUtil
      * @method getItem
@@ -1183,11 +1198,11 @@ var inazumatv = {};
      * @return {string|null} Cookie 値を返します。取得できない場合はnullを返します。
      * @static
      */
-    c.getItem = function (sKey) {
-        return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
-    };
+  c.getItem = function(sKey) {
+    return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
+  };
 
-    /**
+  /**
      * Cookie 保存
      * @for CookieUtil
      * @method setItem
@@ -1200,27 +1215,29 @@ var inazumatv = {};
      * @return {boolean} 保存に成功したかの真偽値を返します
      * @static
      */
-    c.setItem = function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
-        if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
-        var sExpires = "";
-        if (vEnd) {
-            switch (vEnd.constructor) {
-                case Number:
-                    sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
-                    break;
-                case String:
-                    sExpires = "; expires=" + vEnd;
-                    break;
-                case Date:
-                    sExpires = "; expires=" + vEnd.toUTCString();
-                    break;
-            }
-        }
-        document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
-        return true;
-    };
+  c.setItem = function(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
+      return false;
+    }
+    var sExpires = '';
+    if (vEnd) {
+      switch (vEnd.constructor) {
+        case Number:
+          sExpires = vEnd === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : '; max-age=' + vEnd;
+          break;
+        case String:
+          sExpires = '; expires=' + vEnd;
+          break;
+        case Date:
+          sExpires = '; expires=' + vEnd.toUTCString();
+          break;
+      }
+    }
+    document.cookie = encodeURIComponent(sKey) + '=' + encodeURIComponent(sValue) + sExpires + (sDomain ? '; domain=' + sDomain : '') + (sPath ? '; path=' + sPath : '') + (bSecure ? '; secure' : '');
+    return true;
+  };
 
-    /**
+  /**
      * Cookie 削除
      * @for CookieUtil
      * @method removeItem
@@ -1230,13 +1247,15 @@ var inazumatv = {};
      * @return {boolean} 削除に成功したかの真偽値を返します
      * @static
      */
-    c.removeItem = function (sKey, sPath, sDomain) {
-        if (!sKey || !this.hasItem(sKey)) { return false; }
-        document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + ( sDomain ? "; domain=" + sDomain : "") + ( sPath ? "; path=" + sPath : "");
-        return true;
-    };
+  c.removeItem = function(sKey, sPath, sDomain) {
+    if (!sKey || !this.hasItem(sKey)) {
+      return false;
+    }
+    document.cookie = encodeURIComponent(sKey) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT' + ( sDomain ? '; domain=' + sDomain : '') + ( sPath ? '; path=' + sPath : '');
+    return true;
+  };
 
-    /**
+  /**
      * Cookie Key が存在するかを調べる
      * @for CookieUtil
      * @method hasItem
@@ -1244,25 +1263,29 @@ var inazumatv = {};
      * @return {boolean} true / false
      * @static
      */
-    c.hasItem = function (sKey) {
-        return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
-    };
+  c.hasItem = function(sKey) {
+    return (new RegExp('(?:^|;\\s*)' + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=')).test(document.cookie);
+  };
 
-    /**
+  /**
      * Cookie key 列挙
      * @for CookieUtil
      * @method keys
      * @return {Array} Cookie key 配列を返します
      * @static
      */
-    c.keys = /* optional method: you can safely remove it! */ function () {
-        var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
-        for (var nIdx = 0; nIdx < aKeys.length; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
-        return aKeys;
-    };
+  c.keys = /* optional method: you can safely remove it! */ function() {
+    var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, '').split(/\s*(?:\=[^;]*)?;\s*/);
+    for (var nIdx = 0; nIdx < aKeys.length; nIdx++) {
+      aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]);
+    }
+    return aKeys;
+  };
 
-    inazumatv.CookieUtil = CookieUtil;
-}( window, this.inazumatv ) );/**
+  inazumatv.CookieUtil = CookieUtil;
+}( window, this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 14:26
@@ -1274,13 +1297,13 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window, inazumatv ){
-    "use strict";
+( function( window, inazumatv ) {
+  'use strict';
 
-    // EventDispatcher class from EaselJS.
-    // Copyright (c) 2010 gskinner.com, inc.
-    // http://createjs.com/
-    /**
+  // EventDispatcher class from EaselJS.
+  // Copyright (c) 2010 gskinner.com, inc.
+  // http://createjs.com/
+  /**
      * The EventDispatcher provides methods for managing prioritized queues of event listeners and dispatching events. All
      * {{#crossLink "DisplayObject"}}{{/crossLink}} classes dispatch events, as well as some of the utilities like {{#crossLink "Ticker"}}{{/crossLink}}.
      *
@@ -1314,47 +1337,47 @@ var inazumatv = {};
      * @class EventDispatcher
      * @constructor
      **/
-    var EventDispatcher = function() {
-        this.initialize();
-    };
+  var EventDispatcher = function() {
+    this.initialize();
+  };
 
-    var p = EventDispatcher.prototype;
+  var p = EventDispatcher.prototype;
 
-    p.constructor = inazumatv.EventDispatcher;
+  p.constructor = inazumatv.EventDispatcher;
 
-    /**
+  /**
      * Static initializer to mix in EventDispatcher methods.
      * @method initialize
      * @static
      * @param {Object} [target] The target object to inject EventDispatcher methods into. This can be an instance or a
      * prototype.
      **/
-    EventDispatcher.initialize = function(target) {
-        target.addEventListener = p.addEventListener;
-        target.removeEventListener = p.removeEventListener;
-        target.removeAllEventListeners = p.removeAllEventListeners;
-        target.hasEventListener = p.hasEventListener;
-        target.dispatchEvent = p.dispatchEvent;
-    };
+  EventDispatcher.initialize = function(target) {
+    target.addEventListener = p.addEventListener;
+    target.removeEventListener = p.removeEventListener;
+    target.removeAllEventListeners = p.removeAllEventListeners;
+    target.hasEventListener = p.hasEventListener;
+    target.dispatchEvent = p.dispatchEvent;
+  };
 
-    // private properties:
-    /**
+  // private properties:
+  /**
      * @protected
      * @property _listeners
      * @type {Object}
      **/
-    p._listeners = null;
+  p._listeners = null;
 
-    // constructor:
-    /**
+  // constructor:
+  /**
      * Initialization method.
      * @method initialize
      * @protected
      **/
-    p.initialize = function() {};
+  p.initialize = function() {};
 
-    // public methods:
-    /**
+  // public methods:
+  /**
      * Adds the specified event listener.
      * @method addEventListener
      * @param {String} type The string type of the event.
@@ -1362,47 +1385,63 @@ var inazumatv = {};
      * the event is dispatched.
      * @return {Function | Object} Returns the listener for chaining or assignment.
      **/
-    p.addEventListener = function(type, listener) {
-        var listeners = this._listeners;
-        if (!listeners) { listeners = this._listeners = {}; }
-        else { this.removeEventListener(type, listener); }
-        var arr = listeners[type];
-        if (!arr) { arr = listeners[type] = []; }
-        arr.push(listener);
-        return listener;
-    };
+  p.addEventListener = function(type, listener) {
+    var listeners = this._listeners;
+    if (!listeners) {
+      listeners = this._listeners = {};
+    } else {
+      this.removeEventListener(type, listener);
+    }
+    var arr = listeners[type];
+    if (!arr) {
+      arr = listeners[type] = [];
+    }
+    arr.push(listener);
+    return listener;
+  };
 
-    /**
+  /**
      * Removes the specified event listener.
      * @method removeEventListener
      * @param {String} type The string type of the event.
      * @param {Function | Object} listener The listener function or object.
      **/
-    p.removeEventListener = function(type, listener) {
-        var listeners = this._listeners;
-        if (!listeners) { return; }
-        var arr = listeners[type];
-        if (!arr) { return; }
-        for (var i=0,l=arr.length; i<l; i++) {
-            if (arr[i] === listener) {
-                if (l===1) { delete(listeners[type]); } // allows for faster checks.
-                else { arr.splice(i,1); }
-                break;
-            }
+  p.removeEventListener = function(type, listener) {
+    var listeners = this._listeners;
+    if (!listeners) {
+      return;
+    }
+    var arr = listeners[type];
+    if (!arr) {
+      return;
+    }
+    for (var i = 0, l = arr.length; i < l; i++) {
+      if (arr[i] === listener) {
+        if (l === 1) {
+          delete (listeners[type]);
+        } // allows for faster checks.
+        else {
+          arr.splice(i, 1);
         }
-    };
+        break;
+      }
+    }
+  };
 
-    /**
+  /**
      * Removes all listeners for the specified type, or all listeners of all types.
      * @method removeAllEventListeners
      * @param {String} [type] The string type of the event. If omitted, all listeners for all types will be removed.
      **/
-    p.removeAllEventListeners = function(type) {
-        if (!type) { this._listeners = null; }
-        else if (this._listeners) { delete(this._listeners[type]); }
-    };
+  p.removeAllEventListeners = function(type) {
+    if (!type) {
+      this._listeners = null;
+    } else if (this._listeners) {
+      delete (this._listeners[type]);
+    }
+  };
 
-    /**
+  /**
      * Dispatches the specified event.
      * @method dispatchEvent
      * @param {Object | String} eventObj An object with a "type" property, or a string type. If a string is used,
@@ -1411,44 +1450,53 @@ var inazumatv = {};
      * dispatching object.
      * @return {Boolean} Returns true if any listener returned true.
      **/
-    p.dispatchEvent = function(eventObj, target) {
-        var ret=false, listeners = this._listeners;
-        if (eventObj && listeners) {
-            if (typeof eventObj === "string") { eventObj = {type:eventObj}; }
-            var arr = listeners[eventObj.type];
-            if (!arr) { return ret; }
-            eventObj.target = target||this;
-            arr = arr.slice(); // to avoid issues with items being removed or added during the dispatch
-            for (var i=0,l=arr.length; i<l; i++) {
-                var o = arr[i];
-                if (o.handleEvent) { ret = ret||o.handleEvent(eventObj); }
-                else { ret = ret||o(eventObj); }
-            }
+  p.dispatchEvent = function(eventObj, target) {
+    var ret = false, listeners = this._listeners;
+    if (eventObj && listeners) {
+      if (typeof eventObj === 'string') {
+        eventObj = {type: eventObj};
+      }
+      var arr = listeners[eventObj.type];
+      if (!arr) {
+        return ret;
+      }
+      eventObj.target = target || this;
+      arr = arr.slice(); // to avoid issues with items being removed or added during the dispatch
+      for (var i = 0, l = arr.length; i < l; i++) {
+        var o = arr[i];
+        if (o.handleEvent) {
+          ret = ret || o.handleEvent(eventObj);
+        } else {
+          ret = ret || o(eventObj);
         }
-        return !!ret;
-    };
+      }
+    }
+    return !!ret;
+  };
 
-    /**
+  /**
      * Indicates whether there is at least one listener for the specified event type.
      * @method hasEventListener
      * @param {String} type The string type of the event.
      * @return {Boolean} Returns true if there is at least one listener for the specified event.
      **/
-    p.hasEventListener = function(type) {
-        var listeners = this._listeners;
-        return !!(listeners && listeners[type]);
-    };
+  p.hasEventListener = function(type) {
+    var listeners = this._listeners;
+    return !!(listeners && listeners[type]);
+  };
 
-    /**
+  /**
      * @method toString
      * @return {String} a string representation of the instance.
      **/
-    p.toString = function() {
-        return "[EventDispatcher]";
-    };
+  p.toString = function() {
+    return '[EventDispatcher]';
+  };
 
-    inazumatv.EventDispatcher = EventDispatcher;
-}( window, this.inazumatv ) );/**
+  inazumatv.EventDispatcher = EventDispatcher;
+}( window, this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 14:34
@@ -1460,44 +1508,46 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window, inazumatv ){
-    "use strict";
+( function( window, inazumatv ) {
+  'use strict';
 
-    /**
+  /**
      * @class EventObject
      * @param {String} eventType Event Type
      * @param {*|Array|string} [params] String || Array eventHandler へ送る値をセット。複数の時は配列にセットする
      * @constructor
      */
-    var EventObject = function ( eventType, params ){
-        if ( typeof params === "undefined" || params === null ) {
+  var EventObject = function( eventType, params ) {
+    if ( typeof params === 'undefined' || params === null ) {
 
-            params = [];
-        } else if ( !Array.isArray( params ) ) {
-            // 配列へ
-            params = [ params ];
-        }
+      params = [];
+    } else if ( !Array.isArray( params ) ) {
+      // 配列へ
+      params = [ params ];
+    }
 
-        this.type = eventType;
-        this.params = params;
-    };
+    this.type = eventType;
+    this.params = params;
+  };
 
-    var p = EventObject.prototype;
+  var p = EventObject.prototype;
 
-    p.constructor = inazumatv.EventObject;
+  p.constructor = inazumatv.EventObject;
 
-    /**
+  /**
      * パラメタ取出し
      * @method getParams
      * @return {Array|*} 配列を返します
      */
-    p.getParams = function (){
-        return this.params;
-    };
+  p.getParams = function() {
+    return this.params;
+  };
 
-    inazumatv.EventObject = EventObject;
+  inazumatv.EventObject = EventObject;
 
-}( window, this.inazumatv ) );/**
+}( window, this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/15 - 2:55
@@ -1509,10 +1559,10 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    /**
+  /**
      * Ajax access Event, EventDispatcher mixin
      *
      * addEventListener
@@ -1526,31 +1576,33 @@ var inazumatv = {};
      * @constructor
      * @static
      */
-    function AjaxEvent () {}
+  function AjaxEvent() {}
 
-    /**
+  /**
      * @const COMPLETE
      * @type {string}
      * @static
      */
-    AjaxEvent.COMPLETE = "ajaxEventComplete";
+  AjaxEvent.COMPLETE = 'ajaxEventComplete';
 
-    /**
+  /**
      * @const ERROR
      * @type {string}
      * @static
      */
-    AjaxEvent.ERROR = "ajaxEventERROR";
+  AjaxEvent.ERROR = 'ajaxEventERROR';
 
-    var p = AjaxEvent.prototype;
+  var p = AjaxEvent.prototype;
 
-    p.constructor = AjaxEvent;
+  p.constructor = AjaxEvent;
 
-    inazumatv.EventDispatcher.initialize( p );
+  inazumatv.EventDispatcher.initialize( p );
 
-    inazumatv.AjaxEvent = AjaxEvent;
+  inazumatv.AjaxEvent = AjaxEvent;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2014/02/15 - 21:04
@@ -1562,8 +1614,8 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window ){
-  "use strict";
+( function( window ) {
+  'use strict';
   var
     inazumatv = window.inazumatv,
     _decode = window.decodeURIComponent;
@@ -1573,8 +1625,8 @@ var inazumatv = {};
    * @class QuerySearch
    * @constructor
    */
-  function QuerySearch () {
-    throw new Error( "QuerySearch cannot be instantiated" );
+  function QuerySearch() {
+    throw new Error( 'QuerySearch cannot be instantiated' );
   }
 
   QuerySearch.prototype.constructor = QuerySearch;
@@ -1589,15 +1641,15 @@ var inazumatv = {};
    * @return {string} search value
    * @static
    */
-  q.search = function ( key_name ){
+  q.search = function( keyName ) {
     var query = window.location.search.substring( 1 ),
       vars = query.split( '&' ),
-      result = "";
+      result = '';
 
     for ( var i = 0, limit = vars.length; i < limit; i++ ) {
       var pair = vars[ i ].split( '=' );
-      if ( _decode( pair[ 0 ] ) === key_name ) {
-        result =  _decode( pair[ 1 ] );
+      if ( _decode( pair[ 0 ] ) === keyName ) {
+        result = _decode( pair[ 1 ] );
         break;
       }
     }
@@ -1614,7 +1666,7 @@ var inazumatv = {};
    * @return {object} key: value
    * @static
    */
-  q.searchAll = function (){
+  q.searchAll = function() {
     var query = window.location.search.substring( 1 ),
       vars = query.split( '&' ),
       result = {};
@@ -1632,7 +1684,7 @@ var inazumatv = {};
    * @static
    * @return {Function|string}
    */
-  q.raw = function () {
+  q.raw = function() {
     return window.location.search;
   };
 
@@ -1685,7 +1737,9 @@ var inazumatv = {};
 //            return result;
 //        }
 //    };
-}( window ) );/**
+}( window ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2014/06/18 - 18:56
@@ -1697,117 +1751,119 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window ){
-    "use strict";
-    var document = window.document,
-        inazumatv = window.inazumatv,
-        EventObject = inazumatv.EventObject,
-        EventDispatcher = inazumatv.EventDispatcher;
+( function( window ) {
+  'use strict';
+  var document = window.document,
+    inazumatv = window.inazumatv,
+    EventObject = inazumatv.EventObject,
+    EventDispatcher = inazumatv.EventDispatcher;
 
-    inazumatv.LoadImage = ( function (){
-        /**
+  inazumatv.LoadImage = ( function() {
+    /**
          * 画像を読み込みイベントを発火します
          * @class LoadImage
          * @uses EventDispatcher
          * @param {string} path
          * @constructor
          */
-        function LoadImage ( path ) {
-          /**
+    function LoadImage( path ) {
+      /**
            * @property _path
            * @type {string}
            * @private
            */
-          this._path = path;
-        }
+      this._path = path;
+    }
 
-        /**
+    /**
          * 画像読み込み完了イベント
          * @for LoadImage
          * @event COMPLETE
          * @static
          * @type {string}
          */
-        LoadImage.COMPLETE = "load_image_complete";
-        /**
+    LoadImage.COMPLETE = 'load_image_complete';
+    /**
          * 画像読み込みエラーイベント
          * @for LoadImage
          * @event ERROR
          * @static
          * @type {string}
          */
-        LoadImage.ERROR = "load_image_error";
+    LoadImage.ERROR = 'load_image_error';
 
-        var p = LoadImage.prototype;
+    var p = LoadImage.prototype;
 
-        p.constructor = inazumatv.LoadImage;
+    p.constructor = inazumatv.LoadImage;
 
-        EventDispatcher.initialize( p );
+    EventDispatcher.initialize( p );
 
-        /**
+    /**
          * 画像読み込みを開始します
          * @method load
          */
-        p.load = function () {
-            var path = this._path,
-                img = new Image(),
-                _this = this,
-                modern = typeof document.addEventListener !== "undefined",
-                done = false;
+    p.load = function() {
+      var path = this._path,
+        img = new Image(),
+        _this = this,
+        modern = typeof document.addEventListener !== 'undefined',
+        done = false;
 
-            function dispose () {
-                if ( !modern && done ) {
+      function dispose() {
+        if ( !modern && done ) {
 
-                    return false;
-                }
+          return false;
+        }
 
-                if ( modern ) {
-                    // modern browser
-                    img.removeEventListener( "load", complete );
-                    img.removeEventListener( "error", error );
-                } else {
-                    // legacy
-                    img.detachEvent( "onload", complete );
-                    img.detachEvent( "onerror", error );
-                }
+        if ( modern ) {
+          // modern browser
+          img.removeEventListener( 'load', complete );
+          img.removeEventListener( 'error', error );
+        } else {
+          // legacy
+          img.detachEvent( 'onload', complete );
+          img.detachEvent( 'onerror', error );
+        }
 
-                return true;
-            }
+        return true;
+      }
 
-            function complete () {
-                if ( !dispose() ) {
+      function complete() {
+        if ( !dispose() ) {
 
-                    return;
-                }
+          return;
+        }
 
-                _this.dispatchEvent( new EventObject( LoadImage.COMPLETE, [ img ] ), _this );
-            }
+        _this.dispatchEvent( new EventObject( LoadImage.COMPLETE, [ img ] ), _this );
+      }
 
-            function error () {
-                if ( !dispose() ) {
+      function error() {
+        if ( !dispose() ) {
 
-                    return;
-                }
+          return;
+        }
 
-                _this.dispatchEvent( new EventObject( LoadImage.ERROR, [ img ] ), _this );
-            }
+        _this.dispatchEvent( new EventObject( LoadImage.ERROR, [ img ] ), _this );
+      }
 
-            if ( modern ) {
-                // modern browser
-                img.addEventListener( "load", complete, false );
-                img.addEventListener( "error", error, false );
-            } else {
-                // legacy
-                img.attachEvent( "onload", complete );
-                img.attachEvent( "onerror", error );
-            }
+      if ( modern ) {
+        // modern browser
+        img.addEventListener( 'load', complete, false );
+        img.addEventListener( 'error', error, false );
+      } else {
+        // legacy
+        img.attachEvent( 'onload', complete );
+        img.attachEvent( 'onerror', error );
+      }
 
-            img.src = path;
-        };
+      img.src = path;
+    };
 
-        return LoadImage;
-    }() );
-}( window ) );/**
+    return LoadImage;
+  }() );
+}( window ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2014/06/18 - 21:07
@@ -1819,208 +1875,210 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window ){
-    "use strict";
-    var inazumatv = window.inazumatv,
-        LoadImage = inazumatv.LoadImage,
-        EventObject = inazumatv.EventObject,
-        EventDispatcher = inazumatv.EventDispatcher;
+( function( window ) {
+  'use strict';
+  var inazumatv = window.inazumatv,
+    LoadImage = inazumatv.LoadImage,
+    EventObject = inazumatv.EventObject,
+    EventDispatcher = inazumatv.EventDispatcher;
 
-    inazumatv.BulkLoader = ( function (){
-        /**
+  inazumatv.BulkLoader = ( function() {
+    /**
          * 複数画像を読み込みます
          * @class BulkLoader
          * @uses EventDispatcher
          * @param {Array} paths 画像パス配列
          * @constructor
          */
-        function BulkLoader ( paths ) {
-          /**
+    function BulkLoader( paths ) {
+      /**
            * @property _paths
            * @type {Array}
            * @private
            */
-          this._paths = paths;
-          /**
+      this._paths = paths;
+      /**
            * @property _connections
            * @type {number}
            * @default 6
            * @private
            */
-          this._connections = 6;
-          /**
+      this._connections = 6;
+      /**
            * @property _boundLoad
            * @type {function(this:BulkLoader)|*}
            * @private
            */
-          this._boundLoad = this._load.bind( this );
-          /**
+      this._boundLoad = this._load.bind( this );
+      /**
            * @property _boundError
            * @type {function(this:BulkLoader)|*}
            * @private
            */
-          this._boundError = this._error.bind( this );
-        }
+      this._boundError = this._error.bind( this );
+    }
 
-        /**
+    /**
          * 個別画像ロード完了時イベント
          * @event LOAD
          * @static
          * @type {string}
          */
-        BulkLoader.LOAD = "bulk_loader_load";
-        /**
+    BulkLoader.LOAD = 'bulk_loader_load';
+    /**
          * 個別画像ロードエラー時イベント
          * @event ERROR
          * @static
          * @type {string}
          */
-        BulkLoader.ERROR = "bulk_loader_error";
-        /**
+    BulkLoader.ERROR = 'bulk_loader_error';
+    /**
          * 全画像ロード完了時イベント
          * @event COMPLETE
          * @static
          * @type {string}
          */
-        BulkLoader.COMPLETE = "bulk_loader_complete";
+    BulkLoader.COMPLETE = 'bulk_loader_complete';
 
-        var p = BulkLoader.prototype;
+    var p = BulkLoader.prototype;
 
-        p.constructor = inazumatv.BulkLoader;
+    p.constructor = inazumatv.BulkLoader;
 
-        EventDispatcher.initialize( p );
+    EventDispatcher.initialize( p );
 
-        /**
+    /**
          * 接続数を設定します
          * @method setConnections
          * @param {int} n
          */
-        p.setConnections = function ( n ) {
-            this._connections = n;
-        };
+    p.setConnections = function( n ) {
+      this._connections = n;
+    };
 
-        /**
+    /**
          * 読み込みを開始します
          * @method start
          */
-        p.start = function () {
-            var paths = this._paths,
+    p.start = function() {
+      var paths = this._paths,
 
-                limit = this._connections,
-                count = 0;
+        limit = this._connections,
+        count = 0;
 
-            this._loading = 0;
+      this._loading = 0;
 
-            while( paths.length > 0 ) {
-                if ( count >=  limit ) {
-                    // connections limit
-                    break;
-                }
+      while( paths.length > 0 ) {
+        if ( count >= limit ) {
+          // connections limit
+          break;
+        }
 
-                this._next();
-                ++count;
-            }
-        };
+        this._next();
+        ++count;
+      }
+    };
 
-        /**
+    /**
          * @method _done
          * @private
          */
-        p._done = function () {
-            // all done
-            this.dispatchEvent( new EventObject( BulkLoader.COMPLETE ), this );
-        };
+    p._done = function() {
+      // all done
+      this.dispatchEvent( new EventObject( BulkLoader.COMPLETE ), this );
+    };
 
-        /**
+    /**
          * @method _next
          * @private
          */
-        p._next = function () {
-            // next load
-            var paths = this._paths,
-                path = paths.shift();
+    p._next = function() {
+      // next load
+      var paths = this._paths,
+        path = paths.shift();
 
-            this._get( path );
-        };
+      this._get( path );
+    };
 
-        /**
+    /**
          * @method _dispose
          * @param {*} target LoadImage
          * @private
          */
-        p._dispose = function ( target ) {
+    p._dispose = function( target ) {
 
-            target.removeEventListener( LoadImage.COMPLETE, this._boundLoad );
-            target.removeEventListener( LoadImage.ERROR, this._boundError );
-        };
+      target.removeEventListener( LoadImage.COMPLETE, this._boundLoad );
+      target.removeEventListener( LoadImage.ERROR, this._boundError );
+    };
 
-        /**
+    /**
          * @method _load
          * @param {*} e EventObject
          * @private
          */
-        p._load = function ( e ) {
-            this._dispose( e.target );
+    p._load = function( e ) {
+      this._dispose( e.target );
 
-            this.dispatchEvent( new EventObject( BulkLoader.LOAD, e.params ) );
+      this.dispatchEvent( new EventObject( BulkLoader.LOAD, e.params ) );
 
-            this._check();
-        };
+      this._check();
+    };
 
-        /**
+    /**
          * @method _error
          * @param {EventObject} e
          * @private
          */
-        p._error = function ( e ) {
-            this._dispose( e.target );
+    p._error = function( e ) {
+      this._dispose( e.target );
 
-            this.dispatchEvent( new EventObject( BulkLoader.ERROR, e.params ) );
+      this.dispatchEvent( new EventObject( BulkLoader.ERROR, e.params ) );
 
-            this._check();
-        };
+      this._check();
+    };
 
-        /**
+    /**
          * @method _check
          * @private
          */
-        p._check = function () {
-            var paths = this._paths;
+    p._check = function() {
+      var paths = this._paths;
 
-            --this._loading;
+      --this._loading;
 
-            if ( this._loading <= 0 ) {
+      if ( this._loading <= 0 ) {
 
-                if ( paths.length > 0 ) {
-                    // next image
-                    this._next();
-                } else {
-                    // all done
-                    this._done();
-                }
-            }
-        };
+        if ( paths.length > 0 ) {
+          // next image
+          this._next();
+        } else {
+          // all done
+          this._done();
+        }
+      }
+    };
 
-        /**
+    /**
          * @method _get
          * @param {string} path
          * @private
          */
-        p._get = function ( path ) {
-            var loader;
+    p._get = function( path ) {
+      var loader;
 
-            loader = new LoadImage( path );
-            loader.addEventListener( LoadImage.COMPLETE, this._boundLoad );
-            loader.addEventListener( LoadImage.ERROR, this._boundError );
+      loader = new LoadImage( path );
+      loader.addEventListener( LoadImage.COMPLETE, this._boundLoad );
+      loader.addEventListener( LoadImage.ERROR, this._boundError );
 
-            ++this._loading;
-            loader.load();
-        };
+      ++this._loading;
+      loader.load();
+    };
 
-        return BulkLoader;
-    }() );
+    return BulkLoader;
+  }() );
 
-}( window ) );/**
+}( window ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 17:28
@@ -2032,98 +2090,100 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    /**
+  /**
      * 複数の処理が終了しているのかを管理するときなどに使用します
      * @class CheckList
      * @param {Array.<String>} list [key:String...]
      * @constructor
      */
-    function CheckList ( list ) {
-        /**
+  function CheckList( list ) {
+    /**
          *
          * check用list
          * @property _checkList
          * @type {null|{}}
          * @private
          */
-        this._checkList = null;
-        this.reset( list );
-    }
+    this._checkList = null;
+    this.reset( list );
+  }
 
-    var p = CheckList.prototype;
+  var p = CheckList.prototype;
 
-    p.constructor = inazumatv.CheckList;
+  p.constructor = inazumatv.CheckList;
 
-    /**
+  /**
      * 管理用配列を再生成します
      * @method reset
      * @param {Array.<String>} list [key:String...]
      */
-    p.reset = function ( list ) {
-        var checkList = {},
-            i = 0,
-            limit = list.length;
+  p.reset = function( list ) {
+    var checkList = {},
+      i = 0,
+      limit = list.length;
 
-        for ( ; i < limit; i++ ) {
+    for ( ; i < limit; i++ ) {
 
-            checkList[ list[ i ] ] = false;
-        }
+      checkList[ list[ i ] ] = false;
+    }
 
-        this._checkList = checkList;
-    };
+    this._checkList = checkList;
+  };
 
-    /**
+  /**
      * 引数keyの値をtrueにし、全てtrueかどうかを返します
      * @method clear
      * @param {string} key
      * @return {Boolean} true: 全てtrue, false: falseが含まれている
      */
-    p.clear = function ( key ) {
-        var checkList = this._checkList;
+  p.clear = function( key ) {
+    var checkList = this._checkList;
 
-        // keyがなければ処理しない
-        if ( checkList.hasOwnProperty( key ) ) {
+    // keyがなければ処理しない
+    if ( checkList && checkList.hasOwnProperty( key ) ) {
 
-            checkList[ key ] = true;
-            return this._isAllClear();
-        } else {
-            return false;
-        }
-    };
+      checkList[ key ] = true;
+      return this._isAllClear();
+    } else {
+      return false;
+    }
+  };
 
-    /**
+  /**
      * 全てtrueかどうかを調べます
      * @method _isAllClear
      * @return {boolean} true: 全てtrue, false: falseが含まれている
      * @private
      */
-    p._isAllClear = function (){
-        var checkList = this._checkList,
-            result = true;
+  p._isAllClear = function() {
+    var checkList = this._checkList,
+      result = true;
 
-        for ( var key in checkList ) {
+    for ( var key in checkList ) {
 
-            if ( checkList.hasOwnProperty( key ) ) {
+      if ( checkList.hasOwnProperty( key ) ) {
 
-                result = checkList[ key ];
+        result = checkList[ key ];
 
-                if ( !result ) {
-                    // falseが見つかれば処理しない
-                    break;
-                }
-            }
+        if ( !result ) {
+          // falseが見つかれば処理しない
+          break;
         }
+      }
+    }
 
-        // valueが全てtrueの時は処理済み: true
-        return result;
-    };
+    // valueが全てtrueの時は処理済み: true
+    return result;
+  };
 
-    inazumatv.CheckList = CheckList;
+  inazumatv.CheckList = CheckList;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 19:11
@@ -2138,64 +2198,64 @@ var inazumatv = {};
  * require EventDispatcher, EventObject
  */
 
-( function ( window, inazumatv ){
-    "use strict";
+( function( window, inazumatv ) {
+  'use strict';
 
-    var requestAnimationFrame = window.requestAnimationFrame,
-        cancelRequestAnimationFrame = window.cancelRequestAnimationFrame,
+  var requestAnimationFrame = window.requestAnimationFrame,
+    cancelRequestAnimationFrame = window.cancelRequestAnimationFrame,
 
-        EventDispatcher = inazumatv.EventDispatcher,
-        EventObject = inazumatv.EventObject;
+    EventDispatcher = inazumatv.EventDispatcher,
+    EventObject = inazumatv.EventObject;
 
-    // ---------------------------------------------------
-    //  LoopManager
-    // ---------------------------------------------------
-    var
-      /**
+  // ---------------------------------------------------
+  //  LoopManager
+  // ---------------------------------------------------
+  var
+    /**
        * @for LoopManager
        * @property _instanceLoopManager
        * @type {LoopManager}
        * @static
        * @private
        */
-      _instanceLoopManager,
-      /**
+    _instanceLoopManager,
+    /**
        * @for LoopManager
        * @property _eventObj
        * @type {EventObject}
        * @static
        * @private
        */
-      _eventObj,
-      /**
+    _eventObj,
+    /**
        * @for LoopManager
        * @property _loopId
        * @type {number}
        * @static
        * @private
        */
-      _loopId,
-      /**
+    _loopId,
+    /**
        * @for LoopManager
        * @property _this
        * @type {LoopManager}
        * @static
        * @private
        */
-      _this;
+    _this;
 
-    /**
+  /**
      * ループ処理内部関数
      * @for LoopManager
      * @method _loop
      * @private
      */
-    function _loop () {
-        _loopId = requestAnimationFrame( _loop );
-        _instanceLoopManager.dispatchEvent( _eventObj, _this );
-    }
+  function _loop() {
+    _loopId = requestAnimationFrame( _loop );
+    _instanceLoopManager.dispatchEvent( _eventObj, _this );
+  }
 
-    /**
+  /**
      * Browser default loop(60fps) 毎に dispatchEvent します
      *
      *      var loopInstance =  LoopManager.getInstance();
@@ -2211,78 +2271,80 @@ var inazumatv = {};
      * @return {LoopManager} LoopManager instance
      * @constructor
      */
-    function LoopManager () {
-      if ( typeof _instanceLoopManager !== "undefined" ) {
+  function LoopManager() {
+    if ( typeof _instanceLoopManager !== 'undefined' ) {
 
-        return _instanceLoopManager;
-      }
+      return _instanceLoopManager;
+    }
 
-      _this = this;
-      /**
+    _this = this;
+    /**
        * @property _started
        * @type {boolean}
        * @default false
        * @private
        */
-      this._started = false;
-      _eventObj = new EventObject( LoopManager.ENTER_FRAME, [] );
+    this._started = false;
+    _eventObj = new EventObject( LoopManager.ENTER_FRAME, [] );
 
-      _instanceLoopManager = this;
-      return _instanceLoopManager;
-    }
+    _instanceLoopManager = this;
+    return _instanceLoopManager;
+  }
 
-    /**
+  /**
      * @static
      * @method getInstance
      * @return {LoopManager} LoopManager instance
      */
-    LoopManager.getInstance = function (){
-        if ( typeof _instanceLoopManager === "undefined" ) {
+  LoopManager.getInstance = function() {
+    if ( typeof _instanceLoopManager === 'undefined' ) {
 
-            _instanceLoopManager = new LoopManager();
-        }
+      _instanceLoopManager = new LoopManager();
+    }
 
-        return _instanceLoopManager;
-    };
+    return _instanceLoopManager;
+  };
 
-    /**
+  /**
      * event type
      * @const ENTER_FRAME
      * @type {string}
      * @static
      */
-    LoopManager.ENTER_FRAME = "loopManagerEnterFrame";
+  LoopManager.ENTER_FRAME = 'loopManagerEnterFrame';
 
-    var p = LoopManager.prototype;
+  var p = LoopManager.prototype;
 
-    p.constructor = inazumatv.LoopManager;
+  p.constructor = inazumatv.LoopManager;
 
-    EventDispatcher.initialize( p );
+  EventDispatcher.initialize( p );
 
-    /**
+  /**
      * ループ処理を開始します
      * @method start
      */
-    p.start = function (){
-        if ( !this._started ) {
+  p.start = function() {
+    if ( !this._started ) {
 
-            _loop();
-            this._started = true;
-        }
-    };
+      _loop();
+      this._started = true;
+    }
+  };
 
-    /**
+  /**
      * ループ処理を停止します
      * @method stop
      */
-    p.stop = function (){
-        cancelRequestAnimationFrame( _loopId );
-        this._started = false;
-    };
+  p.stop = function() {
+    cancelRequestAnimationFrame( _loopId );
+    this._started = false;
+  };
 
-    inazumatv.LoopManager = LoopManager;
+  inazumatv.LoopManager = LoopManager;
 
-}( window.self, this.inazumatv ) );/**
+}( window.self, this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 17:42
@@ -2296,15 +2358,15 @@ var inazumatv = {};
  *
  * require EventDispatcher, EventObject
  */
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    var EventDispatcher = inazumatv.EventDispatcher,
-        EventObject = inazumatv.EventObject,
+  var EventDispatcher = inazumatv.EventDispatcher,
+    EventObject = inazumatv.EventObject,
 
-        LoopManager = inazumatv.LoopManager;
+    LoopManager = inazumatv.LoopManager;
 
-    /**
+  /**
      * 経過時間を管理します
      * <h4>Example</h4>
      * [1]
@@ -2364,158 +2426,160 @@ var inazumatv = {};
      * @param {Number} ms milliseconds 指定
      * @constructor
      */
-    function PollingManager ( ms ) {
-      /**
+  function PollingManager( ms ) {
+    /**
        * @property _startTime
        * @type {number}
        * @default 0
        * @private
        */
-      this._startTime = 0;
-      /**
+    this._startTime = 0;
+    /**
        * @property _polling
        * @type {Number}
        * @private
        */
-      this._polling = ms;
-      /**
+    this._polling = ms;
+    /**
        * @property _eventObj
        * @type {inazumatv.EventObject}
        * @private
        */
-      this._eventObj = new EventObject( PollingManager.POLLING_PAST );
-      /**
+    this._eventObj = new EventObject( PollingManager.POLLING_PAST );
+    /**
        * @property _boundEnterFrame
        * @type {function(this:PollingManager)|*}
        * @private
        */
-      this._boundEnterFrame = this._onEnterFrame.bind( this );
-      /**
+    this._boundEnterFrame = this._onEnterFrame.bind( this );
+    /**
        * @property _loop
        */
-      this._loop = LoopManager.getInstance();
-      /**
+    this._loop = LoopManager.getInstance();
+    /**
        * @property _auto
        * @type {boolean}
        * @default false
        * @private
        */
-      this._auto = false;
-    }
+    this._auto = false;
+  }
 
-    /**
+  /**
      * event type
      * @const POLLING_PAST
      * @type {string}
      * @static
      */
-    PollingManager.POLLING_PAST = "pollingManagerPollingPast";
+  PollingManager.POLLING_PAST = 'pollingManagerPollingPast';
 
-    var p = PollingManager.prototype;
+  var p = PollingManager.prototype;
 
-    p.constructor = inazumatv.PollingManager;
+  p.constructor = inazumatv.PollingManager;
 
-    // mixin
-    EventDispatcher.initialize( p );
+  // mixin
+  EventDispatcher.initialize( p );
 
-    /**
+  /**
      * _startTime を初期化します
      * @method _resetTime
      * @private
      */
-    p._resetTime = function () {
-        this._startTime = new Date().getTime();
-    };
+  p._resetTime = function() {
+    this._startTime = new Date().getTime();
+  };
 
-    /**
+  /**
      * pollingを開始します
      * @method start
      * @param {boolean=false} [auto] automatic loop flag
      */
-    p.start = function ( auto ) {
-        auto = !!auto;
+  p.start = function( auto ) {
+    auto = !!auto;
 
-        this._auto = auto;
+    this._auto = auto;
 
-        if ( auto ) {
+    if ( auto ) {
 
-            var loop = this._loop;
+      var loop = this._loop;
 
-            loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-            loop.start();
-        }
+      loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+      loop.start();
+    }
 
-        this._resetTime();
-    };
+    this._resetTime();
+  };
 
-    /**
+  /**
      * @method stop
      */
-    p.stop = function () {
-        var loop = this._loop;
+  p.stop = function() {
+    var loop = this._loop;
 
-        if ( this._auto ) {
+    if ( this._auto ) {
 
-            loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-        }
+      loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+    }
 
-        this._startTime = Number.MAX_VALUE;
-    };
+    this._startTime = Number.MAX_VALUE;
+  };
 
-    /**
+  /**
      * polling間隔を変更します
      * @method change
      * @param {Number} ms milliseconds 指定
      */
-    p.change = function ( ms ){
-        this._startTime = 0;
-        this._polling = ms;
-        this._resetTime();
-    };
+  p.change = function( ms ) {
+    this._startTime = 0;
+    this._polling = ms;
+    this._resetTime();
+  };
 
-    /**
+  /**
      * pollingに達した場合は PollingManager.POLLING_PAST を発火します
      * @method update
      * @return {boolean} pollingに達した場合はtrueを返します
      */
-    p.update = function (){
-        var now = new Date().getTime(),
-            bool = false,
-            _this = this;
+  p.update = function() {
+    var now = new Date().getTime(),
+      bool = false,
+      _this = this;
 
-        if ( ( now - this._startTime ) >= this._polling ) {
+    if ( ( now - this._startTime ) >= this._polling ) {
 
-            this._startTime = now;
-            bool = true;
+      this._startTime = now;
+      bool = true;
 
-            setTimeout( function (){
-                _this.dispatchEvent( _this._eventObj, _this );
-            }, 0 );
-        }
+      setTimeout( function() {
+        _this.dispatchEvent( _this._eventObj, _this );
+      }, 0 );
+    }
 
-        return bool;
-    };
+    return bool;
+  };
 
-    /**
+  /**
      * update 関数を破棄します
      * @method destroy
      */
-    p.destroy = function (){
-        this.update = function (){};
-    };
+  p.destroy = function() {
+    this.update = function() {};
+  };
 
-    /**
+  /**
      * loop ENTER_FRAME Event Handler
      * @method _onEnterFrame
      * @private
      */
-    p._onEnterFrame = function (){
-        this.update();
-    };
+  p._onEnterFrame = function() {
+    this.update();
+  };
 
-    inazumatv.PollingManager = PollingManager;
+  inazumatv.PollingManager = PollingManager;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 18:40
@@ -2530,14 +2594,14 @@ var inazumatv = {};
  * require EventDispatcher, EventObject
  */
 
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    var LoopManager = inazumatv.LoopManager,
-        EventDispatcher = inazumatv.EventDispatcher,
-        EventObject = inazumatv.EventObject;
+  var LoopManager = inazumatv.LoopManager,
+    EventDispatcher = inazumatv.EventDispatcher,
+    EventObject = inazumatv.EventObject;
 
-    /**
+  /**
      * FPSを管理します
      *
      *      // 1.auto
@@ -2572,172 +2636,174 @@ var inazumatv = {};
      * @param {Boolean=false} [manual] abort auto start, default: false
      * @constructor
      */
-    function FPSManager ( fps, manual ) {
-      this.setFPS( fps );
-      /**
+  function FPSManager( fps, manual ) {
+    this.setFPS( fps );
+    /**
        * @property _manualStart
        * @type {boolean}
        * @private
        */
-      this._manualStart = !!manual;
-      /**
+    this._manualStart = !!manual;
+    /**
        * @property _eventObj
        * @type {inazumatv.EventObject}
        * @private
        */
-      this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
-      /**
+    this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
+    /**
        * @property _loop
        * @type {LoopManager} LoopManager instance
        */
-      this._loop = LoopManager.getInstance();
-      /**
+    this._loop = LoopManager.getInstance();
+    /**
        * @property _boundEnterFrame
        * @type {function(this:FPSManager)|*}
        * @private
        */
-      this._boundEnterFrame = this._onEnterFrame.bind( this );
-    }
+    this._boundEnterFrame = this._onEnterFrame.bind( this );
+  }
 
-    /**
+  /**
      * event type
      * @const FPS_FRAME
      * @type {string}
      * @static
      */
-    FPSManager.FPS_FRAME = "fpsManagerFpsFrame";
+  FPSManager.FPS_FRAME = 'fpsManagerFpsFrame';
 
-    var p = FPSManager.prototype;
+  var p = FPSManager.prototype;
 
-    p.constructor = inazumatv.FPSManager;
+  p.constructor = inazumatv.FPSManager;
 
-    // mixin
-    EventDispatcher.initialize( p );
+  // mixin
+  EventDispatcher.initialize( p );
 
-    /**
+  /**
      * @method getLoopManager
      * @return {LoopManager} LoopManager instance
      */
-    p.getLoopManager = function (){
-        return this._loop;
-    };
+  p.getLoopManager = function() {
+    return this._loop;
+  };
 
-    /**
+  /**
      * _startTime を初期化します
      * @method _resetTime
      * @private
      */
-    p._resetTime = function () {
-        this._startTime = new Date().getTime();
-    };
+  p._resetTime = function() {
+    this._startTime = new Date().getTime();
+  };
 
-    /**
+  /**
      * FPS監視を開始します
      * @method start
      */
-    p.start = function (){
-        if ( !this._manualStart ) {
-            // no manual
-            this.setFPS( this._fps );
-            this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-            this._loop.start();
-        }
+  p.start = function() {
+    if ( !this._manualStart ) {
+      // no manual
+      this.setFPS( this._fps );
+      this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+      this._loop.start();
+    }
 
-        this._resetTime();
-    };
+    this._resetTime();
+  };
 
-    /**
+  /**
      * FPS監視を停止します
      * @method stop
      */
-    p.stop = function (){
-        if ( !this._manualStart ) {
-            // no manual
-            this._loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-        }
-        this._polling = Number.MAX_VALUE;
-    };
+  p.stop = function() {
+    if ( !this._manualStart ) {
+      // no manual
+      this._loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+    }
+    this._polling = Number.MAX_VALUE;
+  };
 
-    /**
+  /**
      * FPS監視を復活します
      * @method restore
      */
-    p.restore = function (){
-        this.changeFPS( this._fps );
-    };
+  p.restore = function() {
+    this.changeFPS( this._fps );
+  };
 
-    /**
+  /**
      * update 関数を破棄します
      * @method destroy
      */
-    p.destroy = function (){
-        this.update = function (){};
-    };
+  p.destroy = function() {
+    this.update = function() {};
+  };
 
-    /**
+  /**
      * FPS値を設定します
      * @method setFPS
      * @param {int} fps frame rate 指定（整数）
      */
-    p.setFPS = function ( fps ){
-        this._startTime = 0;
-        this._polling = 1000 / fps;
-        this._fps = fps;
-    };
+  p.setFPS = function( fps ) {
+    this._startTime = 0;
+    this._polling = 1000 / fps;
+    this._fps = fps;
+  };
 
-    /**
+  /**
      * FPS値を変更します
      * @method changeFPS
      * @param {int} fps frame rate 指定（整数）
      */
-    p.changeFPS = function ( fps ){
-        this.setFPS( fps );
-//        this.start();
-        this._resetTime();
-    };
+  p.changeFPS = function( fps ) {
+    this.setFPS( fps );
+    //        this.start();
+    this._resetTime();
+  };
 
-    /**
+  /**
      * @method getFPS
      * @return {int|*} 現在のFPSを返します
      */
-    p.getFPS = function (){
-        return this._fps;
-    };
+  p.getFPS = function() {
+    return this._fps;
+  };
 
-    /**
+  /**
      * @method update
      * @return {boolean} FPSに達した場合はtrueを返します
      */
-    p.update = function (){
-        var now = new Date().getTime(),
-            bool = false,
-            _this = this;
+  p.update = function() {
+    var now = new Date().getTime(),
+      bool = false,
+      _this = this;
 
-        if ( ( now - _this._startTime ) >= _this._polling ) {
+    if ( ( now - _this._startTime ) >= _this._polling ) {
 
-            _this._startTime = now;
-            bool = true;
+      _this._startTime = now;
+      bool = true;
 
-            setTimeout( function (){
-                _this.dispatchEvent( _this._eventObj );
-            }, 0 );
-        }
+      setTimeout( function() {
+        _this.dispatchEvent( _this._eventObj );
+      }, 0 );
+    }
 
-        return bool;
-    };
+    return bool;
+  };
 
-    /**
+  /**
      * loop ENTER_FRAME Event Handler
      * @method _onEnterFrame
      * @private
      */
-    p._onEnterFrame = function (){
-        this.update();
-    };
+  p._onEnterFrame = function() {
+    this.update();
+  };
 
-    inazumatv.FPSManager = FPSManager;
+  inazumatv.FPSManager = FPSManager;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2014/06/18 - 19:08
@@ -2749,30 +2815,30 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window ){
-    "use strict";
-    var inazumatv = window.inazumatv;
+( function( window ) {
+  'use strict';
+  var inazumatv = window.inazumatv;
 
-    inazumatv.List = ( function (){
-      var
-        _shuffle = inazumatv.shuffle,
+  inazumatv.List = ( function() {
+    var
+      _shuffle = inazumatv.shuffle,
 
-        _maxValue = inazumatv.maxValue;
+      _maxValue = inazumatv.maxValue;
 
-        /**
+    /**
          * Array ヘルパー
          * @class List
          * @constructor
          */
-        function List () {
-            throw new Error( "List can't create instance" );
-        }
+    function List() {
+      throw new Error( "List can't create instance" );
+    }
 
-        var l = List;
+    var l = List;
 
-        // http://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
-        // http://jsperf.com/zerofill-2d-array
-        /**
+    // http://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
+    // http://jsperf.com/zerofill-2d-array
+    /**
          * word で埋められた配列を length 分作成します
          * @method word
          * @static
@@ -2780,28 +2846,28 @@ var inazumatv = {};
          * @param {int|string} word
          * @return {Array}
          */
-        l.word = function ( length, word ) {
-            var arr = [], i;
+    l.word = function( length, word ) {
+      var arr = [], i;
 
-            for ( i = 0; i < length; i++ ) {
-                arr[ i ] = word;
-            }
+      for ( i = 0; i < length; i++ ) {
+        arr[ i ] = word;
+      }
 
-            return arr;
-        };
+      return arr;
+    };
 
-        /**
+    /**
          * 0 で埋められた配列を length 分作成します
          * @method zero
          * @static
          * @param {int} length
          * @return {Array}
          */
-        l.zero = function ( length ) {
-            return this.word( length, 0 );
-        };
+    l.zero = function( length ) {
+      return this.word( length, 0 );
+    };
 
-        /**
+    /**
          * 配列をシャッフルします
          * <br>inazumatv.shuffle alias
          * @method shuffle
@@ -2809,11 +2875,11 @@ var inazumatv = {};
          * @param {Array} array
          * @return {Array} シャッフル後の配列を返します
          */
-        l.shuffle = function ( array ) {
-            return _shuffle( array );
-        };
+    l.shuffle = function( array ) {
+      return _shuffle( array );
+    };
 
-        /**
+    /**
          * 配列内の最大数値を返します
          * <br>inazumatv.maxValue alias
          * @method max
@@ -2821,14 +2887,16 @@ var inazumatv = {};
          * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
          * @return {number} 配列内の最大数値を返します
          */
-        l.max = function ( arr ) {
-            _maxValue( arr );
-        };
+    l.max = function( arr ) {
+      _maxValue( arr );
+    };
 
-        return List;
-    }() );
+    return List;
+  }() );
 
-}( window ) );/**
+}( window ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2014/06/18 - 19:22
@@ -2840,108 +2908,110 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-/*jshint -W092 */
-( function ( window ){
-    "use strict";
-    var inazumatv = window.inazumatv;
+/* jshint -W092 */
+( function( window ) {
+  'use strict';
+  var inazumatv = window.inazumatv;
 
-    inazumatv.Kana = ( function (){
-        // http://d.hatena.ne.jp/favril/20090514/1242280476
-        /**
+  inazumatv.Kana = ( function() {
+    // http://d.hatena.ne.jp/favril/20090514/1242280476
+    /**
          * 日本語文字判定 Utility
          * @class Kana
          * @constructor
          */
-        function Kana () {
-            throw new Error( "Kana can't create instance!" );
-        }
+    function Kana() {
+      throw new Error( "Kana can't create instance!" );
+    }
 
-        var k = Kana;
+    var k = Kana;
 
-        /**
+    /**
          * @method kanji
          * @static
          * @param {string} txt 判定文字列
          * @return {boolean} 漢字かどうかの真偽値を返します
          */
-        k.kanji = function ( txt ) {
-            var unicode = txt.charCodeAt( 0 );
+    k.kanji = function( txt ) {
+      var unicode = txt.charCodeAt( 0 );
 
-            return (
-                // CJK統合漢字
-                ( unicode >= 0x4e00 && unicode <= 0x9fcf ) ||
+      return (
+      // CJK統合漢字
+        ( unicode >= 0x4e00 && unicode <= 0x9fcf ) ||
                 // CJK統合漢字拡張A
-                ( unicode >= 0x3400  && unicode <= 0x4dbf)  ||
+                ( unicode >= 0x3400 && unicode <= 0x4dbf) ||
                 // CJK統合漢字拡張B
                 ( unicode >= 0x20000 && unicode <= 0x2a6df) ||
                 // CJK互換漢字
-                ( unicode >= 0xf900  && unicode <= 0xfadf)  ||
+                ( unicode >= 0xf900 && unicode <= 0xfadf) ||
                 // CJK互換漢字補助
                 ( unicode >= 0x2f800 && unicode <= 0x2fa1f)
-            );
-        };
+      );
+    };
 
-        /**
+    /**
          * @method hiragana
          * @static
          * @param {string} txt 判定文字列
          * @return {boolean} ひらがなか否かの真偽値を返します
          */
-        k.hiragana = function ( txt ) {
-            var unicode = txt.charCodeAt( 0 );
+    k.hiragana = function( txt ) {
+      var unicode = txt.charCodeAt( 0 );
 
-            return unicode >= 0x3040 && unicode <= 0x309f;
-        };
+      return unicode >= 0x3040 && unicode <= 0x309f;
+    };
 
-        /**
+    /**
          * @method kana
          * @static
          * @param {string} txt 判定文字列
          * @return {boolean} カナか否かの真偽値を返します
          */
-        k.kana = function ( txt ) {
-            var unicode = txt.charCodeAt( 0 );
+    k.kana = function( txt ) {
+      var unicode = txt.charCodeAt( 0 );
 
-            return unicode >= 0x30a0 && unicode <= 0x30ff;
-        };
+      return unicode >= 0x30a0 && unicode <= 0x30ff;
+    };
 
-        /**
+    /**
          * @method han
          * @static
          * @param {string} txt 判定文字列
          * @return {boolean} 半角文字か否かの真偽値を返します
          */
-        k.han = function ( txt ) {
-            var unicode = txt.charCodeAt( 0 );
+    k.han = function( txt ) {
+      var unicode = txt.charCodeAt( 0 );
 
-            return unicode >= 0xff61 && unicode <= 0xff9f;
-        };
+      return unicode >= 0xff61 && unicode <= 0xff9f;
+    };
 
-        /**
+    /**
          * @method zen
          * @static
          * @param {string} txt 判定文字列
          * @return {boolean} 全角か否かの真偽値を返します
          */
-        k.zen = function ( txt ) {
-            return k.kanji( txt ) || k.hiragana( txt ) || k.kana( txt );
-        };
+    k.zen = function( txt ) {
+      return k.kanji( txt ) || k.hiragana( txt ) || k.kana( txt );
+    };
 
-        //http://stackoverflow.com/questions/2450641/validating-alphabetic-only-string-in-javascript
-        /**
+    // http://stackoverflow.com/questions/2450641/validating-alphabetic-only-string-in-javascript
+    /**
          * @method alphabetic
          * @static
          * @param {string} txt 判定文字列
          * @return {boolean} アルファベットか否かの真偽値を返します、スペースはfalseです
          */
-        k.alphabetic = function ( txt ) {
-            return /^[a-zA-Z]+$/.test( txt );
-        };
+    k.alphabetic = function( txt ) {
+      return /^[a-zA-Z]+$/.test( txt );
+    };
 
-        return Kana;
-    }() );
+    return Kana;
+  }() );
 
-}( window ) );/**
+}( window ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2015/02/06 - 16:01
@@ -2955,17 +3025,17 @@ var inazumatv = {};
  *
  * Number utility
  */
-( function ( window ){
-  "use strict";
+( function( window ) {
+  'use strict';
   var inazumatv = window.inazumatv;
 
-  inazumatv.Num = ( function (){
+  inazumatv.Num = ( function() {
 
     /**
      * @class Num
      * @constructor
      */
-    function Num () {
+    function Num() {
       throw new Error( "Num can't create instance." );
     }
 
@@ -2980,9 +3050,9 @@ var inazumatv = {};
      * @param {number|string} n
      * @return {string} カンマ挿入後の文字列を返します
      */
-    Num.comma = function ( n ) {
+    Num.comma = function( n ) {
 
-      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     };
 
     /**
@@ -2994,7 +3064,7 @@ var inazumatv = {};
      * @param {Number} [max] 最大値 optional
      * @return {Number} min ~ max 間の乱数(Float)を発生させます
      */
-    Num.random = function ( min, max ) {
+    Num.random = function( min, max ) {
       return inazumatv.random( min, max );
     };
     /**
@@ -3005,13 +3075,15 @@ var inazumatv = {};
      * @param {*} obj
      * @return {boolean} true: Number, false: not Number
      */
-    Num.is = function ( obj ) {
+    Num.is = function( obj ) {
       return inazumatv.isNumeric( obj );
     };
 
     return Num;
   }() );
-}( window ) );/**
+}( window ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 16:58
@@ -3057,8 +3129,8 @@ var inazumatv = {};
 //
 //  modified by (at)taikiken
 // -----------------------------------
-( function ( inazumatv ){
-  "use strict";
+( function( inazumatv ) {
+  'use strict';
 
   var
     rand = Math.random,
@@ -3073,7 +3145,7 @@ var inazumatv = {};
    * @class ShuffleText
    * @constructor
    */
-  function ShuffleText () {
+  function ShuffleText() {
     /**
      * フレームレート
      * @property fps
@@ -3087,14 +3159,14 @@ var inazumatv = {};
      * @default "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
      * @type {string}
      */
-    this.randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    this.randomChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     /**
      * 空白に用いる文字列
      * @property emptyCharacter
      * @default "*"
      * @type {string}
      */
-    this.emptyCharacter = "*";
+    this.emptyCharacter = '*';
     /**
      * 再生中かどうかを示すブール値
      * @property isRunning
@@ -3127,13 +3199,13 @@ var inazumatv = {};
      * @type {string}
      * @private
      */
-    this._originalStr = "";
+    this._originalStr = '';
     /**
      * @property _originalLength
      * @type {string}
      * @private
      */
-    this._originalLength = "";
+    this._originalLength = '';
     /**
      * @property _intervalId
      * @type {number}
@@ -3169,7 +3241,7 @@ var inazumatv = {};
      * @type {string}
      * @private
      */
-    this._endStr = "";
+    this._endStr = '';
     /**
      * @property _element
      * @type {null} HTMLElement
@@ -3183,13 +3255,13 @@ var inazumatv = {};
    * @static
    * @type {string}
    */
-  ShuffleText.CHANGE = "shuffleTextChange";
+  ShuffleText.CHANGE = 'shuffleTextChange';
   /**
    * @event COMPLETE
    * @static
    * @type {string}
    */
-  ShuffleText.COMPLETE = "shuffleTextComplete";
+  ShuffleText.COMPLETE = 'shuffleTextComplete';
 
   var p = ShuffleText.prototype;
 
@@ -3203,7 +3275,7 @@ var inazumatv = {};
    * @param {*|HTMLElement} element DOMElement
    * @return ShuffleText
    */
-  p.initialize = function ( element ){
+  p.initialize = function( element ) {
     this._element = element;
     this._fps = new FPSManager( this.fps );
 
@@ -3215,7 +3287,7 @@ var inazumatv = {};
    * @param {Number} ms millisecond
    * @return ShuffleText
    */
-  p.setDuration = function ( ms ){
+  p.setDuration = function( ms ) {
     this.duration = ms;
     return this;
   };
@@ -3226,7 +3298,7 @@ var inazumatv = {};
    * @param {string} text
    * @return ShuffleText
    */
-  p.setText = function ( text ) {
+  p.setText = function( text ) {
     this._originalStr = text;
     this._originalLength = text.length;
 
@@ -3238,7 +3310,7 @@ var inazumatv = {};
    * @param {number} fps
    * @return {ShuffleText}
    */
-  p.setFPS = function ( fps ) {
+  p.setFPS = function( fps ) {
     this.fps = fps;
 
     return this;
@@ -3249,7 +3321,7 @@ var inazumatv = {};
    * @param {string} char
    * @return {ShuffleText}
    */
-  p.setRandomChar = function ( char ) {
+  p.setRandomChar = function( char ) {
     this.randomChar = char;
     return this;
   };
@@ -3260,16 +3332,16 @@ var inazumatv = {};
    * @method start
    * @param {boolean=false} [is_keep]
    * */
-  p.start = function ( is_keep ) {
+  p.start = function( is_keep ) {
     var
       element = this._element,
-      str = "",
+      str = '',
       random_index,
       empty_char = this.emptyCharacter,
       origin_length = this._originalLength,
       i, _fps, rate;
 
-    if ( typeof element === "undefined" || element === null ) {
+    if ( typeof element === 'undefined' || element === null ) {
       return;
     }
 
@@ -3320,7 +3392,7 @@ var inazumatv = {};
    * 停止します。
    * @method stop
    * */
-  p.stop = function ( strong ) {
+  p.stop = function( strong ) {
     strong = !!strong;
 
     if ( this.isRunning ) {
@@ -3341,7 +3413,7 @@ var inazumatv = {};
    *
    * @method update
    */
-  p.update = function () {
+  p.update = function() {
     var
       timeCurrent = new Date().getTime() - this._timeStart,
       percent = timeCurrent / this.duration,
@@ -3351,7 +3423,7 @@ var inazumatv = {};
       random_char = this.randomChar,
       random_char_length = random_char.length,
       is_keep = this._keep,
-      str = "",
+      str = '',
       i, limit;
 
     for ( i = 0, limit = this._originalLength; i < limit; i++ ) {
@@ -3398,7 +3470,7 @@ var inazumatv = {};
    * shuffle 終了 callback 関数, override して使用します
    * @method onComplete
    */
-  p.onComplete = function () {
+  p.onComplete = function() {
 
   };
 
@@ -3407,13 +3479,15 @@ var inazumatv = {};
    * @method onChange
    * @param {string} str 変更された文字
    */
-  p.onChange = function ( str ) {
+  p.onChange = function( str ) {
 
   };
 
-    inazumatv.ShuffleText = ShuffleText;
+  inazumatv.ShuffleText = ShuffleText;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/13 - 21:12
@@ -3425,13 +3499,13 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    inazumatv.jq = inazumatv.jq || {};
-    var ExternalJQ = inazumatv.jq.ExternalJQ  = inazumatv.jq.ExternalJQ || {};
+  inazumatv.jq = inazumatv.jq || {};
+  var ExternalJQ = inazumatv.jq.ExternalJQ = inazumatv.jq.ExternalJQ || {};
 
-    /**
+  /**
      * jQuery Object 設定します。<br>
      * imports, exports を行う前に実行します。
      *
@@ -3442,17 +3516,17 @@ var inazumatv = {};
      * @param {jQuery} jQuery global jQuery Object
      * @static
      */
-    ExternalJQ.save = function ( jQuery ){
-        if ( typeof jQuery === "undefined" || jQuery === null ) {
-            // jQuery defined
-            throw "set first global jQuery object";
-        } else {
-            this._$ = jQuery;
-            inazumatv.eventStop = eventStop;
-        }
-    };
+  ExternalJQ.save = function( jQuery ) {
+    if ( typeof jQuery === 'undefined' || jQuery === null ) {
+      // jQuery defined
+      throw 'set first global jQuery object';
+    } else {
+      this._$ = jQuery;
+      inazumatv.eventStop = eventStop;
+    }
+  };
 
-    /**
+  /**
      * jQuery Object を取得します。
      *
      *     var $ = inazumatv.jq.ExternalJQ.exports();
@@ -3462,11 +3536,11 @@ var inazumatv = {};
      * @return {jQuery} jQuery Object
      * @static
      */
-    ExternalJQ.exports = function (){
-        return this._$;
-    };
+  ExternalJQ.exports = function() {
+    return this._$;
+  };
 
-    /**
+  /**
      * jQuery plugin を活性化させます。<br>
      *
      *     inazumatv.jq.ExternalJQ.save( jQuery );
@@ -3481,15 +3555,15 @@ var inazumatv = {};
      * @param {jQuery} [jQuery] jQuery Object
      * @static
      */
-    ExternalJQ.install = function ( pluginName, jQuery ){
-        if ( typeof jQuery !== "undefined" && jQuery !== null ) {
-            //  defined
-            this.save( jQuery );
-        }
-        inazumatv.jq[ pluginName ].activate( this._$ );
-    };
+  ExternalJQ.install = function( pluginName, jQuery ) {
+    if ( typeof jQuery !== 'undefined' && jQuery !== null ) {
+      //  defined
+      this.save( jQuery );
+    }
+    inazumatv.jq[ pluginName ].activate( this._$ );
+  };
 
-    /**
+  /**
      * 拡張機能を取得します。<br>
      *
      *     inazumatv.jq.ExternalJQ.save( jQuery );
@@ -3505,17 +3579,17 @@ var inazumatv = {};
      * @return {*} 拡張機能を返します
      * @static
      */
-    ExternalJQ.imports = function ( extensionName, jQuery ){
-        if ( typeof jQuery !== "undefined" && jQuery !== null ) {
-            //  defined
-            this.save( jQuery );
-        }
-        var extension = inazumatv.jq[ extensionName ];
-        extension.activate( this._$ );
-        return extension;
-    };
+  ExternalJQ.imports = function( extensionName, jQuery ) {
+    if ( typeof jQuery !== 'undefined' && jQuery !== null ) {
+      //  defined
+      this.save( jQuery );
+    }
+    var extension = inazumatv.jq[ extensionName ];
+    extension.activate( this._$ );
+    return extension;
+  };
 
-    /**
+  /**
      * event バブリングと伝播を止めます。<br>
      * <strong style="color:red;">注意</strong> jQuery Object を save 後に使用できます。
      *
@@ -3536,22 +3610,24 @@ var inazumatv = {};
      * @param {Event} e jQuery event instance
      * @param {*\Boolean} [propagation] optional, default true
      */
-    function eventStop ( e, propagation ){
-        if ( typeof propagation === 'undefined' || propagation === null ) {
-            // undefined or null
-            propagation = true;
-        }
-
-        e.preventDefault();
-
-        if ( propagation ) {
-            e.stopPropagation();
-        }
+  function eventStop( e, propagation ) {
+    if ( typeof propagation === 'undefined' || propagation === null ) {
+      // undefined or null
+      propagation = true;
     }
 
-    inazumatv.jq.ExternalJQ = ExternalJQ;
+    e.preventDefault();
 
-}( this.inazumatv ) );/**
+    if ( propagation ) {
+      e.stopPropagation();
+    }
+  }
+
+  inazumatv.jq.ExternalJQ = ExternalJQ;
+
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/14 - 18:59
@@ -3563,15 +3639,15 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-  "use strict";
+( function( inazumatv ) {
+  'use strict';
 
   /**
    * @class Easing
    * @constructor
    */
-  var Easing = function () {
-    throw new Error( "Easing cannot be instantiated" );
+  var Easing = function() {
+    throw new Error( 'Easing cannot be instantiated' );
   };
 
   /**
@@ -3614,149 +3690,202 @@ var inazumatv = {};
    * @param {jQuery} jQuery
    * @static
    */
-  Easing.activate = function ( jQuery ) {
+  Easing.activate = function( jQuery ) {
     var je = jQuery.easing;
-    je.quart = function (x, t, b, c, d) {
+    je.quart = function(x, t, b, c, d) {
       return -c * ((t = t / d - 1) * t * t * t - 1) + b;
     };
-    je.easeInQuad = function (x, t, b, c, d) {
-      return c*(t/=d)*t + b;
+    je.easeInQuad = function(x, t, b, c, d) {
+      return c * (t /= d) * t + b;
     };
-    je.easeOutQuad = function (x, t, b, c, d) {
-      return -c *(t/=d)*(t-2) + b;
+    je.easeOutQuad = function(x, t, b, c, d) {
+      return -c * (t /= d) * (t - 2) + b;
     };
-    je.easeInOutQuad = function (x, t, b, c, d) {
-      if ((t /= d/2) < 1) {return c/2*t*t + b;}
-      return -c/2 * ((--t)*(t-2) - 1) + b;
-    };
-    je.easeInCubic = function (x, t, b, c, d) {
-      return c*(t/=d)*t*t + b;
-    };
-    je.easeOutCubic = function (x, t, b, c, d) {
-      return c*((t=t/d-1)*t*t + 1) + b;
-    };
-    je.easeInOutCubic = function (x, t, b, c, d) {
-      if ((t /= d/2) < 1) {return c/2*t*t*t + b;}
-      return c/2*((t-=2)*t*t + 2) + b;
-    };
-    je.easeInQuart = function (x, t, b, c, d) {
-      return c*(t/=d)*t*t*t + b;
-    };
-    je.easeOutQuart = function (x, t, b, c, d) {
-      return -c * ((t=t/d-1)*t*t*t - 1) + b;
-    };
-    je.easeInOutQuart = function (x, t, b, c, d) {
-      if ((t /= d/2) < 1) {return c/2*t*t*t*t + b;}
-      return -c/2 * ((t-=2)*t*t*t - 2) + b;
-    };
-    je.easeInQuint = function (x, t, b, c, d) {
-      return c*(t/=d)*t*t*t*t + b;
-    };
-    je.easeOutQuint = function (x, t, b, c, d) {
-      return c*((t=t/d-1)*t*t*t*t + 1) + b;
-    };
-    je.easeInOutQuint = function (x, t, b, c, d) {
-      if ((t /= d/2) < 1) {return c/2*t*t*t*t*t + b;}
-      return c/2*((t-=2)*t*t*t*t + 2) + b;
-    };
-    je.easeInSine = function (x, t, b, c, d) {
-      return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
-    };
-    je.easeOutSine = function (x, t, b, c, d) {
-      return c * Math.sin(t/d * (Math.PI/2)) + b;
-    };
-    je.easeInOutSine = function (x, t, b, c, d) {
-      return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
-    };
-    je.easeInExpo = function (x, t, b, c, d) {
-      return (t===0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
-    };
-    je.easeOutExpo = function (x, t, b, c, d) {
-      return (t===d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
-    };
-    je.easeInOutExpo = function (x, t, b, c, d) {
-      if (t===0) {return b;}
-      if (t===d) {return b+c;}
-      if ((t /= d/2) < 1) {return c/2 * Math.pow(2, 10 * (t - 1)) + b;}
-      return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
-    };
-    je.easeInCirc = function (x, t, b, c, d) {
-      return -c * (Math.sqrt(1 - (t/=d)*t) - 1) + b;
-    };
-    je.easeOutCirc = function (x, t, b, c, d) {
-      return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
-    };
-    je.easeInOutCirc = function (x, t, b, c, d) {
-      if ((t /= d/2) < 1) {return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;}
-      return c/2 * (Math.sqrt(1 - (t-=2)*t) + 1) + b;
-    };
-    je.easeInElastic = function (x, t, b, c, d) {
-      var s=1.70158,p= 0,a=c;
-      if (t===0) {return b;}
-      if ((t/=d)===1) {return b+c;}
-      if (!p) {p=d*0.3;}
-      if (a < Math.abs(c)) { a=c;s=p/4; }
-      else {
-        s = p/(2*Math.PI) * Math.asin (c/a);
-        return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+    je.easeInOutQuad = function(x, t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return c / 2 * t * t + b;
       }
+      return -c / 2 * ((--t) * (t - 2) - 1) + b;
     };
-    je.easeOutElastic = function (x, t, b, c, d) {
-      var s=1.70158,p= 0,a=c;
-      if (t===0) {return b; }
-      if ((t/=d)===1) {return b+c;}
-      if (!p) {p=d*0.3;}
-      if (a < Math.abs(c)) { a=c; s=p/4; }
-      else { s = p/(2*Math.PI) * Math.asin (c/a);
-        return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;}
+    je.easeInCubic = function(x, t, b, c, d) {
+      return c * (t /= d) * t * t + b;
     };
-    je.easeInOutElastic = function (x, t, b, c, d) {
-      var s=1.70158,p=0,a=c;
-      if (t===0) {return b;}
-      if ((t /= d/2)===2) {return b+c;}
-      if (!p) {p=d*(0.3*1.5);}
-      if (a < Math.abs(c)) { a=c;s=p/4; }
-      else {
-        s = p/(2*Math.PI) * Math.asin (c/a);
-        if (t < 1) {return -0.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;}
-        return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*0.5 + c + b;
+    je.easeOutCubic = function(x, t, b, c, d) {
+      return c * ((t = t / d - 1) * t * t + 1) + b;
+    };
+    je.easeInOutCubic = function(x, t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return c / 2 * t * t * t + b;
       }
+      return c / 2 * ((t -= 2) * t * t + 2) + b;
     };
-    je.easeInBack = function (x, t, b, c, d, s) {
-      if (s === undefined) {s = 1.70158;}
-      return c*(t/=d)*t*((s+1)*t - s) + b;
+    je.easeInQuart = function(x, t, b, c, d) {
+      return c * (t /= d) * t * t * t + b;
     };
-    je.easeOutBack = function (x, t, b, c, d, s) {
-      if (s === undefined) {s = 1.70158;}
-      return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+    je.easeOutQuart = function(x, t, b, c, d) {
+      return -c * ((t = t / d - 1) * t * t * t - 1) + b;
     };
-    je.easeInOutBack = function (x, t, b, c, d, s) {
-      if (s === undefined) {s = 1.70158; }
-      if ((t /= d/2) < 1) {return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;}
-      return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+    je.easeInOutQuart = function(x, t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return c / 2 * t * t * t * t + b;
+      }
+      return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
     };
-    je.easeInBounce = function (x, t, b, c, d) {
-      return c - jQuery.easing.easeOutBounce (x, d-t, 0, c, d) + b;
+    je.easeInQuint = function(x, t, b, c, d) {
+      return c * (t /= d) * t * t * t * t + b;
     };
-    je.easeOutBounce = function (x, t, b, c, d) {
-      if ((t/=d) < (1/2.75)) {
-        return c*(7.5625*t*t) + b;
-      } else if (t < (2/2.75)) {
-        return c*(7.5625*(t-=(1.5/2.75))*t + 0.75) + b;
-      } else if (t < (2.5/2.75)) {
-        return c*(7.5625*(t-=(2.25/2.75))*t + 0.9375) + b;
+    je.easeOutQuint = function(x, t, b, c, d) {
+      return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+    };
+    je.easeInOutQuint = function(x, t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return c / 2 * t * t * t * t * t + b;
+      }
+      return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
+    };
+    je.easeInSine = function(x, t, b, c, d) {
+      return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+    };
+    je.easeOutSine = function(x, t, b, c, d) {
+      return c * Math.sin(t / d * (Math.PI / 2)) + b;
+    };
+    je.easeInOutSine = function(x, t, b, c, d) {
+      return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+    };
+    je.easeInExpo = function(x, t, b, c, d) {
+      return (t === 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
+    };
+    je.easeOutExpo = function(x, t, b, c, d) {
+      return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
+    };
+    je.easeInOutExpo = function(x, t, b, c, d) {
+      if (t === 0) {
+        return b;
+      }
+      if (t === d) {
+        return b + c;
+      }
+      if ((t /= d / 2) < 1) {
+        return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
+      }
+      return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
+    };
+    je.easeInCirc = function(x, t, b, c, d) {
+      return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
+    };
+    je.easeOutCirc = function(x, t, b, c, d) {
+      return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
+    };
+    je.easeInOutCirc = function(x, t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
+      }
+      return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
+    };
+    je.easeInElastic = function(x, t, b, c, d) {
+      var s = 1.70158, p = 0, a = c;
+      if (t === 0) {
+        return b;
+      }
+      if ((t /= d) === 1) {
+        return b + c;
+      }
+      if (!p) {
+        p = d * 0.3;
+      }
+      if (a < Math.abs(c)) {
+        a = c; s = p / 4;
       } else {
-        return c*(7.5625*(t-=(2.625/2.75))*t + 0.984375) + b;
+        s = p / (2 * Math.PI) * Math.asin(c / a);
+        return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin( (t * d - s) * (2 * Math.PI) / p )) + b;
       }
     };
-    je.easeInOutBounce = function (x, t, b, c, d) {
-      if (t < d/2) {return jQuery.easing.easeInBounce (x, t*2, 0, c, d) * 0.5 + b;}
-      return jQuery.easing.easeOutBounce (x, t*2-d, 0, c, d) * 0.5 + c * 0.5 + b;
+    je.easeOutElastic = function(x, t, b, c, d) {
+      var s = 1.70158, p = 0, a = c;
+      if (t === 0) {
+        return b;
+      }
+      if ((t /= d) === 1) {
+        return b + c;
+      }
+      if (!p) {
+        p = d * 0.3;
+      }
+      if (a < Math.abs(c)) {
+        a = c; s = p / 4;
+      } else {
+        s = p / (2 * Math.PI) * Math.asin(c / a);
+        return a * Math.pow(2, -10 * t) * Math.sin( (t * d - s) * (2 * Math.PI) / p ) + c + b;
+      }
+    };
+    je.easeInOutElastic = function(x, t, b, c, d) {
+      var s = 1.70158, p = 0, a = c;
+      if (t === 0) {
+        return b;
+      }
+      if ((t /= d / 2) === 2) {
+        return b + c;
+      }
+      if (!p) {
+        p = d * (0.3 * 1.5);
+      }
+      if (a < Math.abs(c)) {
+        a = c; s = p / 4;
+      } else {
+        s = p / (2 * Math.PI) * Math.asin(c / a);
+        if (t < 1) {
+          return -0.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin( (t * d - s) * (2 * Math.PI) / p )) + b;
+        }
+        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin( (t * d - s) * (2 * Math.PI) / p ) * 0.5 + c + b;
+      }
+    };
+    je.easeInBack = function(x, t, b, c, d, s) {
+      if (s === undefined) {
+        s = 1.70158;
+      }
+      return c * (t /= d) * t * ((s + 1) * t - s) + b;
+    };
+    je.easeOutBack = function(x, t, b, c, d, s) {
+      if (s === undefined) {
+        s = 1.70158;
+      }
+      return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
+    };
+    je.easeInOutBack = function(x, t, b, c, d, s) {
+      if (s === undefined) {
+        s = 1.70158;
+      }
+      if ((t /= d / 2) < 1) {
+        return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
+      }
+      return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
+    };
+    je.easeInBounce = function(x, t, b, c, d) {
+      return c - jQuery.easing.easeOutBounce(x, d - t, 0, c, d) + b;
+    };
+    je.easeOutBounce = function(x, t, b, c, d) {
+      if ((t /= d) < (1 / 2.75)) {
+        return c * (7.5625 * t * t) + b;
+      } else if (t < (2 / 2.75)) {
+        return c * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75) + b;
+      } else if (t < (2.5 / 2.75)) {
+        return c * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375) + b;
+      } else {
+        return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
+      }
+    };
+    je.easeInOutBounce = function(x, t, b, c, d) {
+      if (t < d / 2) {
+        return jQuery.easing.easeInBounce(x, t * 2, 0, c, d) * 0.5 + b;
+      }
+      return jQuery.easing.easeOutBounce(x, t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
     };
   };
 
-    inazumatv.jq.Easing = Easing;
-}( this.inazumatv ) );/**
+  inazumatv.jq.Easing = Easing;
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/17 - 17:55
@@ -3774,280 +3903,284 @@ var inazumatv = {};
  * Copyright (c) 2013 Karl Swedberg
  * Licensed MIT (https://github.com/kswedberg/jquery-smooth-scroll/blob/master/LICENSE-MIT)
  */
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    /**
+  /**
      * @class SmoothScroll
      * @constructor
      * @static
      */
-    var SmoothScroll = function () {
-        throw "SmoothScroll cannot be instantiated";
-    };
+  var SmoothScroll = function() {
+    throw 'SmoothScroll cannot be instantiated';
+  };
 
-    /**
+  /**
      * SmoothScroll plugin を活性化します
      * @method activate
      * @param {jQuery} jQuery
      * @static
      */
-    SmoothScroll.activate = function ( jQuery ){
-        var $ = jQuery;
+  SmoothScroll.activate = function( jQuery ) {
+    var $ = jQuery;
 
-        var version = '1.4.13',
-            optionOverrides = {},
-            defaults = {
-                exclude: [],
-                excludeWithin:[],
-                offset: 0,
+    var version = '1.4.13',
+      optionOverrides = {},
+      defaults = {
+        exclude: [],
+        excludeWithin: [],
+        offset: 0,
 
-                // one of 'top' or 'left'
-                direction: 'top',
+        // one of 'top' or 'left'
+        direction: 'top',
 
-                // jQuery set of elements you wish to scroll (for $.smoothScroll).
-                //  if null (default), $('html, body').firstScrollable() is used.
-                scrollElement: null,
+        // jQuery set of elements you wish to scroll (for $.smoothScroll).
+        //  if null (default), $('html, body').firstScrollable() is used.
+        scrollElement: null,
 
-                // only use if you want to override default behavior
-                scrollTarget: null,
+        // only use if you want to override default behavior
+        scrollTarget: null,
 
-                // fn(opts) function to be called before scrolling occurs.
-                // `this` is the element(s) being scrolled
-                beforeScroll: function() {},
+        // fn(opts) function to be called before scrolling occurs.
+        // `this` is the element(s) being scrolled
+        beforeScroll: function() {},
 
-                // fn(opts) function to be called after scrolling occurs.
-                // `this` is the triggering element
-                afterScroll: function() {},
-                easing: 'swing',
-                speed: 400,
+        // fn(opts) function to be called after scrolling occurs.
+        // `this` is the triggering element
+        afterScroll: function() {},
+        easing: 'swing',
+        speed: 400,
 
-                // coefficient for "auto" speed
-                autoCoefficent: 2,
+        // coefficient for "auto" speed
+        autoCoefficent: 2,
 
-                // $.fn.smoothScroll only: whether to prevent the default click action
-                preventDefault: true
-            },
+        // $.fn.smoothScroll only: whether to prevent the default click action
+        preventDefault: true
+      },
 
-            getScrollable = function(opts) {
-                var scrollable = [],
-                    scrolled = false,
-                    dir = opts.dir && opts.dir === 'left' ? 'scrollLeft' : 'scrollTop';
+      getScrollable = function(opts) {
+        var scrollable = [],
+          scrolled = false,
+          dir = opts.dir && opts.dir === 'left' ? 'scrollLeft' : 'scrollTop';
 
-                this.each(function() {
+        this.each(function() {
 
-                    if (this === document || this === window) { return; }
-                    var el = $(this);
-                    if ( el[dir]() > 0 ) {
-                        scrollable.push(this);
-                    } else {
-                        // if scroll(Top|Left) === 0, nudge the element 1px and see if it moves
-                        el[dir](1);
-                        scrolled = el[dir]() > 0;
-                        if ( scrolled ) {
-                            scrollable.push(this);
-                        }
-                        // then put it back, of course
-                        el[dir](0);
-                    }
-                });
-
-                // If no scrollable elements, fall back to <body>,
-                // if it's in the jQuery collection
-                // (doing this because Safari sets scrollTop async,
-                // so can't set it to 1 and immediately get the value.)
-                if (!scrollable.length) {
-//                    this.each(function(index) {
-                    this.each(function() {
-                        if (this.nodeName === 'BODY') {
-                            scrollable = [this];
-                        }
-                    });
-                }
-
-                // Use the first scrollable element if we're calling firstScrollable()
-                if ( opts.el === 'first' && scrollable.length > 1 ) {
-                    scrollable = [ scrollable[0] ];
-                }
-
-                return scrollable;
-            },
-            isTouch = 'ontouchend' in document;
-
-        $.fn.extend({
-            scrollable: function(dir) {
-//                var scrl = getScrollable.call(this, {dir: dir});
-//                return this.pushStack(scrl);
-                return this.pushStack(getScrollable.call(this, {dir: dir}));
-            },
-            firstScrollable: function(dir) {
-//                var scrl = getScrollable.call(this, {el: 'first', dir: dir});
-//                return this.pushStack(scrl);
-                return this.pushStack(getScrollable.call(this, {el: 'first', dir: dir}));
-            },
-
-            smoothScroll: function(options, extra) {
-                options = options || {};
-
-                if ( options === 'options' ) {
-                    if ( !extra ) {
-                        return this.first().data('ssOpts');
-                    }
-                    return this.each(function() {
-                        var $this = $(this),
-                            opts = $.extend($this.data('ssOpts') || {}, extra);
-
-                        $(this).data('ssOpts', opts);
-                    });
-                }
-
-                var opts = $.extend({}, $.fn.smoothScroll.defaults, options),
-                    locationPath = $.smoothScroll.filterPath(location.pathname);
-
-                this
-                    .unbind('click.smoothscroll')
-                    .bind('click.smoothscroll', function(event) {
-                        var link = this,
-                            $link = $(this),
-                            thisOpts = $.extend({}, opts, $link.data('ssOpts') || {}),
-                            exclude = opts.exclude,
-                            excludeWithin = thisOpts.excludeWithin,
-                            elCounter = 0, ewlCounter = 0,
-                            include = true,
-                            clickOpts = {},
-                            hostMatch = ((location.hostname === link.hostname) || !link.hostname),
-                            pathMatch = thisOpts.scrollTarget || ( $.smoothScroll.filterPath(link.pathname) || locationPath ) === locationPath,
-                            thisHash = escapeSelector(link.hash);
-
-                        if ( !thisOpts.scrollTarget && (!hostMatch || !pathMatch || !thisHash) ) {
-                            include = false;
-                        } else {
-                            while (include && elCounter < exclude.length) {
-                                if ($link.is(escapeSelector(exclude[elCounter++]))) {
-                                    include = false;
-                                }
-                            }
-                            while ( include && ewlCounter < excludeWithin.length ) {
-                                if ($link.closest(excludeWithin[ewlCounter++]).length) {
-                                    include = false;
-                                }
-                            }
-                        }
-
-                        if ( include ) {
-
-                            if ( thisOpts.preventDefault ) {
-                                event.preventDefault();
-                            }
-
-                            $.extend( clickOpts, thisOpts, {
-                                scrollTarget: thisOpts.scrollTarget || thisHash,
-                                link: link
-                            });
-                            $.smoothScroll( clickOpts );
-                        }
-                    });
-
-                return this;
+          if (this === document || this === window) {
+            return;
+          }
+          var el = $(this);
+          if ( el[dir]() > 0 ) {
+            scrollable.push(this);
+          } else {
+            // if scroll(Top|Left) === 0, nudge the element 1px and see if it moves
+            el[dir](1);
+            scrolled = el[dir]() > 0;
+            if ( scrolled ) {
+              scrollable.push(this);
             }
+            // then put it back, of course
+            el[dir](0);
+          }
         });
 
-        $.smoothScroll = function(options, px) {
-            if ( options === 'options' && typeof px === 'object' ) {
-                return $.extend(optionOverrides, px);
+        // If no scrollable elements, fall back to <body>,
+        // if it's in the jQuery collection
+        // (doing this because Safari sets scrollTop async,
+        // so can't set it to 1 and immediately get the value.)
+        if (!scrollable.length) {
+          //                    this.each(function(index) {
+          this.each(function() {
+            if (this.nodeName === 'BODY') {
+              scrollable = [this];
             }
-            var opts, $scroller, scrollTargetOffset, speed,
-                scrollerOffset = 0,
-                offPos = 'offset',
-                scrollDir = 'scrollTop',
-                aniProps = {},
-                aniOpts = {},
-                scrollprops = [];
+          });
+        }
 
-            if (typeof options === 'number') {
-                opts = $.extend({link: null}, $.fn.smoothScroll.defaults, optionOverrides);
-                scrollTargetOffset = options;
+        // Use the first scrollable element if we're calling firstScrollable()
+        if ( opts.el === 'first' && scrollable.length > 1 ) {
+          scrollable = [ scrollable[0] ];
+        }
+
+        return scrollable;
+      },
+      isTouch = 'ontouchend' in document;
+
+    $.fn.extend({
+      scrollable: function(dir) {
+        //                var scrl = getScrollable.call(this, {dir: dir});
+        //                return this.pushStack(scrl);
+        return this.pushStack(getScrollable.call(this, {dir: dir}));
+      },
+      firstScrollable: function(dir) {
+        //                var scrl = getScrollable.call(this, {el: 'first', dir: dir});
+        //                return this.pushStack(scrl);
+        return this.pushStack(getScrollable.call(this, {el: 'first', dir: dir}));
+      },
+
+      smoothScroll: function(options, extra) {
+        options = options || {};
+
+        if ( options === 'options' ) {
+          if ( !extra ) {
+            return this.first().data('ssOpts');
+          }
+          return this.each(function() {
+            var $this = $(this),
+              opts = $.extend($this.data('ssOpts') || {}, extra);
+
+            $(this).data('ssOpts', opts);
+          });
+        }
+
+        var opts = $.extend({}, $.fn.smoothScroll.defaults, options),
+          locationPath = $.smoothScroll.filterPath(location.pathname);
+
+        this
+          .unbind('click.smoothscroll')
+          .bind('click.smoothscroll', function(event) {
+            var link = this,
+              $link = $(this),
+              thisOpts = $.extend({}, opts, $link.data('ssOpts') || {}),
+              exclude = opts.exclude,
+              excludeWithin = thisOpts.excludeWithin,
+              elCounter = 0, ewlCounter = 0,
+              include = true,
+              clickOpts = {},
+              hostMatch = ((location.hostname === link.hostname) || !link.hostname),
+              pathMatch = thisOpts.scrollTarget || ( $.smoothScroll.filterPath(link.pathname) || locationPath ) === locationPath,
+              thisHash = escapeSelector(link.hash);
+
+            if ( !thisOpts.scrollTarget && (!hostMatch || !pathMatch || !thisHash) ) {
+              include = false;
             } else {
-                opts = $.extend({link: null}, $.fn.smoothScroll.defaults, options || {}, optionOverrides);
-                if (opts.scrollElement) {
-                    offPos = 'position';
-                    if (opts.scrollElement.css('position') === 'static') {
-                        opts.scrollElement.css('position', 'relative');
-                    }
+              while (include && elCounter < exclude.length) {
+                if ($link.is(escapeSelector(exclude[elCounter++]))) {
+                  include = false;
                 }
+              }
+              while ( include && ewlCounter < excludeWithin.length ) {
+                if ($link.closest(excludeWithin[ewlCounter++]).length) {
+                  include = false;
+                }
+              }
             }
 
-            scrollDir = opts.direction === 'left' ? 'scrollLeft' : scrollDir;
+            if ( include ) {
 
-            if ( opts.scrollElement ) {
-                $scroller = opts.scrollElement;
-                if ( !(/^(?:HTML|BODY)$/).test($scroller[0].nodeName) ) {
-                    scrollerOffset = $scroller[scrollDir]();
-                }
-            } else {
-                $scroller = $('html, body').firstScrollable(opts.direction);
+              if ( thisOpts.preventDefault ) {
+                event.preventDefault();
+              }
+
+              $.extend( clickOpts, thisOpts, {
+                scrollTarget: thisOpts.scrollTarget || thisHash,
+                link: link
+              });
+              $.smoothScroll( clickOpts );
             }
+          });
 
-            // beforeScroll callback function must fire before calculating offset
-            opts.beforeScroll.call($scroller, opts);
+        return this;
+      }
+    });
 
-            scrollTargetOffset = (typeof options === 'number') ? options :
-                px ||
+    $.smoothScroll = function(options, px) {
+      if ( options === 'options' && typeof px === 'object' ) {
+        return $.extend(optionOverrides, px);
+      }
+      var opts, $scroller, scrollTargetOffset, speed,
+        scrollerOffset = 0,
+        offPos = 'offset',
+        scrollDir = 'scrollTop',
+        aniProps = {},
+        aniOpts = {},
+        scrollprops = [];
+
+      if (typeof options === 'number') {
+        opts = $.extend({link: null}, $.fn.smoothScroll.defaults, optionOverrides);
+        scrollTargetOffset = options;
+      } else {
+        opts = $.extend({link: null}, $.fn.smoothScroll.defaults, options || {}, optionOverrides);
+        if (opts.scrollElement) {
+          offPos = 'position';
+          if (opts.scrollElement.css('position') === 'static') {
+            opts.scrollElement.css('position', 'relative');
+          }
+        }
+      }
+
+      scrollDir = opts.direction === 'left' ? 'scrollLeft' : scrollDir;
+
+      if ( opts.scrollElement ) {
+        $scroller = opts.scrollElement;
+        if ( !(/^(?:HTML|BODY)$/).test($scroller[0].nodeName) ) {
+          scrollerOffset = $scroller[scrollDir]();
+        }
+      } else {
+        $scroller = $('html, body').firstScrollable(opts.direction);
+      }
+
+      // beforeScroll callback function must fire before calculating offset
+      opts.beforeScroll.call($scroller, opts);
+
+      scrollTargetOffset = (typeof options === 'number') ? options :
+        px ||
                     ( $(opts.scrollTarget)[offPos]() &&
                         $(opts.scrollTarget)[offPos]()[opts.direction] ) ||
                     0;
 
-            aniProps[scrollDir] = scrollTargetOffset + scrollerOffset + opts.offset;
-            speed = opts.speed;
+      aniProps[scrollDir] = scrollTargetOffset + scrollerOffset + opts.offset;
+      speed = opts.speed;
 
-            // automatically calculate the speed of the scroll based on distance / coefficient
-            if (speed === 'auto') {
+      // automatically calculate the speed of the scroll based on distance / coefficient
+      if (speed === 'auto') {
 
-                // if aniProps[scrollDir] == 0 then we'll use scrollTop() value instead
-                speed = aniProps[scrollDir] || $scroller.scrollTop();
+        // if aniProps[scrollDir] == 0 then we'll use scrollTop() value instead
+        speed = aniProps[scrollDir] || $scroller.scrollTop();
 
-                // divide the speed by the coefficient
-                speed = speed / opts.autoCoefficent;
-            }
+        // divide the speed by the coefficient
+        speed = speed / opts.autoCoefficent;
+      }
 
-            aniOpts = {
-                duration: speed,
-                easing: opts.easing,
-                complete: function() {
-                    opts.afterScroll.call(opts.link, opts);
-                }
-            };
-
-            if (opts.step) {
-                aniOpts.step = opts.step;
-            }
-
-            if ($scroller.length) {
-                $scroller.stop().animate(aniProps, aniOpts);
-            } else {
-                opts.afterScroll.call(opts.link, opts);
-            }
-        };
-
-        $.smoothScroll.version = version;
-        $.smoothScroll.filterPath = function(string) {
-            return string
-                .replace(/^\//,'')
-                .replace(/(?:index|default).[a-zA-Z]{3,4}$/,'')
-                .replace(/\/$/,'');
-        };
-
-        // default options
-        $.fn.smoothScroll.defaults = defaults;
-
-        function escapeSelector (str) {
-            return str.replace(/(:|\.)/g,'\\$1');
+      aniOpts = {
+        duration: speed,
+        easing: opts.easing,
+        complete: function() {
+          opts.afterScroll.call(opts.link, opts);
         }
+      };
+
+      if (opts.step) {
+        aniOpts.step = opts.step;
+      }
+
+      if ($scroller.length) {
+        $scroller.stop().animate(aniProps, aniOpts);
+      } else {
+        opts.afterScroll.call(opts.link, opts);
+      }
     };
 
-    inazumatv.jq.SmoothScroll = SmoothScroll;
+    $.smoothScroll.version = version;
+    $.smoothScroll.filterPath = function(string) {
+      return string
+        .replace(/^\//, '')
+        .replace(/(?:index|default).[a-zA-Z]{3,4}$/, '')
+        .replace(/\/$/, '');
+    };
 
-}( this.inazumatv ) );/**
+    // default options
+    $.fn.smoothScroll.defaults = defaults;
+
+    function escapeSelector(str) {
+      return str.replace(/(:|\.)/g, '\\$1');
+    }
+  };
+
+  inazumatv.jq.SmoothScroll = SmoothScroll;
+
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/15 - 3:07
@@ -4059,8 +4192,8 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-  "use strict";
+( function( inazumatv ) {
+  'use strict';
   var
     EventObject = inazumatv.EventObject,
     AjaxEvent = inazumatv.AjaxEvent,
@@ -4095,10 +4228,10 @@ var inazumatv = {};
    * @default true
    * @constructor
    */
-  function XMLLoader ( url, nocache ) {
-    if ( typeof url === "undefined" || url === null ) {
+  function XMLLoader( url, nocache ) {
+    if ( typeof url === 'undefined' || url === null ) {
       // url undefined
-      throw new Error( "url required" );
+      throw new Error( 'url required' );
     }
 
     AjaxEvent.call( this );
@@ -4121,7 +4254,7 @@ var inazumatv = {};
      * @type {string}
      * @protected
      */
-    this._type = "xml";
+    this._type = 'xml';
     /**
      * @property _option
      * @type {{}}
@@ -4140,7 +4273,7 @@ var inazumatv = {};
    * @param {jQuery} jQuery object
    * @static
    */
-  XMLLoader.activate = function ( jQuery ){
+  XMLLoader.activate = function( jQuery ) {
     $ = jQuery;
   };
 
@@ -4153,8 +4286,8 @@ var inazumatv = {};
    * @method setType
    * @param {String} type
    */
-  p.setType = function ( type ){
-    if ( typeof type === "undefined" || type === null ) {
+  p.setType = function( type ) {
+    if ( typeof type === 'undefined' || type === null ) {
       // type defined
       return;
     }
@@ -4167,8 +4300,8 @@ var inazumatv = {};
    * @method setURL
    * @param {String} url
    */
-  p.setURL = function ( url ){
-    if ( typeof url === "undefined" || url === null ) {
+  p.setURL = function( url ) {
+    if ( typeof url === 'undefined' || url === null ) {
       // type defined
       return;
     }
@@ -4181,8 +4314,8 @@ var inazumatv = {};
    * @method setOption
    * @param {Object} option
    */
-  p.setOption = function ( option ){
-    if ( typeof option === "undefined" || option === null ) {
+  p.setOption = function( option ) {
+    if ( typeof option === 'undefined' || option === null ) {
       // type defined
       return;
     }
@@ -4196,21 +4329,21 @@ var inazumatv = {};
    * @method start
    * @deprecated
    */
-  p.start = function (){
+  p.start = function() {
     this.load();
   };
   /**
    * load 開始
    * @method load
    */
-  p.load = function () {
+  p.load = function() {
     var
       _this = this,
       url = _this._url,
       option = _this._option;
 
     if ( _this._nocache ) {
-      //url +=  "?" + new Date().getTime();
+      // url +=  "?" + new Date().getTime();
       option.cache = false;
     }
 
@@ -4219,20 +4352,22 @@ var inazumatv = {};
     option.dataType = _this._type;
 
     $.ajax( option ).
-      done( function ( data, textStatus, jqXHR ){
+      done( function( data, textStatus, jqXHR ) {
         // success
         _this.dispatchEvent( new EventObject( AjaxEvent.COMPLETE, [ data, jqXHR ] ), _this );
       } ).
-      fail(function ( jqXHR, textStatus, errorThrown ){
+      fail(function( jqXHR, textStatus, errorThrown ) {
         // error
         _this.dispatchEvent( new EventObject( AjaxEvent.ERROR, [ jqXHR, textStatus ] ), _this );
-        console.warn( "load error, " + jqXHR + ", " + errorThrown );
+        console.warn( 'load error, ' + jqXHR + ', ' + errorThrown );
       } );
   };
 
-    inazumatv.jq.XMLLoader = XMLLoader;
+  inazumatv.jq.XMLLoader = XMLLoader;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/15 - 17:47
@@ -4244,12 +4379,12 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var XMLLoader = inazumatv.jq.XMLLoader,
-        $;
+( function( inazumatv ) {
+  'use strict';
+  var XMLLoader = inazumatv.jq.XMLLoader,
+    $;
 
-    /**
+  /**
      * 指定URLのTXTを読込みます
      * @class TXTLoader
      * @extends XMLLoader
@@ -4257,21 +4392,21 @@ var inazumatv = {};
      * @param {Boolean|*} [nocache] no cache: true, default: true
      * @constructor
      */
-    function TXTLoader ( url, nocache ) {
-        XMLLoader.call( this, url, nocache );
-        /**
+  function TXTLoader( url, nocache ) {
+    XMLLoader.call( this, url, nocache );
+    /**
          * @property _type
          * @type {string}
          * @protected
          */
-        this._type = "text";
-    }
+    this._type = 'text';
+  }
 
-    TXTLoader.prototype.constructor = TXTLoader;
+  TXTLoader.prototype.constructor = TXTLoader;
 
-    inazumatv.extend( XMLLoader, TXTLoader );
+  inazumatv.extend( XMLLoader, TXTLoader );
 
-    /**
+  /**
      * TXTLoader へ jQuery object を設定。TXTLoader を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -4279,12 +4414,14 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    TXTLoader.activate = function ( jQuery ){
-        $ = jQuery;
-    };
+  TXTLoader.activate = function( jQuery ) {
+    $ = jQuery;
+  };
 
-    inazumatv.jq.TXTLoader = TXTLoader;
-}( this.inazumatv ) );/**
+  inazumatv.jq.TXTLoader = TXTLoader;
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/15 - 17:47
@@ -4296,12 +4433,12 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var XMLLoader = inazumatv.jq.XMLLoader,
-        $;
+( function( inazumatv ) {
+  'use strict';
+  var XMLLoader = inazumatv.jq.XMLLoader,
+    $;
 
-    /**
+  /**
      * 指定URLのHTMLを読込みます
      * @class HTMLLoader
      * @extends XMLLoader
@@ -4309,21 +4446,21 @@ var inazumatv = {};
      * @param {Boolean|*} [nocache] no cache: true, default: true
      * @constructor
      */
-    function HTMLLoader ( url, nocache ) {
-        XMLLoader.call( this, url, nocache );
-        /**
+  function HTMLLoader( url, nocache ) {
+    XMLLoader.call( this, url, nocache );
+    /**
          * @property _type
          * @type {string}
          * @protected
          */
-        this._type = "html";
-    }
+    this._type = 'html';
+  }
 
-    HTMLLoader.prototype.constructor = HTMLLoader;
+  HTMLLoader.prototype.constructor = HTMLLoader;
 
-    inazumatv.extend( XMLLoader, HTMLLoader );
+  inazumatv.extend( XMLLoader, HTMLLoader );
 
-    /**
+  /**
      * HTMLLoader へ jQuery object を設定。HTMLLoader を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -4331,12 +4468,14 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    HTMLLoader.activate = function ( jQuery ){
-        $ = jQuery;
-    };
+  HTMLLoader.activate = function( jQuery ) {
+    $ = jQuery;
+  };
 
-    inazumatv.jq.HTMLLoader = HTMLLoader;
-}( this.inazumatv ) );/**
+  inazumatv.jq.HTMLLoader = HTMLLoader;
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/15 - 18:28
@@ -4348,60 +4487,60 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window, inazumatv ){
-    "use strict";
-    var
-      document = window.document,
-      /**
+( function( window, inazumatv ) {
+  'use strict';
+  var
+    document = window.document,
+    /**
        * @property _prevHeight
        * @type {number}
        * @private
        */
-      _prevHeight = 0,
-      //_$watchTarget,
-      _instance,
-      /**
+    _prevHeight = 0,
+    // _$watchTarget,
+    _instance,
+    /**
        * FPSManager instance, default frame rate is 24.
        * @property _fps
        * @type {FPSManager}
        * @static
        * @private
        */
-      _fps,
-      _isStart = false,
+    _fps,
+    _isStart = false,
 
-      EventObject = inazumatv.EventObject,
-      EventDispatcher = inazumatv.EventDispatcher,
-      FPSManager = inazumatv.FPSManager,
-      /**
+    EventObject = inazumatv.EventObject,
+    EventDispatcher = inazumatv.EventDispatcher,
+    FPSManager = inazumatv.FPSManager,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $,
-      _max = Math.max;
+    $,
+    _max = Math.max;
 
-    /**
+  /**
      * @class WatchDocumentHeight
      * @uses EventDispatcher
      * @return {WatchDocumentHeight}
      * @constructor
      */
-    function WatchDocumentHeight () {
-        if ( typeof _instance !== "undefined" ) {
+  function WatchDocumentHeight() {
+    if ( typeof _instance !== 'undefined' ) {
 
-            return _instance;
-        }
-
-        _fps = new FPSManager( 24 );
-
-        _instance = this;
-        return _instance;
+      return _instance;
     }
 
-    /**
+    _fps = new FPSManager( 24 );
+
+    _instance = this;
+    return _instance;
+  }
+
+  /**
      * WatchDocumentHeight へ jQuery object を設定。WatchDocumentHeight を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -4409,60 +4548,60 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    WatchDocumentHeight.activate = function ( jQuery ){
-        $ = jQuery;
-        var $document = $( document.body ),
-            $window = $( window );
+  WatchDocumentHeight.activate = function( jQuery ) {
+    $ = jQuery;
+    var $document = $( document.body ),
+      $window = $( window );
 
-        this._$document = $document;
-        this._$window = $window;
+    this._$document = $document;
+    this._$window = $window;
 
-        //if ( $window.height() > $document.height() ) {
-        //    _$watchTarget = $window;
-        //} else {
-        //    _$watchTarget = $document;
-        //}
-    };
+    // if ( $window.height() > $document.height() ) {
+    //    _$watchTarget = $window;
+    //} else {
+    //    _$watchTarget = $document;
+    //}
+  };
 
-    /**
+  /**
      * @method getInstance
      * @uses EventDispatcher
      * @return {WatchDocumentHeight}
      * @static
      */
-    WatchDocumentHeight.getInstance = function (){
-        if ( typeof _instance === "undefined" ) {
+  WatchDocumentHeight.getInstance = function() {
+    if ( typeof _instance === 'undefined' ) {
 
-            _instance = new WatchDocumentHeight();
-        }
+      _instance = new WatchDocumentHeight();
+    }
 
-        return _instance;
-    };
+    return _instance;
+  };
 
-    /**
+  /**
      * document height change event
      * @event RESIZE_HEIGHT
      * @type {string}
      * @static
      */
-    WatchDocumentHeight.RESIZE = "watchDocumentResizeHeight";
+  WatchDocumentHeight.RESIZE = 'watchDocumentResizeHeight';
 
-    var p = WatchDocumentHeight.prototype;
+  var p = WatchDocumentHeight.prototype;
 
-    p.constructor = inazumatv.WatchDocumentHeight;
+  p.constructor = inazumatv.WatchDocumentHeight;
 
-    EventDispatcher.initialize( p );
+  EventDispatcher.initialize( p );
 
-    /**
+  /**
      * FPSManager instance を取得します
      * @method getFPSManager
      * @return {FPSManager} FPSManager instance を返します
      */
-    p.getFPSManager = function (){
-        return this._fps;
-    };
+  p.getFPSManager = function() {
+    return this._fps;
+  };
 
-    /**
+  /**
      * フレーム毎に呼び出されます。<br>
      * 高さが変更されると WatchDocumentHeight.RESIZE を dispatchEvent し true を返します。
      *
@@ -4470,83 +4609,85 @@ var inazumatv = {};
      * @param {boolean} [strong] default false
      * @return {boolean} true: 高さ変更
      */
-    p.update = function ( strong ){
-        var
-          $window = this._$window,
-          $document = this._$document,
-          h,
-          isChange,
-          params;
+  p.update = function( strong ) {
+    var
+      $window = this._$window,
+      $document = this._$document,
+      h,
+      isChange,
+      params;
 
-        //if ( $window.height() > $document.height() ) {
-        //    _$watchTarget = $window;
-        //} else {
-        //    _$watchTarget = $document;
-        //}
-        //
-        //h = _$watchTarget.height();
-        h = _max( $window.height(), $document.height() );
-        isChange = h !== _prevHeight;
+    // if ( $window.height() > $document.height() ) {
+    //    _$watchTarget = $window;
+    //} else {
+    //    _$watchTarget = $document;
+    //}
+    //
+    // h = _$watchTarget.height();
+    h = _max( $window.height(), $document.height() );
+    isChange = h !== _prevHeight;
 
-        params = {
-            strong: strong,
-            height: h
-        };
-
-        _prevHeight = h;
-        if ( isChange || strong ) {
-            // height
-            _instance.dispatchEvent( new EventObject( WatchDocumentHeight.RESIZE, params ), _instance );
-        }
-
-        return isChange;
+    params = {
+      strong: strong,
+      height: h
     };
 
-    /**
+    _prevHeight = h;
+    if ( isChange || strong ) {
+      // height
+      _instance.dispatchEvent( new EventObject( WatchDocumentHeight.RESIZE, params ), _instance );
+    }
+
+    return isChange;
+  };
+
+  /**
      * 強制的にEventを発火
      * @method fire
      */
-    p.fire = function (){
-        this.update( true );
-    };
+  p.fire = function() {
+    this.update( true );
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method start
      */
-    p.start = function (){
-        this.fire();
+  p.start = function() {
+    this.fire();
 
-        if ( !_isStart ) {
-            _fps.addEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
-            _fps.start();
-            _isStart = true;
-        }
-    };
+    if ( !_isStart ) {
+      _fps.addEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
+      _fps.start();
+      _isStart = true;
+    }
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method stop
      */
-    p.stop = function (){
-        _fps.removeEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
-        _fps.stop();
-        _isStart = false;
-    };
+  p.stop = function() {
+    _fps.removeEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
+    _fps.stop();
+    _isStart = false;
+  };
 
-    /**
+  /**
      * FPSManager.ENTER_FRAME Event Handler<br>
      * default 24fps
      *
      * @method _onEnterFrame
      * @private
      */
-    p._onEnterFrame = function (){
-        _instance.update();
-    };
+  p._onEnterFrame = function() {
+    _instance.update();
+  };
 
-    inazumatv.jq.WatchDocumentHeight = WatchDocumentHeight;
-}( window, window.inazumatv ) );/**
+  inazumatv.jq.WatchDocumentHeight = WatchDocumentHeight;
+}( window, window.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/15 - 22:13
@@ -4558,19 +4699,19 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var
-      WatchDocumentHeight,
-      _max = Math.max,
-      /**
+( function( inazumatv ) {
+  'use strict';
+  var
+    WatchDocumentHeight,
+    _max = Math.max,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $;
+    $;
     /**
      * jQuery Object の高さを document へあわせます
      * @class FitDocumentHeight
@@ -4578,38 +4719,38 @@ var inazumatv = {};
      * @param {Number} [minHeight] 最小高さ、default: 0
      * @constructor
      */
-    function FitDocumentHeight ( $element, minHeight ) {
-        if ( !inazumatv.isNumeric( minHeight ) ) {
-            minHeight = 0;
-        }
+  function FitDocumentHeight( $element, minHeight ) {
+    if ( !inazumatv.isNumeric( minHeight ) ) {
+      minHeight = 0;
+    }
 
-        /**
+    /**
          * @property _watch
          * @type {WatchDocumentHeight}
          * @private
          */
-        this._watch = WatchDocumentHeight.getInstance();
-        /**
+    this._watch = WatchDocumentHeight.getInstance();
+    /**
          * @property _$element
          * @type {jQuery}
          * @private
          */
-        this._$element = $element;
-        /**
+    this._$element = $element;
+    /**
          * @property _minHeight
          * @type {Number}
          * @private
          */
-        this._minHeight = minHeight;
-        /**
+    this._minHeight = minHeight;
+    /**
          * @property _boundOnResize
          * @type {function(this:FitDocumentHeight)|*}
          * @private
          */
-        this._boundOnResize = this._onResize.bind( this );
-    }
+    this._boundOnResize = this._onResize.bind( this );
+  }
 
-    /**
+  /**
      * FitDocumentHeight へ jQuery object を設定。FitDocumentHeight を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -4617,77 +4758,79 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    FitDocumentHeight.activate = function ( jQuery ){
-        $ = jQuery;
-        WatchDocumentHeight = inazumatv.jq.WatchDocumentHeight;
-        WatchDocumentHeight.activate( jQuery );
-    };
+  FitDocumentHeight.activate = function( jQuery ) {
+    $ = jQuery;
+    WatchDocumentHeight = inazumatv.jq.WatchDocumentHeight;
+    WatchDocumentHeight.activate( jQuery );
+  };
 
-    var p = FitDocumentHeight.prototype;
+  var p = FitDocumentHeight.prototype;
 
-    p.constructor = inazumatv.FitDocumentHeight;
+  p.constructor = inazumatv.FitDocumentHeight;
 
-    /**
+  /**
      * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchWindowSize = function (){
-        //return this._watch;
-        console.warn( "deprecated, use watch()" );
-        return this.watch();
-    };
+  p.getWatchWindowSize = function() {
+    // return this._watch;
+    console.warn( 'deprecated, use watch()' );
+    return this.watch();
+  };
 
-    /**
+  /**
      * @method watch
      * @return {WatchWindowSize|*|FitDocumentHeight._watch}
      */
-    p.watch = function () {
+  p.watch = function() {
 
-        return this._watch;
-    };
+    return this._watch;
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method listen
      * @return {FitDocumentHeight}
      */
-    p.listen = function (){
-        var watch = this._watch;
+  p.listen = function() {
+    var watch = this._watch;
 
-        watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
-        watch.start();
+    watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
+    watch.start();
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method abort
      * @return {FitDocumentHeight}
      */
-    p.abort = function (){
-        this._watch.removeEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
+  p.abort = function() {
+    this._watch.removeEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * Event Handler, Document height resize
      * @method _onResize
      * @param {EventObject} eventObject
      * @private
      */
-    p._onResize = function ( eventObject ){
-        var params = eventObject.params[ 0 ],
-            h = params.height;
+  p._onResize = function( eventObject ) {
+    var params = eventObject.params[ 0 ],
+      h = params.height;
 
-        this._$element.height( _max( h, this._minHeight ) );
-    };
+    this._$element.height( _max( h, this._minHeight ) );
+  };
 
-    inazumatv.jq.FitDocumentHeight = FitDocumentHeight;
+  inazumatv.jq.FitDocumentHeight = FitDocumentHeight;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/17 - 12:17
@@ -4699,56 +4842,56 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var
-      _height = 0,
-      _width = 0,
-      _$window,
-      _instance,
-      /**
+( function( inazumatv ) {
+  'use strict';
+  var
+    _height = 0,
+    _width = 0,
+    _$window,
+    _instance,
+    /**
        * FPSManager instance, default frame rate is 24.
        * @property _fps
        * @type {FPSManager}
        * @static
        * @private
        */
-      _fps,
-      _isStart = false,
+    _fps,
+    _isStart = false,
 
-      EventObject = inazumatv.EventObject,
-      EventDispatcher = inazumatv.EventDispatcher,
-      FPSManager = inazumatv.FPSManager,
-      /**
+    EventObject = inazumatv.EventObject,
+    EventDispatcher = inazumatv.EventDispatcher,
+    FPSManager = inazumatv.FPSManager,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $;
+    $;
 
-    /**
+  /**
      * @class WatchWindowSize
      * @uses EventDispatcher
      * @return {WatchWindowSize} WatchWindowSize instance
      * @constructor
      * @singleton
      */
-    function WatchWindowSize () {
+  function WatchWindowSize() {
 
-        if ( typeof _instance !== "undefined" ) {
+    if ( typeof _instance !== 'undefined' ) {
 
-            return _instance;
-        }
-
-        _fps = new FPSManager( 24 );
-
-        _instance = this;
-        return _instance;
+      return _instance;
     }
 
-    /**
+    _fps = new FPSManager( 24 );
+
+    _instance = this;
+    return _instance;
+  }
+
+  /**
      * WatchWindowSize へ jQuery object を設定。WatchWindowSize を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -4756,152 +4899,154 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    WatchWindowSize.activate = function ( jQuery ){
-        $ = jQuery;
-        _$window = $( window );
-    };
+  WatchWindowSize.activate = function( jQuery ) {
+    $ = jQuery;
+    _$window = $( window );
+  };
 
-    /**
+  /**
      * @method getInstance
      * @return {WatchDocumentHeight}
      * @static
      */
-    WatchWindowSize.getInstance = function (){
-        if ( typeof _instance === "undefined" ) {
+  WatchWindowSize.getInstance = function() {
+    if ( typeof _instance === 'undefined' ) {
 
-            _instance = new WatchWindowSize();
-        }
+      _instance = new WatchWindowSize();
+    }
 
-        return _instance;
-    };
+    return _instance;
+  };
 
-    /**
+  /**
      * window width change Event
      * @event RESIZE_WIDTH
      * @type {string}
      * @static
      */
-    WatchWindowSize.RESIZE_WIDTH = "watchWindowSizeResizeWidth";
-    /**
+  WatchWindowSize.RESIZE_WIDTH = 'watchWindowSizeResizeWidth';
+  /**
      * window height change Event
      * @event RESIZE_HEIGHT
      * @type {string}
      * @static
      */
-    WatchWindowSize.RESIZE_HEIGHT = "watchWindowSizeResizeHeight";
-    /**
+  WatchWindowSize.RESIZE_HEIGHT = 'watchWindowSizeResizeHeight';
+  /**
      * window width or height change Event
      * @event RESIZE
      * @type {string}
      * @static
      */
-    WatchWindowSize.RESIZE = "watchWindowSizeResize";
+  WatchWindowSize.RESIZE = 'watchWindowSizeResize';
 
-    var p = WatchWindowSize.prototype;
+  var p = WatchWindowSize.prototype;
 
-    p.constructor = inazumatv.WatchWindowSize;
+  p.constructor = inazumatv.WatchWindowSize;
 
-    EventDispatcher.initialize( p );
+  EventDispatcher.initialize( p );
 
-    /**
+  /**
      * FPSManager instance を取得します
      * @method getFPSManager
      * @return {FPSManager} FPSManager instance を返します
      */
-    p.getFPSManager = function (){
-        return this._fps;
-    };
+  p.getFPSManager = function() {
+    return this._fps;
+  };
 
-    /**
+  /**
      * window size を監視し変更があるとイベントを発生させます。
      * @param {boolean=false} [strong] 強制的にイベントを発生させる default: false
      * @return {boolean} true: window size 変更あり
      */
-    p.update = function ( strong ){
-        var w = _$window.width(),
-            h = _$window.height(),
+  p.update = function( strong ) {
+    var w = _$window.width(),
+      h = _$window.height(),
 
-            isWidthChange = w !== _width,
-            isHeightChange = h !== _height,
-            isChange = isWidthChange || isHeightChange,
+      isWidthChange = w !== _width,
+      isHeightChange = h !== _height,
+      isChange = isWidthChange || isHeightChange,
 
-            params = {
-                strong: strong,
-                width: w,
-                height: h
-            }
+      params = {
+        strong: strong,
+        width: w,
+        height: h
+      }
             ;
 
-        _width = w;
-        _height = h;
+    _width = w;
+    _height = h;
 
-        if ( strong ) {
-            // width
-            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_WIDTH, params ), _instance );
-            // height
-            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_HEIGHT, params ), _instance );
-            // both
-            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE, params ), _instance );
-        } else if ( isChange ) {
-            // both
-            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE, params ), _instance );
-        } else if ( isWidthChange ) {
-            // width
-            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_WIDTH, params ), _instance );
-        } else if ( isHeightChange ) {
-            // height
-            _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_HEIGHT, params ), _instance );
-        }
+    if ( strong ) {
+      // width
+      _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_WIDTH, params ), _instance );
+      // height
+      _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_HEIGHT, params ), _instance );
+      // both
+      _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE, params ), _instance );
+    } else if ( isChange ) {
+      // both
+      _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE, params ), _instance );
+    } else if ( isWidthChange ) {
+      // width
+      _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_WIDTH, params ), _instance );
+    } else if ( isHeightChange ) {
+      // height
+      _instance.dispatchEvent( new EventObject( WatchWindowSize.RESIZE_HEIGHT, params ), _instance );
+    }
 
-        return isChange;
-    };
+    return isChange;
+  };
 
-    /**
+  /**
      * 強制的にEventを発火
      * @method fire
      */
-    p.fire = function (){
-        this.update( true );
-    };
+  p.fire = function() {
+    this.update( true );
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method start
      */
-    p.start = function (){
-        this.fire();
+  p.start = function() {
+    this.fire();
 
-        if ( !_isStart ) {
-            _fps.addEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
-            _fps.start();
-            _isStart = true;
-        }
-    };
+    if ( !_isStart ) {
+      _fps.addEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
+      _fps.start();
+      _isStart = true;
+    }
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method stop
      */
-    p.stop = function (){
-        _fps.removeEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
-        _fps.stop();
-        _isStart = false;
-    };
+  p.stop = function() {
+    _fps.removeEventListener( FPSManager.FPS_FRAME, _instance._onEnterFrame );
+    _fps.stop();
+    _isStart = false;
+  };
 
-    /**
+  /**
      * FPSManager.ENTER_FRAME Event Handler<br>
      * default 24fps
      *
      * @method _onEnterFrame
      * @private
      */
-    p._onEnterFrame = function (){
-        _instance.update();
-    };
+  p._onEnterFrame = function() {
+    _instance.update();
+  };
 
-    inazumatv.jq.WatchWindowSize = WatchWindowSize;
+  inazumatv.jq.WatchWindowSize = WatchWindowSize;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/17 - 13:57
@@ -4913,20 +5058,20 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var
-      isNumeric = inazumatv.isNumeric,
-      _max = Math.max,
-      WatchWindowSize,
-      /**
+( function( inazumatv ) {
+  'use strict';
+  var
+    isNumeric = inazumatv.isNumeric,
+    _max = Math.max,
+    WatchWindowSize,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $;
+    $;
     /**
      *
      * @class FitWindow
@@ -4936,55 +5081,55 @@ var inazumatv = {};
      * @param {Number} [offsetLeft] default 0
      * @constructor
      */
-    function FitWindow ( $element, minWidth, minHeight, offsetLeft ) {
-        if ( !isNumeric( minWidth ) ) {
-            minWidth = 0;
-        }
-        if ( !isNumeric( minHeight ) ) {
-            minHeight = 0;
-        }
-        if ( !isNumeric( offsetLeft ) ) {
-            offsetLeft = 0;
-        }
-        /**
+  function FitWindow( $element, minWidth, minHeight, offsetLeft ) {
+    if ( !isNumeric( minWidth ) ) {
+      minWidth = 0;
+    }
+    if ( !isNumeric( minHeight ) ) {
+      minHeight = 0;
+    }
+    if ( !isNumeric( offsetLeft ) ) {
+      offsetLeft = 0;
+    }
+    /**
          * @property _watch
          * @type {WatchDocumentHeight}
          * @private
          */
-        this._watch = WatchWindowSize.getInstance();
-        /**
+    this._watch = WatchWindowSize.getInstance();
+    /**
          * @property _$element
          * @type {jQuery}
          * @private
          */
-        this._$element = $element;
-        /**
+    this._$element = $element;
+    /**
          * @property _minWidth
          * @type {Number}
          * @private
          */
-        this._minWidth = minWidth;
-        /**
+    this._minWidth = minWidth;
+    /**
          * @property _minHeight
          * @type {Number}
          * @private
          */
-        this._minHeight = minHeight;
-        /**
+    this._minHeight = minHeight;
+    /**
          * @property _offsetLeft
          * @type {Number}
          * @private
          */
-        this._offsetLeft = offsetLeft;
-        /**
+    this._offsetLeft = offsetLeft;
+    /**
          * @property _boundOnResize
          * @type {function(this:FitWindow)|*}
          * @private
          */
-        this._boundOnResize = this._onResize.bind( this );
-    }
+    this._boundOnResize = this._onResize.bind( this );
+  }
 
-    /**
+  /**
      * FitWindow へ jQuery object を設定。FitWindow を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -4992,104 +5137,106 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    FitWindow.activate = function ( jQuery ){
-        $ = jQuery;
-        WatchWindowSize = inazumatv.jq.WatchWindowSize;
-        WatchWindowSize.activate( jQuery );
-    };
+  FitWindow.activate = function( jQuery ) {
+    $ = jQuery;
+    WatchWindowSize = inazumatv.jq.WatchWindowSize;
+    WatchWindowSize.activate( jQuery );
+  };
 
-    var p = FitWindow.prototype;
+  var p = FitWindow.prototype;
 
-    p.constructor = inazumatv.FitWindow;
+  p.constructor = inazumatv.FitWindow;
 
-    /**
+  /**
      * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchWindowSize = function (){
-        //return this._watch;
-        console.warn( "deprecated, use watch()" );
-        return this.watch();
-    };
+  p.getWatchWindowSize = function() {
+    // return this._watch;
+    console.warn( 'deprecated, use watch()' );
+    return this.watch();
+  };
 
-    /**
+  /**
      * @method watch
      * @return {WatchWindowSize|*|FitWindow._watch}
      */
-    p.watch = function () {
+  p.watch = function() {
 
-        return this._watch;
-    };
+    return this._watch;
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method listen
      * @return {FitWindow}
      */
-    p.listen = function (){
-        var watch = this._watch;
+  p.listen = function() {
+    var watch = this._watch;
 
-        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        watch.start();
+    watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    watch.start();
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method abort
      * @return {FitWindow}
      */
-    p.abort = function (){
-        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+  p.abort = function() {
+    this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setMinHeight
      * @param {Number} h Minimum height
      * @return {FitWindow}
      */
-    p.setMinHeight = function ( h ){
-        if ( isNumeric( h ) ) {
-            this._minHeight = h;
-        }
+  p.setMinHeight = function( h ) {
+    if ( isNumeric( h ) ) {
+      this._minHeight = h;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setMinWidth
      * @param {Number} w Minimum width
      * @return {FitWindow}
      */
-    p.setMinWidth = function ( w ){
-        if ( isNumeric( w ) ) {
-            this._elementWidth = w;
-        }
+  p.setMinWidth = function( w ) {
+    if ( isNumeric( w ) ) {
+      this._elementWidth = w;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * Event Handler, Document height resize
      * @method _onResize
      * @param {EventObject} eventObject
      * @protected
      */
-    p._onResize = function ( eventObject ){
-        var params = eventObject.params[ 0 ],
-            w = params.width - this._offsetLeft,
-            h = params.height;
+  p._onResize = function( eventObject ) {
+    var params = eventObject.params[ 0 ],
+      w = params.width - this._offsetLeft,
+      h = params.height;
 
-        this._$element.width( _max( w, this._minWidth ) ).height(_max( h, this._minHeight ) );
-    };
+    this._$element.width( _max( w, this._minWidth ) ).height(_max( h, this._minHeight ) );
+  };
 
-    inazumatv.jq.FitWindow = FitWindow;
+  inazumatv.jq.FitWindow = FitWindow;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/17 - 14:10
@@ -5101,24 +5248,24 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var
-      isNumeric = inazumatv.isNumeric,
-      _int = parseInt,
-      _ceil = Math.ceil,
-      _max = Math.max,
-      WatchWindowSize,
-      /**
+( function( inazumatv ) {
+  'use strict';
+  var
+    isNumeric = inazumatv.isNumeric,
+    _int = parseInt,
+    _ceil = Math.ceil,
+    _max = Math.max,
+    WatchWindowSize,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $;
+    $;
 
-    /**
+  /**
      *
      * @class FitWindowAspect
      * @param {jQuery} $element jQuery object, 対象エレメント
@@ -5128,76 +5275,76 @@ var inazumatv = {};
      * @param {Number} [offsetTop] default 0
      * @constructor
      */
-    function FitWindowAspect ( $element, minWidth, minHeight, offsetLeft, offsetTop ) {
-        if ( !isNumeric( minWidth ) ) {
-            minWidth = 0;
-        }
-        if ( !isNumeric( minHeight ) ) {
-            minHeight = 0;
-        }
-        if ( !isNumeric( offsetLeft ) ) {
-            offsetLeft = 0;
-        }
-        if ( !isNumeric( offsetTop ) ) {
-            offsetTop = 0;
-        }
-        /**
+  function FitWindowAspect( $element, minWidth, minHeight, offsetLeft, offsetTop ) {
+    if ( !isNumeric( minWidth ) ) {
+      minWidth = 0;
+    }
+    if ( !isNumeric( minHeight ) ) {
+      minHeight = 0;
+    }
+    if ( !isNumeric( offsetLeft ) ) {
+      offsetLeft = 0;
+    }
+    if ( !isNumeric( offsetTop ) ) {
+      offsetTop = 0;
+    }
+    /**
          * @property _watch
          * @type {WatchWindowSize}
          * @private
          */
-        this._watch = WatchWindowSize.getInstance();
-        /**
+    this._watch = WatchWindowSize.getInstance();
+    /**
          * @property _$element
          * @type {jQuery}
          * @private
          */
-        this._$element = $element;
-        /**
+    this._$element = $element;
+    /**
          * @property _minWidth
          * @type {Number}
          * @private
          */
-        this._minWidth = minWidth;
-        /**
+    this._minWidth = minWidth;
+    /**
          * @property _minHeight
          * @type {Number}
          * @private
          */
-        this._minHeight = minHeight;
-        /**
+    this._minHeight = minHeight;
+    /**
          * @property _offsetLeft
          * @type {Number}
          * @private
          */
-        this._offsetLeft = offsetLeft;
-        /**
+    this._offsetLeft = offsetLeft;
+    /**
          * @property _offsetTop
          * @type {Number}
          * @private
          */
-        this._offsetTop = offsetTop;
-        /**
+    this._offsetTop = offsetTop;
+    /**
          * @property _elementWidth
          * @type {Number}
          * @private
          */
-        this._elementWidth = _int( $element.width(), 10 );
-        /**
+    this._elementWidth = _int( $element.width(), 10 );
+    /**
          * @property _elementHeight
          * @type {Number}
          * @private
          */
-        this._elementHeight = _int( $element.height(), 10 );
-        /**
+    this._elementHeight = _int( $element.height(), 10 );
+    /**
          * @property _boundOnResize
          * @type {function(this:FitWindowAspect)|*}
          * @private
          */
-        this._boundOnResize = this._onResize.bind( this );
-    }
+    this._boundOnResize = this._onResize.bind( this );
+  }
 
-    /**
+  /**
      * FitWindowAspect へ jQuery object を設定。FitWindowAspect を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -5205,136 +5352,138 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    FitWindowAspect.activate = function ( jQuery ){
-        $ = jQuery;
-        WatchWindowSize = inazumatv.jq.WatchWindowSize;
-        WatchWindowSize.activate( jQuery );
-    };
+  FitWindowAspect.activate = function( jQuery ) {
+    $ = jQuery;
+    WatchWindowSize = inazumatv.jq.WatchWindowSize;
+    WatchWindowSize.activate( jQuery );
+  };
 
-    var p = FitWindowAspect.prototype;
+  var p = FitWindowAspect.prototype;
 
-    p.constructor = inazumatv.FitWindowAspect;
+  p.constructor = inazumatv.FitWindowAspect;
 
-    /**
+  /**
      * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchWindowSize = function (){
-        console.warn( "getWatchWindowSize deprecated, instead watch" );
-        return this.watch();
-    };
-    /**
+  p.getWatchWindowSize = function() {
+    console.warn( 'getWatchWindowSize deprecated, instead watch' );
+    return this.watch();
+  };
+  /**
      * @method watch
      * @return {WatchWindowSize}
      */
-    p.watch = function () {
-      return this._watch;
-    };
+  p.watch = function() {
+    return this._watch;
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method listen
      * @return {FitWindowAspect}
      */
-    p.listen = function (){
-        var watch = this._watch;
-        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        watch.start();
+  p.listen = function() {
+    var watch = this._watch;
+    watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    watch.start();
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method abort
      * @return {FitWindowAspect}
      */
-    p.abort = function (){
-        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+  p.abort = function() {
+    this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setElementWidth
      * @param {Number} w DOMElement width
      * @return {FitWindowAspect}
      */
-    p.setElementWidth = function ( w ){
-        if ( isNumeric( w ) ) {
-            this._elementWidth = w;
-        }
+  p.setElementWidth = function( w ) {
+    if ( isNumeric( w ) ) {
+      this._elementWidth = w;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setElementHeight
      * @param {Number} h DOMElement height
      * @return {FitWindowAspect}
      */
-    p.setElementHeight = function ( h ){
-        if ( isNumeric( h ) ) {
-            this._elementHeight = h;
-        }
+  p.setElementHeight = function( h ) {
+    if ( isNumeric( h ) ) {
+      this._elementHeight = h;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setMinHeight
      * @param {Number} h Minimum height
      * @return {FitWindowAspect}
      */
-    p.setMinHeight = function ( h ){
-        if ( isNumeric( h ) ) {
-            this._minHeight = h;
-        }
+  p.setMinHeight = function( h ) {
+    if ( isNumeric( h ) ) {
+      this._minHeight = h;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setMinWidth
      * @param {Number} w Minimum width
      * @return {FitWindowAspect}
      */
-    p.setMinWidth = function ( w ){
-        if ( isNumeric( w ) ) {
-            this._elementWidth = w;
-        }
+  p.setMinWidth = function( w ) {
+    if ( isNumeric( w ) ) {
+      this._elementWidth = w;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * Event Handler, Window width or height resize
      * @method _onResize
      * @param {EventObject} eventObject
      * @protected
      */
-    p._onResize = function ( eventObject ){
-        var ew = this._elementWidth,
-            eh = this._elementHeight,
-            params = eventObject.params[ 0 ],
-            w = params.width - this._offsetLeft,
-            h = params.height - this._offsetTop,
-            aw,
-            ah,
-            aspect;
+  p._onResize = function( eventObject ) {
+    var ew = this._elementWidth,
+      eh = this._elementHeight,
+      params = eventObject.params[ 0 ],
+      w = params.width - this._offsetLeft,
+      h = params.height - this._offsetTop,
+      aw,
+      ah,
+      aspect;
 
-        w = _max( w, this._minWidth );
-        h = _max( h, this._minHeight );
-        aw = w / ew;
-        ah = h / eh;
-        aspect = _max( aw, ah );
+    w = _max( w, this._minWidth );
+    h = _max( h, this._minHeight );
+    aw = w / ew;
+    ah = h / eh;
+    aspect = _max( aw, ah );
 
-        this._$element.width( _ceil( ew * aspect ) ).height( _ceil( eh * aspect ) );
-    };
+    this._$element.width( _ceil( ew * aspect ) ).height( _ceil( eh * aspect ) );
+  };
 
-    inazumatv.jq.FitWindowAspect = FitWindowAspect;
-}( this.inazumatv ) );/**
+  inazumatv.jq.FitWindowAspect = FitWindowAspect;
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/17 - 14:10
@@ -5346,24 +5495,24 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var
-      isNumeric = inazumatv.isNumeric,
-      _int = parseInt,
-      _ceil = Math.ceil,
-      _max = Math.max,
-      WatchWindowSize,
-      /**
+( function( inazumatv ) {
+  'use strict';
+  var
+    isNumeric = inazumatv.isNumeric,
+    _int = parseInt,
+    _ceil = Math.ceil,
+    _max = Math.max,
+    WatchWindowSize,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $;
+    $;
 
-    /**
+  /**
      * window幅に比率を保ち拡大縮小し、常に中央を表示します。
      *
      * @class FitWindowAspectCenter
@@ -5372,58 +5521,58 @@ var inazumatv = {};
      * @param {Number} [minHeight] default 0
      * @constructor
      */
-    function FitWindowAspectCenter ( $element, minWidth, minHeight ) {
-        if ( !isNumeric( minWidth ) ) {
-            minWidth = 0;
-        }
-        if ( !isNumeric( minHeight ) ) {
-            minHeight = 0;
-        }
-        /**
+  function FitWindowAspectCenter( $element, minWidth, minHeight ) {
+    if ( !isNumeric( minWidth ) ) {
+      minWidth = 0;
+    }
+    if ( !isNumeric( minHeight ) ) {
+      minHeight = 0;
+    }
+    /**
          * @property _watch
          * @type {WatchDocumentHeight}
          * @private
          */
-        this._watch = WatchWindowSize.getInstance();
-        /**
+    this._watch = WatchWindowSize.getInstance();
+    /**
          * @property _$element
          * @type {jQuery}
          * @private
          */
-        this._$element = $element;
-        /**
+    this._$element = $element;
+    /**
          * @property _minWidth
          * @type {Number}
          * @private
          */
-        this._minWidth = minWidth;
-        /**
+    this._minWidth = minWidth;
+    /**
          * @property _minHeight
          * @type {Number}
          * @private
          */
-        this._minHeight = minHeight;
-        /**
+    this._minHeight = minHeight;
+    /**
          * @property _elementWidth
          * @type {Number}
          * @private
          */
-        this._elementWidth = _int( $element.width(), 10 );
-        /**
+    this._elementWidth = _int( $element.width(), 10 );
+    /**
          * @property _elementHeight
          * @type {Number}
          * @private
          */
-        this._elementHeight = _int( $element.height(), 10 );
-        /**
+    this._elementHeight = _int( $element.height(), 10 );
+    /**
          * @property _boundOnResize
          * @type {function(this:FitWindowAspectCenter)|*}
          * @private
          */
-        this._boundOnResize = this._onResize.bind( this );
-    }
+    this._boundOnResize = this._onResize.bind( this );
+  }
 
-    /**
+  /**
      * FitWindowAspectCenter へ jQuery object を設定。FitWindowAspectCenter を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -5431,152 +5580,154 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    FitWindowAspectCenter.activate = function ( jQuery ){
-        $ = jQuery;
-        WatchWindowSize = inazumatv.jq.WatchWindowSize;
-        WatchWindowSize.activate( jQuery );
-    };
+  FitWindowAspectCenter.activate = function( jQuery ) {
+    $ = jQuery;
+    WatchWindowSize = inazumatv.jq.WatchWindowSize;
+    WatchWindowSize.activate( jQuery );
+  };
 
-    var p = FitWindowAspectCenter.prototype;
+  var p = FitWindowAspectCenter.prototype;
 
-    p.constructor = FitWindowAspectCenter;
+  p.constructor = FitWindowAspectCenter;
 
-    /**
+  /**
      * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchWindowSize = function (){
-        //return this._watch;
-        console.warn( "deprecated, use watch()" );
-        return this.watch();
-    };
+  p.getWatchWindowSize = function() {
+    // return this._watch;
+    console.warn( 'deprecated, use watch()' );
+    return this.watch();
+  };
 
-    /**
+  /**
      * @method watch
      * @return {WatchDocumentHeight|*|FitWindowAspectCenter._watch}
      */
-    p.watch = function () {
+  p.watch = function() {
 
-        return this._watch;
-    };
+    return this._watch;
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method listen
      * @return {FitWindowAspectCenter}
      */
-    p.listen = function (){
-        var watch = this._watch;
-        //this._boundOnResize = this._onResize.bind( this );
-        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        watch.start();
+  p.listen = function() {
+    var watch = this._watch;
+    // this._boundOnResize = this._onResize.bind( this );
+    watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    watch.start();
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method abort
      * @return {FitWindowAspectCenter}
      */
-    p.abort = function (){
-        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+  p.abort = function() {
+    this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setElementWidth
      * @param {Number} w DOMElement width
      * @return {FitWindowAspectCenter}
      */
-    p.setElementWidth = function ( w ){
-        if ( isNumeric( w ) ) {
-            this._elementWidth = w;
-        }
+  p.setElementWidth = function( w ) {
+    if ( isNumeric( w ) ) {
+      this._elementWidth = w;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setElementHeight
      * @param {Number} h DOMElement height
      * @return {FitWindowAspectCenter}
      */
-    p.setElementHeight = function ( h ){
-        if ( isNumeric( h ) ) {
-            this._elementHeight = h;
-        }
+  p.setElementHeight = function( h ) {
+    if ( isNumeric( h ) ) {
+      this._elementHeight = h;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setMinHeight
      * @param {Number} h Minimum height
      * @return {FitWindowAspectCenter}
      */
-    p.setMinHeight = function ( h ){
-        if ( isNumeric( h ) ) {
-            this._minHeight = h;
-        }
+  p.setMinHeight = function( h ) {
+    if ( isNumeric( h ) ) {
+      this._minHeight = h;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setMinWidth
      * @param {Number} w Minimum width
      * @return {FitWindowAspectCenter}
      */
-    p.setMinWidth = function ( w ){
-        if ( isNumeric( w ) ) {
-            this._elementWidth = w;
-        }
+  p.setMinWidth = function( w ) {
+    if ( isNumeric( w ) ) {
+      this._elementWidth = w;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * Event Handler, Window width or height resize
      * @method _onResize
      * @param {EventObject} eventObject
      * @protected
      */
-    p._onResize = function ( eventObject ){
-        var
-          ew = this._elementWidth,
-          eh = this._elementHeight,
-          params = eventObject.params[ 0 ],
-          window_w = Math.ceil( params.width ),
-          window_h = Math.ceil( params.height ),
-          w,
-          h,
-          aspect_w,
-          aspect_h,
-          aspect,
-          after_w, after_h, sub_w, sub_h;
+  p._onResize = function( eventObject ) {
+    var
+      ew = this._elementWidth,
+      eh = this._elementHeight,
+      params = eventObject.params[ 0 ],
+      window_w = Math.ceil( params.width ),
+      window_h = Math.ceil( params.height ),
+      w,
+      h,
+      aspect_w,
+      aspect_h,
+      aspect,
+      after_w, after_h, sub_w, sub_h;
 
-        w = _max( window_w, this._minWidth );
-        h = _max( window_h, this._minHeight );
-        aspect_w = w / ew;
-        aspect_h = h / eh;
-        aspect = _max( aspect_w, aspect_h );
+    w = _max( window_w, this._minWidth );
+    h = _max( window_h, this._minHeight );
+    aspect_w = w / ew;
+    aspect_h = h / eh;
+    aspect = _max( aspect_w, aspect_h );
 
-        // 計算後のwidth, height
-        after_w = _ceil( ew * aspect );
-        after_h = _ceil( eh * aspect );
-        sub_w = (window_w - after_w) * 0.5;
-        sub_h = (window_h - after_h) * 0.5;
+    // 計算後のwidth, height
+    after_w = _ceil( ew * aspect );
+    after_h = _ceil( eh * aspect );
+    sub_w = (window_w - after_w) * 0.5;
+    sub_h = (window_h - after_h) * 0.5;
 
-        //this._$element.width( after_w ).height( after_h ).css( { left: sub_w + "px", top: sub_h + "px" } );
-        this._$element.css( { width: after_w + "px", height: after_h + "px", left: sub_w + "px", top: sub_h + "px" } );
-    };
+    // this._$element.width( after_w ).height( after_h ).css( { left: sub_w + "px", top: sub_h + "px" } );
+    this._$element.css( { width: after_w + 'px', height: after_h + 'px', left: sub_w + 'px', top: sub_h + 'px' } );
+  };
 
-    inazumatv.jq.FitWindowAspectCenter = FitWindowAspectCenter;
+  inazumatv.jq.FitWindowAspectCenter = FitWindowAspectCenter;
 
-}( this.inazumatv ) );/**
+}( this.inazumatv ) );
+
+/**
  * license inazumatv.com
  * author (at)taikiken / http://inazumatv.com
  * date 2013/12/17 - 14:26
@@ -5588,74 +5739,74 @@ var inazumatv = {};
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var
-      isNumeric = inazumatv.isNumeric,
-      _max = Math.max,
-      WatchWindowSize,
-      /**
+( function( inazumatv ) {
+  'use strict';
+  var
+    isNumeric = inazumatv.isNumeric,
+    _max = Math.max,
+    WatchWindowSize,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $;
+    $;
 
-    /**
+  /**
      * @class FitWindowHeight
      * @param {jQuery} $element jQuery object, 対象エレメント
      * @param {Number} [minHeight] default 0
      * @param {Number} [offsetTop] default 0
      * @constructor
      */
-    function FitWindowHeight ( $element, minHeight, offsetTop ) {
-        if ( !isNumeric( minHeight ) ) {
-            minHeight = 0;
-        }
+  function FitWindowHeight( $element, minHeight, offsetTop ) {
+    if ( !isNumeric( minHeight ) ) {
+      minHeight = 0;
+    }
 
-        if ( !isNumeric( offsetTop ) ) {
-            offsetTop = 0;
-        }
-        /**
+    if ( !isNumeric( offsetTop ) ) {
+      offsetTop = 0;
+    }
+    /**
          * @property _watch
          * @type {WatchDocumentHeight}
          * @private
          */
-        this._watch = WatchWindowSize.getInstance();
-        /**
+    this._watch = WatchWindowSize.getInstance();
+    /**
          * @property _$element
          * @type {jQuery}
          * @private
          */
-        this._$element = $element;
-        /**
+    this._$element = $element;
+    /**
          * @property _minHeight
          * @type {Number}
          * @private
          */
-        this._minHeight = minHeight;
-        /**
+    this._minHeight = minHeight;
+    /**
          * @property _offsetTop
          * @type {Number}
          * @private
          */
-        this._offsetTop = offsetTop;
-        /**
+    this._offsetTop = offsetTop;
+    /**
          * @property _elementHeight
          * @type {Number}
          * @private
          */
-        this._elementHeight = parseInt( $element.height(), 10 );
-        /**
+    this._elementHeight = parseInt( $element.height(), 10 );
+    /**
          * @property _boundOnResize
          * @type {function(this:FitWindowHeight)|*}
          * @private
          */
-        this._boundOnResize = this._onResize.bind( this );
-    }
-    /**
+    this._boundOnResize = this._onResize.bind( this );
+  }
+  /**
      * FitWindowHeight へ jQuery object を設定。FitWindowHeight を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -5663,85 +5814,85 @@ var inazumatv = {};
      * @param {jQuery} jQuery object
      * @static
      */
-    FitWindowHeight.activate = function ( jQuery ){
-        $ = jQuery;
-        WatchWindowSize = inazumatv.jq.WatchWindowSize;
-        WatchWindowSize.activate( jQuery );
-    };
+  FitWindowHeight.activate = function( jQuery ) {
+    $ = jQuery;
+    WatchWindowSize = inazumatv.jq.WatchWindowSize;
+    WatchWindowSize.activate( jQuery );
+  };
 
-    var p = FitWindowHeight.prototype;
+  var p = FitWindowHeight.prototype;
 
-    /**
+  /**
      * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchWindowSize = function (){
-        //return this._watch;
-        console.warn( "deprecated, use watch()" );
-        return this.watch();
-    };
+  p.getWatchWindowSize = function() {
+    // return this._watch;
+    console.warn( 'deprecated, use watch()' );
+    return this.watch();
+  };
 
-    /**
+  /**
      * @method watch
      * @return {WatchWindowSize|*|FitWindowHeight._watch}
      */
-    p.watch = function () {
+  p.watch = function() {
 
-        return this._watch;
-    };
+    return this._watch;
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method listen
      * @return {FitWindowHeight}
      */
-    p.listen = function (){
-        var watch = this._watch;
+  p.listen = function() {
+    var watch = this._watch;
 
-        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        watch.start();
+    watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    watch.start();
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method abort
      * @return {FitWindowHeight}
      */
-    p.abort = function (){
-        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+  p.abort = function() {
+    this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setMinHeight
      * @param {Number} h Minimum height
      * @return {FitWindowHeight}
      */
-    p.setMinHeight = function ( h ){
-        if ( isNumeric( h ) ) {
-            this._minHeight = h;
-        }
+  p.setMinHeight = function( h ) {
+    if ( isNumeric( h ) ) {
+      this._minHeight = h;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * Event Handler, Window width or height resizec
      * @method _onResize
      * @param {EventObject} eventObject
      * @protected
      */
-    p._onResize = function ( eventObject ){
-        var
-          params = eventObject.params[ 0 ],
-          h = params.height;
+  p._onResize = function( eventObject ) {
+    var
+      params = eventObject.params[ 0 ],
+      h = params.height;
 
-        this._$element.height( _max( h, this._minHeight ) - this._offsetTop );
-    };
+    this._$element.height( _max( h, this._minHeight ) - this._offsetTop );
+  };
 
-    inazumatv.jq.FitWindowHeight = FitWindowHeight;
+  inazumatv.jq.FitWindowHeight = FitWindowHeight;
 }( this.inazumatv ) );
