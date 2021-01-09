@@ -10,13 +10,13 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    inazumatv.jq = inazumatv.jq || {};
-    var ExternalJQ = inazumatv.jq.ExternalJQ  = inazumatv.jq.ExternalJQ || {};
+  inazumatv.jq = inazumatv.jq || {};
+  var ExternalJQ = inazumatv.jq.ExternalJQ = inazumatv.jq.ExternalJQ || {};
 
-    /**
+  /**
      * jQuery Object 設定します。<br>
      * imports, exports を行う前に実行します。
      *
@@ -27,17 +27,17 @@
      * @param {jQuery} jQuery global jQuery Object
      * @static
      */
-    ExternalJQ.save = function ( jQuery ){
-        if ( typeof jQuery === "undefined" || jQuery === null ) {
-            // jQuery defined
-            throw "set first global jQuery object";
-        } else {
-            this._$ = jQuery;
-            inazumatv.eventStop = eventStop;
-        }
-    };
+  ExternalJQ.save = function( jQuery ) {
+    if ( typeof jQuery === 'undefined' || jQuery === null ) {
+      // jQuery defined
+      throw 'set first global jQuery object';
+    } else {
+      this._$ = jQuery;
+      inazumatv.eventStop = eventStop;
+    }
+  };
 
-    /**
+  /**
      * jQuery Object を取得します。
      *
      *     var $ = inazumatv.jq.ExternalJQ.exports();
@@ -47,11 +47,11 @@
      * @return {jQuery} jQuery Object
      * @static
      */
-    ExternalJQ.exports = function (){
-        return this._$;
-    };
+  ExternalJQ.exports = function() {
+    return this._$;
+  };
 
-    /**
+  /**
      * jQuery plugin を活性化させます。<br>
      *
      *     inazumatv.jq.ExternalJQ.save( jQuery );
@@ -66,15 +66,15 @@
      * @param {jQuery} [jQuery] jQuery Object
      * @static
      */
-    ExternalJQ.install = function ( pluginName, jQuery ){
-        if ( typeof jQuery !== "undefined" && jQuery !== null ) {
-            //  defined
-            this.save( jQuery );
-        }
-        inazumatv.jq[ pluginName ].activate( this._$ );
-    };
+  ExternalJQ.install = function( pluginName, jQuery ) {
+    if ( typeof jQuery !== 'undefined' && jQuery !== null ) {
+      //  defined
+      this.save( jQuery );
+    }
+    inazumatv.jq[ pluginName ].activate( this._$ );
+  };
 
-    /**
+  /**
      * 拡張機能を取得します。<br>
      *
      *     inazumatv.jq.ExternalJQ.save( jQuery );
@@ -90,17 +90,17 @@
      * @return {*} 拡張機能を返します
      * @static
      */
-    ExternalJQ.imports = function ( extensionName, jQuery ){
-        if ( typeof jQuery !== "undefined" && jQuery !== null ) {
-            //  defined
-            this.save( jQuery );
-        }
-        var extension = inazumatv.jq[ extensionName ];
-        extension.activate( this._$ );
-        return extension;
-    };
+  ExternalJQ.imports = function( extensionName, jQuery ) {
+    if ( typeof jQuery !== 'undefined' && jQuery !== null ) {
+      //  defined
+      this.save( jQuery );
+    }
+    var extension = inazumatv.jq[ extensionName ];
+    extension.activate( this._$ );
+    return extension;
+  };
 
-    /**
+  /**
      * event バブリングと伝播を止めます。<br>
      * <strong style="color:red;">注意</strong> jQuery Object を save 後に使用できます。
      *
@@ -121,19 +121,19 @@
      * @param {Event} e jQuery event instance
      * @param {*\Boolean} [propagation] optional, default true
      */
-    function eventStop ( e, propagation ){
-        if ( typeof propagation === 'undefined' || propagation === null ) {
-            // undefined or null
-            propagation = true;
-        }
-
-        e.preventDefault();
-
-        if ( propagation ) {
-            e.stopPropagation();
-        }
+  function eventStop( e, propagation ) {
+    if ( typeof propagation === 'undefined' || propagation === null ) {
+      // undefined or null
+      propagation = true;
     }
 
-    inazumatv.jq.ExternalJQ = ExternalJQ;
+    e.preventDefault();
+
+    if ( propagation ) {
+      e.stopPropagation();
+    }
+  }
+
+  inazumatv.jq.ExternalJQ = ExternalJQ;
 
 }( this.inazumatv ) );

@@ -10,8 +10,8 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window, inazumatv ){
-    "use strict";
+( function( window, inazumatv ) {
+  'use strict';
   var
     _float = parseFloat,
     _int = parseInt,
@@ -26,7 +26,7 @@
     _ie10 = !!_ua.match(/msie [10]/i),
     _ie11 = !!_ua.match(/trident\/[7]/i) && !!_ua.match(/rv:[11]/i),
     _ie = !!_ua.match(/msie/i) || _ie11,
-    _legacy = _ie6 || _ie7|| _ie8,
+    _legacy = _ie6 || _ie7 || _ie8,
 
     _ipad = !!_ua.match(/ipad/i),
     _ipod = !!_ua.match(/ipod/i),
@@ -36,7 +36,7 @@
     _android = !!_ua.match(/android/i),
     _mobile = _ios || _android,
 
-  // for ios chrome
+    // for ios chrome
     _crios = !!_ua.match(/crios/i),
 
     _chrome = !!_ua.match(/chrome/i),
@@ -47,9 +47,9 @@
     _windows = !!_ua.match(/windows/i),
     _mac = !!_ua.match(/mac os x/i),
 
-    _touch = typeof window.ontouchstart !== "undefined",
+    _touch = typeof window.ontouchstart !== 'undefined',
 
-    _fullScreen = typeof navigator.standalone !== "undefined" ? navigator.standalone : false,
+    _fullScreen = typeof navigator.standalone !== 'undefined' ? navigator.standalone : false,
 
     _android_phone = false,
     _android_tablet = false,
@@ -104,13 +104,13 @@
    * @returns {Array} iOS version 配列 3桁
    * @private
    */
-  function _iosVersion () {
+  function _iosVersion() {
     var v, versions;
 
     // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
     v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
     versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3] || 0, 10)];
-    _ios_version = _float( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
+    _ios_version = _float( versions[ 0 ] + '.' + versions[ 1 ] + versions[ 2 ] );
 
     return versions;
   }
@@ -127,7 +127,7 @@
    * @returns {Array} Android version 配列 3桁
    * @private
    */
-  function _get_androidVersion () {
+  function _get_androidVersion() {
     var v, versions = [0, 0, 0];
     v = (navigator.appVersion).match(/Android (\d+)\.(\d+)\.?(\d+)?/);
     if (Array.isArray(v)) {
@@ -136,7 +136,7 @@
         _int(v[2], 10),
         _int(v[3] || 0, 10)
       ];
-      _android_version = _float( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
+      _android_version = _float( versions[ 0 ] + '.' + versions[ 1 ] + versions[ 2 ] );
     }
     return versions;
   }
@@ -151,28 +151,28 @@
    * @returns {Array} Safari version 配列 2桁~3桁
    * @private
    */
-  function _safariVersion () {
+  function _safariVersion() {
     var v, versions;
 
     v = (navigator.appVersion).match(/Version\/(\d+)\.(\d+)\.?(\d+)?/);
     versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3] || 0, 10)];
-    _safari_version = _float( versions[ 0 ] + "." + versions[ 1 ] + versions[ 2 ] );
+    _safari_version = _float( versions[ 0 ] + '.' + versions[ 1 ] + versions[ 2 ] );
     return versions;
   }
 
-  //if ( _safari && !_mobile ) {
+  // if ( _safari && !_mobile ) {
   if ( _safari ) {
-    //// not _mobile and _safari
+    // // not _mobile and _safari
     // _safari, include mobile
     _safari_versions = _safariVersion();
   }
 
-  function _chromeVersion () {
+  function _chromeVersion() {
     var v, versions;
 
     v = (navigator.appVersion).match(/Chrome\/(\d+)\.(\d+)\.(\d+)\.?(\d+)?/);
     versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3], 10), _int(v[4], 10)];
-    return versions.join( "." );
+    return versions.join( '.' );
   }
 
   // exclude iOS chrome
@@ -180,12 +180,12 @@
     _chrome_version = _chromeVersion();
   }
 
-  function _criosVersion () {
+  function _criosVersion() {
     var v, versions;
 
     v = (navigator.appVersion).match(/CriOS\/(\d+)\.(\d+)\.(\d+)\.?(\d+)?/);
     versions = [_int(v[1], 10), _int(v[2], 10), _int(v[3], 10), _int(v[4], 10)];
-    return versions.join( "." );
+    return versions.join( '.' );
   }
 
   if ( _crios ) {
@@ -196,18 +196,18 @@
 
   // transition support
   // http://stackoverflow.com/questions/7264899/detect-css-transitions-using-javascript-and-without-modernizr
-  _transition = ( function (){
-    var p = document.createElement( "p" ).style;
+  _transition = ( function() {
+    var p = document.createElement( 'p' ).style;
 
-    return "transition" in p || "WebkitTransition" in p || "MozTransition" in p || "msTransition" in p || "OTransition" in p;
+    return 'transition' in p || 'WebkitTransition' in p || 'MozTransition' in p || 'msTransition' in p || 'OTransition' in p;
 
   }() );
 
   // transform support
-  _transform = ( function (){
-    var p = document.createElement( "p" ).style;
+  _transform = ( function() {
+    var p = document.createElement( 'p' ).style;
 
-    return "transform" in p || "WebkitTransform" in p || "MozTransform" in p || "OTransform" in p || "msTransform" in p;
+    return 'transform' in p || 'WebkitTransform' in p || 'MozTransform' in p || 'OTransform' in p || 'msTransform' in p;
 
   }() );
 
@@ -216,8 +216,8 @@
    * @class Browser
    * @constructor
    */
-  var Browser = function () {
-    throw "Browser cannot be instantiated";
+  var Browser = function() {
+    throw 'Browser cannot be instantiated';
   };
 
   /**
@@ -240,7 +240,7 @@
        * @returns {boolean} iOS か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _ios;
       },
       /**
@@ -249,7 +249,7 @@
        * @returns {Array} iOS version number を返します [ major, minor, build ]
        * @static
        */
-      number: function (){
+      number: function() {
         return _ios_versions;
       },
       /**
@@ -258,7 +258,7 @@
        * @returns {Number} iOS major version number を返します
        * @static
        */
-      major: function (){
+      major: function() {
         return _ios_versions[ 0 ];
       },
       /**
@@ -267,7 +267,7 @@
        * @returns {Number} iOS version を返します 9.99
        * @static
        */
-      version: function (){
+      version: function() {
         return _ios_version;
       },
       /**
@@ -276,7 +276,7 @@
        * @returns {Boolean} iPhone か否かを返します
        * @static
        */
-      iPhone: function (){
+      iPhone: function() {
         return _iphone;
       },
       /**
@@ -285,7 +285,7 @@
        * @returns {Boolean} iPad か否かを返します
        * @static
        */
-      iPad: function (){
+      iPad: function() {
         return _ipad;
       },
       /**
@@ -294,7 +294,7 @@
        * @returns {Boolean} iPod か否かを返します
        * @static
        */
-      iPod: function (){
+      iPod: function() {
         return _ipod;
       },
       /**
@@ -303,7 +303,7 @@
        * @returns {boolean} standalone mode か否かを返します
        * @static
        */
-      fullScreen: function (){
+      fullScreen: function() {
         return _fullScreen;
       }
     },
@@ -321,7 +321,7 @@
        * @returns {boolean} Android か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _android;
       },
       /**
@@ -330,7 +330,7 @@
        * @returns {Array} Android version number を返します [ major, minor, build ]
        * @static
        */
-      number: function (){
+      number: function() {
         return _android_versions;
       },
       /**
@@ -339,7 +339,7 @@
        * @returns {Number} Android major version number を返します
        * @static
        */
-      major: function (){
+      major: function() {
         return _android_versions[ 0 ];
       },
       /**
@@ -348,7 +348,7 @@
        * @returns {Number} Android version を返します 9.99
        * @static
        */
-      version: function (){
+      version: function() {
         return _android_version;
       },
       /**
@@ -357,7 +357,7 @@
        * @returns {boolean} Android Phone か否かを返します
        * @static
        */
-      phone: function (){
+      phone: function() {
         return _android_phone;
       },
       /**
@@ -366,7 +366,7 @@
        * @returns {boolean} Android Tablet か否かを返します
        * @static
        */
-      tablet: function (){
+      tablet: function() {
         return _android_tablet;
       },
       /**
@@ -375,7 +375,7 @@
        * @returns {boolean} Android standard Browser か否かを返します
        * @static
        */
-      standard: function () {
+      standard: function() {
         return _android_standard;
       }
     },
@@ -393,7 +393,7 @@
        * @returns {boolean} IE か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _ie;
       },
       /**
@@ -401,7 +401,7 @@
        * @method is6
        * @returns {boolean} IE 6 か否かを返します
        */
-      is6: function (){
+      is6: function() {
         return _ie6;
       },
       /**
@@ -409,7 +409,7 @@
        * @method is7
        * @returns {boolean} IE 7 か否かを返します
        */
-      is7: function (){
+      is7: function() {
         return _ie7;
       },
       /**
@@ -417,7 +417,7 @@
        * @method is8
        * @returns {boolean} IE 8 か否かを返します
        */
-      is8: function (){
+      is8: function() {
         return _ie8;
       },
       /**
@@ -425,7 +425,7 @@
        * @method is9
        * @returns {boolean} IE 9 か否かを返します
        */
-      is9: function (){
+      is9: function() {
         return _ie9;
       },
       /**
@@ -433,7 +433,7 @@
        * @method is10
        * @returns {boolean} IE 10 か否かを返します
        */
-      is10: function (){
+      is10: function() {
         return _ie10;
       },
       /**
@@ -441,7 +441,7 @@
        * @method is11
        * @returns {boolean} IE 11 か否かを返します
        */
-      is11: function (){
+      is11: function() {
         return _ie11;
       },
       /**
@@ -449,7 +449,7 @@
        * @method _legacy
        * @returns {boolean} IE 6 or 7 or 8 か否かを返します
        */
-      legacy: function (){
+      legacy: function() {
         return _legacy;
       },
       /**
@@ -458,7 +458,7 @@
        * @returns {Number} IE version を返します int 6 ~ 11, IE 6 ~ IE 11 でない場合は -1 を返します
        * @static
        */
-      version: function (){
+      version: function() {
         var v = -1;
         if ( _ie11 ) {
           v = 11;
@@ -490,7 +490,7 @@
        * @returns {boolean} Chrome か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _chrome;
       },
       /**
@@ -498,7 +498,7 @@
        * @method version
        * @returns {string|number}
        */
-      version: function () {
+      version: function() {
         return _chrome_version;
       }
     },
@@ -516,7 +516,7 @@
        * @returns {boolean} Safari か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _safari;
       },
       /**
@@ -525,7 +525,7 @@
        * @returns {Array} Safari version number を返します [ major, minor, build ]
        * @static
        */
-      number: function (){
+      number: function() {
         return _safari_versions;
       },
       /**
@@ -534,7 +534,7 @@
        * @returns {Number} Safari major version number を返します
        * @static
        */
-      major: function (){
+      major: function() {
         return _safari_versions[ 0 ];
       },
       /**
@@ -543,7 +543,7 @@
        * @returns {Number} Safari version を返します 9.99
        * @static
        */
-      version: function (){
+      version: function() {
         return _safari_version;
       }
     },
@@ -561,7 +561,7 @@
        * @returns {boolean} Firefox か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _firefox;
       }
     },
@@ -579,7 +579,7 @@
        * @returns {boolean} Touch 可能か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _touch;
       }
     },
@@ -597,7 +597,7 @@
        * @returns {boolean} mobile(smart phone) か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _mobile;
       },
       /**
@@ -615,8 +615,10 @@
        * @method hideURLBar
        * @static
        */
-      hideURLBar : function (){
-        setTimeout( function (){ scrollBy( 0, 1 ); }, 0);
+      hideURLBar: function() {
+        setTimeout( function() {
+          scrollBy( 0, 1 );
+        }, 0);
       },
       /**
        * @for Browser.Mobile
@@ -624,7 +626,7 @@
        * @returns {boolean} Smart Phone(include iPod)か否かを返します
        * @static
        */
-      phone: function (){
+      phone: function() {
         return _ipod || _iphone || _android_phone;
       },
       /**
@@ -633,7 +635,7 @@
        * @returns {boolean} tablet か否かを返します
        * @static
        */
-      tablet: function (){
+      tablet: function() {
         return _ipad || _android_tablet;
       }
     },
@@ -651,7 +653,7 @@
        * @returns {boolean} canvas 2D が使用可能か否かを返します
        * @static
        */
-      is: function (){
+      is: function() {
         return _canvas;
       },
       /**
@@ -660,7 +662,7 @@
        * @returns {boolean} canvas webgl 使用可能か否かを返します
        * @static
        */
-      webgl: function (){
+      webgl: function() {
         if ( !_canvas ) {
           return false;
         }
@@ -679,7 +681,7 @@
        * @return {boolean} Mac OS X or not
        * @static
        */
-      is: function () {
+      is: function() {
         return _mac;
       }
     },
@@ -689,7 +691,7 @@
        * @method is
        * @return {boolean} Windows or not
        */
-      is: function () {
+      is: function() {
         return _windows;
       }
     },
@@ -699,7 +701,7 @@
        * @method is
        * @return {boolean} CSS3 transition support or not
        */
-      is: function () {
+      is: function() {
 
         return _transition;
       }
@@ -710,7 +712,7 @@
        * @method is
        * @return {boolean} CSS3 transition support or not
        */
-      is: function () {
+      is: function() {
 
         return _transform;
       }

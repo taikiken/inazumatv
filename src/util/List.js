@@ -10,30 +10,30 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( window ){
-    "use strict";
-    var inazumatv = window.inazumatv;
+( function( window ) {
+  'use strict';
+  var inazumatv = window.inazumatv;
 
-    inazumatv.List = ( function (){
-      var
-        _shuffle = inazumatv.shuffle,
+  inazumatv.List = ( function() {
+    var
+      _shuffle = inazumatv.shuffle,
 
-        _maxValue = inazumatv.maxValue;
+      _maxValue = inazumatv.maxValue;
 
-        /**
+    /**
          * Array ヘルパー
          * @class List
          * @constructor
          */
-        function List () {
-            throw new Error( "List can't create instance" );
-        }
+    function List() {
+      throw new Error( "List can't create instance" );
+    }
 
-        var l = List;
+    var l = List;
 
-        // http://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
-        // http://jsperf.com/zerofill-2d-array
-        /**
+    // http://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
+    // http://jsperf.com/zerofill-2d-array
+    /**
          * word で埋められた配列を length 分作成します
          * @method word
          * @static
@@ -41,28 +41,28 @@
          * @param {int|string} word
          * @return {Array}
          */
-        l.word = function ( length, word ) {
-            var arr = [], i;
+    l.word = function( length, word ) {
+      var arr = [], i;
 
-            for ( i = 0; i < length; i++ ) {
-                arr[ i ] = word;
-            }
+      for ( i = 0; i < length; i++ ) {
+        arr[ i ] = word;
+      }
 
-            return arr;
-        };
+      return arr;
+    };
 
-        /**
+    /**
          * 0 で埋められた配列を length 分作成します
          * @method zero
          * @static
          * @param {int} length
          * @return {Array}
          */
-        l.zero = function ( length ) {
-            return this.word( length, 0 );
-        };
+    l.zero = function( length ) {
+      return this.word( length, 0 );
+    };
 
-        /**
+    /**
          * 配列をシャッフルします
          * <br>inazumatv.shuffle alias
          * @method shuffle
@@ -70,11 +70,11 @@
          * @param {Array} array
          * @return {Array} シャッフル後の配列を返します
          */
-        l.shuffle = function ( array ) {
-            return _shuffle( array );
-        };
+    l.shuffle = function( array ) {
+      return _shuffle( array );
+    };
 
-        /**
+    /**
          * 配列内の最大数値を返します
          * <br>inazumatv.maxValue alias
          * @method max
@@ -82,11 +82,11 @@
          * @param {Array} arr 検証対象の配列、内部は全部数値 [Number, [Number]]
          * @return {number} 配列内の最大数値を返します
          */
-        l.max = function ( arr ) {
-            _maxValue( arr );
-        };
+    l.max = function( arr ) {
+      _maxValue( arr );
+    };
 
-        return List;
-    }() );
+    return List;
+  }() );
 
 }( window ) );

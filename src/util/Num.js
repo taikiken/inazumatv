@@ -12,17 +12,17 @@
  *
  * Number utility
  */
-( function ( window ){
-  "use strict";
+( function( window ) {
+  'use strict';
   var inazumatv = window.inazumatv;
 
-  inazumatv.Num = ( function (){
+  inazumatv.Num = ( function() {
 
     /**
      * @class Num
      * @constructor
      */
-    function Num () {
+    function Num() {
       throw new Error( "Num can't create instance." );
     }
 
@@ -37,9 +37,9 @@
      * @param {number|string} n
      * @return {string} カンマ挿入後の文字列を返します
      */
-    Num.comma = function ( n ) {
+    Num.comma = function( n ) {
 
-      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     };
 
     /**
@@ -51,7 +51,7 @@
      * @param {Number} [max] 最大値 optional
      * @return {Number} min ~ max 間の乱数(Float)を発生させます
      */
-    Num.random = function ( min, max ) {
+    Num.random = function( min, max ) {
       return inazumatv.random( min, max );
     };
     /**
@@ -62,7 +62,7 @@
      * @param {*} obj
      * @return {boolean} true: Number, false: not Number
      */
-    Num.is = function ( obj ) {
+    Num.is = function( obj ) {
       return inazumatv.isNumeric( obj );
     };
 

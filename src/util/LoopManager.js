@@ -13,64 +13,64 @@
  * require EventDispatcher, EventObject
  */
 
-( function ( window, inazumatv ){
-    "use strict";
+( function( window, inazumatv ) {
+  'use strict';
 
-    var requestAnimationFrame = window.requestAnimationFrame,
-        cancelRequestAnimationFrame = window.cancelRequestAnimationFrame,
+  var requestAnimationFrame = window.requestAnimationFrame,
+    cancelRequestAnimationFrame = window.cancelRequestAnimationFrame,
 
-        EventDispatcher = inazumatv.EventDispatcher,
-        EventObject = inazumatv.EventObject;
+    EventDispatcher = inazumatv.EventDispatcher,
+    EventObject = inazumatv.EventObject;
 
-    // ---------------------------------------------------
-    //  LoopManager
-    // ---------------------------------------------------
-    var
-      /**
+  // ---------------------------------------------------
+  //  LoopManager
+  // ---------------------------------------------------
+  var
+    /**
        * @for LoopManager
        * @property _instanceLoopManager
        * @type {LoopManager}
        * @static
        * @private
        */
-      _instanceLoopManager,
-      /**
+    _instanceLoopManager,
+    /**
        * @for LoopManager
        * @property _eventObj
        * @type {EventObject}
        * @static
        * @private
        */
-      _eventObj,
-      /**
+    _eventObj,
+    /**
        * @for LoopManager
        * @property _loopId
        * @type {number}
        * @static
        * @private
        */
-      _loopId,
-      /**
+    _loopId,
+    /**
        * @for LoopManager
        * @property _this
        * @type {LoopManager}
        * @static
        * @private
        */
-      _this;
+    _this;
 
-    /**
+  /**
      * ループ処理内部関数
      * @for LoopManager
      * @method _loop
      * @private
      */
-    function _loop () {
-        _loopId = requestAnimationFrame( _loop );
-        _instanceLoopManager.dispatchEvent( _eventObj, _this );
-    }
+  function _loop() {
+    _loopId = requestAnimationFrame( _loop );
+    _instanceLoopManager.dispatchEvent( _eventObj, _this );
+  }
 
-    /**
+  /**
      * Browser default loop(60fps) 毎に dispatchEvent します
      *
      *      var loopInstance =  LoopManager.getInstance();
@@ -86,75 +86,75 @@
      * @return {LoopManager} LoopManager instance
      * @constructor
      */
-    function LoopManager () {
-      if ( typeof _instanceLoopManager !== "undefined" ) {
+  function LoopManager() {
+    if ( typeof _instanceLoopManager !== 'undefined' ) {
 
-        return _instanceLoopManager;
-      }
+      return _instanceLoopManager;
+    }
 
-      _this = this;
-      /**
+    _this = this;
+    /**
        * @property _started
        * @type {boolean}
        * @default false
        * @private
        */
-      this._started = false;
-      _eventObj = new EventObject( LoopManager.ENTER_FRAME, [] );
+    this._started = false;
+    _eventObj = new EventObject( LoopManager.ENTER_FRAME, [] );
 
-      _instanceLoopManager = this;
-      return _instanceLoopManager;
-    }
+    _instanceLoopManager = this;
+    return _instanceLoopManager;
+  }
 
-    /**
+  /**
      * @static
      * @method getInstance
      * @return {LoopManager} LoopManager instance
      */
-    LoopManager.getInstance = function (){
-        if ( typeof _instanceLoopManager === "undefined" ) {
+  LoopManager.getInstance = function() {
+    if ( typeof _instanceLoopManager === 'undefined' ) {
 
-            _instanceLoopManager = new LoopManager();
-        }
+      _instanceLoopManager = new LoopManager();
+    }
 
-        return _instanceLoopManager;
-    };
+    return _instanceLoopManager;
+  };
 
-    /**
+  /**
      * event type
      * @const ENTER_FRAME
      * @type {string}
      * @static
      */
-    LoopManager.ENTER_FRAME = "loopManagerEnterFrame";
+  LoopManager.ENTER_FRAME = 'loopManagerEnterFrame';
 
-    var p = LoopManager.prototype;
+  var p = LoopManager.prototype;
 
-    p.constructor = inazumatv.LoopManager;
+  p.constructor = inazumatv.LoopManager;
 
-    EventDispatcher.initialize( p );
+  EventDispatcher.initialize( p );
 
-    /**
+  /**
      * ループ処理を開始します
      * @method start
      */
-    p.start = function (){
-        if ( !this._started ) {
+  p.start = function() {
+    if ( !this._started ) {
 
-            _loop();
-            this._started = true;
-        }
-    };
+      _loop();
+      this._started = true;
+    }
+  };
 
-    /**
+  /**
      * ループ処理を停止します
      * @method stop
      */
-    p.stop = function (){
-        cancelRequestAnimationFrame( _loopId );
-        this._started = false;
-    };
+  p.stop = function() {
+    cancelRequestAnimationFrame( _loopId );
+    this._started = false;
+  };
 
-    inazumatv.LoopManager = LoopManager;
+  inazumatv.LoopManager = LoopManager;
 
 }( window.self, this.inazumatv ) );

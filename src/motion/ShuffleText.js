@@ -44,8 +44,8 @@
 //
 //  modified by (at)taikiken
 // -----------------------------------
-( function ( inazumatv ){
-  "use strict";
+( function( inazumatv ) {
+  'use strict';
 
   var
     rand = Math.random,
@@ -60,7 +60,7 @@
    * @class ShuffleText
    * @constructor
    */
-  function ShuffleText () {
+  function ShuffleText() {
     /**
      * フレームレート
      * @property fps
@@ -74,14 +74,14 @@
      * @default "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
      * @type {string}
      */
-    this.randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    this.randomChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     /**
      * 空白に用いる文字列
      * @property emptyCharacter
      * @default "*"
      * @type {string}
      */
-    this.emptyCharacter = "*";
+    this.emptyCharacter = '*';
     /**
      * 再生中かどうかを示すブール値
      * @property isRunning
@@ -114,13 +114,13 @@
      * @type {string}
      * @private
      */
-    this._originalStr = "";
+    this._originalStr = '';
     /**
      * @property _originalLength
      * @type {string}
      * @private
      */
-    this._originalLength = "";
+    this._originalLength = '';
     /**
      * @property _intervalId
      * @type {number}
@@ -156,7 +156,7 @@
      * @type {string}
      * @private
      */
-    this._endStr = "";
+    this._endStr = '';
     /**
      * @property _element
      * @type {null} HTMLElement
@@ -170,13 +170,13 @@
    * @static
    * @type {string}
    */
-  ShuffleText.CHANGE = "shuffleTextChange";
+  ShuffleText.CHANGE = 'shuffleTextChange';
   /**
    * @event COMPLETE
    * @static
    * @type {string}
    */
-  ShuffleText.COMPLETE = "shuffleTextComplete";
+  ShuffleText.COMPLETE = 'shuffleTextComplete';
 
   var p = ShuffleText.prototype;
 
@@ -190,7 +190,7 @@
    * @param {*|HTMLElement} element DOMElement
    * @return ShuffleText
    */
-  p.initialize = function ( element ){
+  p.initialize = function( element ) {
     this._element = element;
     this._fps = new FPSManager( this.fps );
 
@@ -202,7 +202,7 @@
    * @param {Number} ms millisecond
    * @return ShuffleText
    */
-  p.setDuration = function ( ms ){
+  p.setDuration = function( ms ) {
     this.duration = ms;
     return this;
   };
@@ -213,7 +213,7 @@
    * @param {string} text
    * @return ShuffleText
    */
-  p.setText = function ( text ) {
+  p.setText = function( text ) {
     this._originalStr = text;
     this._originalLength = text.length;
 
@@ -225,7 +225,7 @@
    * @param {number} fps
    * @return {ShuffleText}
    */
-  p.setFPS = function ( fps ) {
+  p.setFPS = function( fps ) {
     this.fps = fps;
 
     return this;
@@ -236,7 +236,7 @@
    * @param {string} char
    * @return {ShuffleText}
    */
-  p.setRandomChar = function ( char ) {
+  p.setRandomChar = function( char ) {
     this.randomChar = char;
     return this;
   };
@@ -247,16 +247,16 @@
    * @method start
    * @param {boolean=false} [is_keep]
    * */
-  p.start = function ( is_keep ) {
+  p.start = function( is_keep ) {
     var
       element = this._element,
-      str = "",
+      str = '',
       random_index,
       empty_char = this.emptyCharacter,
       origin_length = this._originalLength,
       i, _fps, rate;
 
-    if ( typeof element === "undefined" || element === null ) {
+    if ( typeof element === 'undefined' || element === null ) {
       return;
     }
 
@@ -307,7 +307,7 @@
    * 停止します。
    * @method stop
    * */
-  p.stop = function ( strong ) {
+  p.stop = function( strong ) {
     strong = !!strong;
 
     if ( this.isRunning ) {
@@ -328,7 +328,7 @@
    *
    * @method update
    */
-  p.update = function () {
+  p.update = function() {
     var
       timeCurrent = new Date().getTime() - this._timeStart,
       percent = timeCurrent / this.duration,
@@ -338,7 +338,7 @@
       random_char = this.randomChar,
       random_char_length = random_char.length,
       is_keep = this._keep,
-      str = "",
+      str = '',
       i, limit;
 
     for ( i = 0, limit = this._originalLength; i < limit; i++ ) {
@@ -385,7 +385,7 @@
    * shuffle 終了 callback 関数, override して使用します
    * @method onComplete
    */
-  p.onComplete = function () {
+  p.onComplete = function() {
 
   };
 
@@ -394,10 +394,10 @@
    * @method onChange
    * @param {string} str 変更された文字
    */
-  p.onChange = function ( str ) {
+  p.onChange = function( str ) {
 
   };
 
-    inazumatv.ShuffleText = ShuffleText;
+  inazumatv.ShuffleText = ShuffleText;
 
 }( this.inazumatv ) );

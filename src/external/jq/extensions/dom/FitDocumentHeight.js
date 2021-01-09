@@ -10,19 +10,19 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var
-      WatchDocumentHeight,
-      _max = Math.max,
-      /**
+( function( inazumatv ) {
+  'use strict';
+  var
+    WatchDocumentHeight,
+    _max = Math.max,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $;
+    $;
     /**
      * jQuery Object の高さを document へあわせます
      * @class FitDocumentHeight
@@ -30,38 +30,38 @@
      * @param {Number} [minHeight] 最小高さ、default: 0
      * @constructor
      */
-    function FitDocumentHeight ( $element, minHeight ) {
-        if ( !inazumatv.isNumeric( minHeight ) ) {
-            minHeight = 0;
-        }
+  function FitDocumentHeight( $element, minHeight ) {
+    if ( !inazumatv.isNumeric( minHeight ) ) {
+      minHeight = 0;
+    }
 
-        /**
+    /**
          * @property _watch
          * @type {WatchDocumentHeight}
          * @private
          */
-        this._watch = WatchDocumentHeight.getInstance();
-        /**
+    this._watch = WatchDocumentHeight.getInstance();
+    /**
          * @property _$element
          * @type {jQuery}
          * @private
          */
-        this._$element = $element;
-        /**
+    this._$element = $element;
+    /**
          * @property _minHeight
          * @type {Number}
          * @private
          */
-        this._minHeight = minHeight;
-        /**
+    this._minHeight = minHeight;
+    /**
          * @property _boundOnResize
          * @type {function(this:FitDocumentHeight)|*}
          * @private
          */
-        this._boundOnResize = this._onResize.bind( this );
-    }
+    this._boundOnResize = this._onResize.bind( this );
+  }
 
-    /**
+  /**
      * FitDocumentHeight へ jQuery object を設定。FitDocumentHeight を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -69,74 +69,74 @@
      * @param {jQuery} jQuery object
      * @static
      */
-    FitDocumentHeight.activate = function ( jQuery ){
-        $ = jQuery;
-        WatchDocumentHeight = inazumatv.jq.WatchDocumentHeight;
-        WatchDocumentHeight.activate( jQuery );
-    };
+  FitDocumentHeight.activate = function( jQuery ) {
+    $ = jQuery;
+    WatchDocumentHeight = inazumatv.jq.WatchDocumentHeight;
+    WatchDocumentHeight.activate( jQuery );
+  };
 
-    var p = FitDocumentHeight.prototype;
+  var p = FitDocumentHeight.prototype;
 
-    p.constructor = inazumatv.FitDocumentHeight;
+  p.constructor = inazumatv.FitDocumentHeight;
 
-    /**
+  /**
      * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchWindowSize = function (){
-        //return this._watch;
-        console.warn( "deprecated, use watch()" );
-        return this.watch();
-    };
+  p.getWatchWindowSize = function() {
+    // return this._watch;
+    console.warn( 'deprecated, use watch()' );
+    return this.watch();
+  };
 
-    /**
+  /**
      * @method watch
      * @return {WatchWindowSize|*|FitDocumentHeight._watch}
      */
-    p.watch = function () {
+  p.watch = function() {
 
-        return this._watch;
-    };
+    return this._watch;
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method listen
      * @return {FitDocumentHeight}
      */
-    p.listen = function (){
-        var watch = this._watch;
+  p.listen = function() {
+    var watch = this._watch;
 
-        watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
-        watch.start();
+    watch.addEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
+    watch.start();
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method abort
      * @return {FitDocumentHeight}
      */
-    p.abort = function (){
-        this._watch.removeEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
+  p.abort = function() {
+    this._watch.removeEventListener( WatchDocumentHeight.RESIZE, this._boundOnResize );
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * Event Handler, Document height resize
      * @method _onResize
      * @param {EventObject} eventObject
      * @private
      */
-    p._onResize = function ( eventObject ){
-        var params = eventObject.params[ 0 ],
-            h = params.height;
+  p._onResize = function( eventObject ) {
+    var params = eventObject.params[ 0 ],
+      h = params.height;
 
-        this._$element.height( _max( h, this._minHeight ) );
-    };
+    this._$element.height( _max( h, this._minHeight ) );
+  };
 
-    inazumatv.jq.FitDocumentHeight = FitDocumentHeight;
+  inazumatv.jq.FitDocumentHeight = FitDocumentHeight;
 
 }( this.inazumatv ) );

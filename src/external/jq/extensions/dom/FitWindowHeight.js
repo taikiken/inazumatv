@@ -10,74 +10,74 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var
-      isNumeric = inazumatv.isNumeric,
-      _max = Math.max,
-      WatchWindowSize,
-      /**
+( function( inazumatv ) {
+  'use strict';
+  var
+    isNumeric = inazumatv.isNumeric,
+    _max = Math.max,
+    WatchWindowSize,
+    /**
        * jQuery alias
        * @property $
        * @type {jQuery}
        * @private
        * @static
        */
-      $;
+    $;
 
-    /**
+  /**
      * @class FitWindowHeight
      * @param {jQuery} $element jQuery object, 対象エレメント
      * @param {Number} [minHeight] default 0
      * @param {Number} [offsetTop] default 0
      * @constructor
      */
-    function FitWindowHeight ( $element, minHeight, offsetTop ) {
-        if ( !isNumeric( minHeight ) ) {
-            minHeight = 0;
-        }
+  function FitWindowHeight( $element, minHeight, offsetTop ) {
+    if ( !isNumeric( minHeight ) ) {
+      minHeight = 0;
+    }
 
-        if ( !isNumeric( offsetTop ) ) {
-            offsetTop = 0;
-        }
-        /**
+    if ( !isNumeric( offsetTop ) ) {
+      offsetTop = 0;
+    }
+    /**
          * @property _watch
          * @type {WatchDocumentHeight}
          * @private
          */
-        this._watch = WatchWindowSize.getInstance();
-        /**
+    this._watch = WatchWindowSize.getInstance();
+    /**
          * @property _$element
          * @type {jQuery}
          * @private
          */
-        this._$element = $element;
-        /**
+    this._$element = $element;
+    /**
          * @property _minHeight
          * @type {Number}
          * @private
          */
-        this._minHeight = minHeight;
-        /**
+    this._minHeight = minHeight;
+    /**
          * @property _offsetTop
          * @type {Number}
          * @private
          */
-        this._offsetTop = offsetTop;
-        /**
+    this._offsetTop = offsetTop;
+    /**
          * @property _elementHeight
          * @type {Number}
          * @private
          */
-        this._elementHeight = parseInt( $element.height(), 10 );
-        /**
+    this._elementHeight = parseInt( $element.height(), 10 );
+    /**
          * @property _boundOnResize
          * @type {function(this:FitWindowHeight)|*}
          * @private
          */
-        this._boundOnResize = this._onResize.bind( this );
-    }
-    /**
+    this._boundOnResize = this._onResize.bind( this );
+  }
+  /**
      * FitWindowHeight へ jQuery object を設定。FitWindowHeight を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -85,85 +85,85 @@
      * @param {jQuery} jQuery object
      * @static
      */
-    FitWindowHeight.activate = function ( jQuery ){
-        $ = jQuery;
-        WatchWindowSize = inazumatv.jq.WatchWindowSize;
-        WatchWindowSize.activate( jQuery );
-    };
+  FitWindowHeight.activate = function( jQuery ) {
+    $ = jQuery;
+    WatchWindowSize = inazumatv.jq.WatchWindowSize;
+    WatchWindowSize.activate( jQuery );
+  };
 
-    var p = FitWindowHeight.prototype;
+  var p = FitWindowHeight.prototype;
 
-    /**
+  /**
      * @deprecated
      * @method getWatchWindowSize
      * @return {WatchWindowSize} WatchWindowSize instance
      */
-    p.getWatchWindowSize = function (){
-        //return this._watch;
-        console.warn( "deprecated, use watch()" );
-        return this.watch();
-    };
+  p.getWatchWindowSize = function() {
+    // return this._watch;
+    console.warn( 'deprecated, use watch()' );
+    return this.watch();
+  };
 
-    /**
+  /**
      * @method watch
      * @return {WatchWindowSize|*|FitWindowHeight._watch}
      */
-    p.watch = function () {
+  p.watch = function() {
 
-        return this._watch;
-    };
+    return this._watch;
+  };
 
-    /**
+  /**
      * 監視を開始します
      * @method listen
      * @return {FitWindowHeight}
      */
-    p.listen = function (){
-        var watch = this._watch;
+  p.listen = function() {
+    var watch = this._watch;
 
-        watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
-        watch.start();
+    watch.addEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+    watch.start();
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * 監視を止めます
      * @method abort
      * @return {FitWindowHeight}
      */
-    p.abort = function (){
-        this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
+  p.abort = function() {
+    this._watch.removeEventListener( WatchWindowSize.RESIZE, this._boundOnResize );
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * @method setMinHeight
      * @param {Number} h Minimum height
      * @return {FitWindowHeight}
      */
-    p.setMinHeight = function ( h ){
-        if ( isNumeric( h ) ) {
-            this._minHeight = h;
-        }
+  p.setMinHeight = function( h ) {
+    if ( isNumeric( h ) ) {
+      this._minHeight = h;
+    }
 
-        return this;
-    };
+    return this;
+  };
 
-    /**
+  /**
      * Event Handler, Window width or height resizec
      * @method _onResize
      * @param {EventObject} eventObject
      * @protected
      */
-    p._onResize = function ( eventObject ){
-        var
-          params = eventObject.params[ 0 ],
-          h = params.height;
+  p._onResize = function( eventObject ) {
+    var
+      params = eventObject.params[ 0 ],
+      h = params.height;
 
-        this._$element.height( _max( h, this._minHeight ) - this._offsetTop );
-    };
+    this._$element.height( _max( h, this._minHeight ) - this._offsetTop );
+  };
 
-    inazumatv.jq.FitWindowHeight = FitWindowHeight;
+  inazumatv.jq.FitWindowHeight = FitWindowHeight;
 }( this.inazumatv ) );

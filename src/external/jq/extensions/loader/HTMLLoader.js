@@ -10,12 +10,12 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var XMLLoader = inazumatv.jq.XMLLoader,
-        $;
+( function( inazumatv ) {
+  'use strict';
+  var XMLLoader = inazumatv.jq.XMLLoader,
+    $;
 
-    /**
+  /**
      * 指定URLのHTMLを読込みます
      * @class HTMLLoader
      * @extends XMLLoader
@@ -23,21 +23,21 @@
      * @param {Boolean|*} [nocache] no cache: true, default: true
      * @constructor
      */
-    function HTMLLoader ( url, nocache ) {
-        XMLLoader.call( this, url, nocache );
-        /**
+  function HTMLLoader( url, nocache ) {
+    XMLLoader.call( this, url, nocache );
+    /**
          * @property _type
          * @type {string}
          * @protected
          */
-        this._type = "html";
-    }
+    this._type = 'html';
+  }
 
-    HTMLLoader.prototype.constructor = HTMLLoader;
+  HTMLLoader.prototype.constructor = HTMLLoader;
 
-    inazumatv.extend( XMLLoader, HTMLLoader );
+  inazumatv.extend( XMLLoader, HTMLLoader );
 
-    /**
+  /**
      * HTMLLoader へ jQuery object を設定。HTMLLoader を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -45,9 +45,9 @@
      * @param {jQuery} jQuery object
      * @static
      */
-    HTMLLoader.activate = function ( jQuery ){
-        $ = jQuery;
-    };
+  HTMLLoader.activate = function( jQuery ) {
+    $ = jQuery;
+  };
 
-    inazumatv.jq.HTMLLoader = HTMLLoader;
+  inazumatv.jq.HTMLLoader = HTMLLoader;
 }( this.inazumatv ) );

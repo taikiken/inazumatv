@@ -10,10 +10,10 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    /**
+  /**
      * Ajax access Event, EventDispatcher mixin
      *
      * addEventListener
@@ -27,28 +27,28 @@
      * @constructor
      * @static
      */
-    function AjaxEvent () {}
+  function AjaxEvent() {}
 
-    /**
+  /**
      * @const COMPLETE
      * @type {string}
      * @static
      */
-    AjaxEvent.COMPLETE = "ajaxEventComplete";
+  AjaxEvent.COMPLETE = 'ajaxEventComplete';
 
-    /**
+  /**
      * @const ERROR
      * @type {string}
      * @static
      */
-    AjaxEvent.ERROR = "ajaxEventERROR";
+  AjaxEvent.ERROR = 'ajaxEventERROR';
 
-    var p = AjaxEvent.prototype;
+  var p = AjaxEvent.prototype;
 
-    p.constructor = AjaxEvent;
+  p.constructor = AjaxEvent;
 
-    inazumatv.EventDispatcher.initialize( p );
+  inazumatv.EventDispatcher.initialize( p );
 
-    inazumatv.AjaxEvent = AjaxEvent;
+  inazumatv.AjaxEvent = AjaxEvent;
 
 }( this.inazumatv ) );

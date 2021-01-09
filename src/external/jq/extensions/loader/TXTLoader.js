@@ -10,12 +10,12 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-    "use strict";
-    var XMLLoader = inazumatv.jq.XMLLoader,
-        $;
+( function( inazumatv ) {
+  'use strict';
+  var XMLLoader = inazumatv.jq.XMLLoader,
+    $;
 
-    /**
+  /**
      * 指定URLのTXTを読込みます
      * @class TXTLoader
      * @extends XMLLoader
@@ -23,21 +23,21 @@
      * @param {Boolean|*} [nocache] no cache: true, default: true
      * @constructor
      */
-    function TXTLoader ( url, nocache ) {
-        XMLLoader.call( this, url, nocache );
-        /**
+  function TXTLoader( url, nocache ) {
+    XMLLoader.call( this, url, nocache );
+    /**
          * @property _type
          * @type {string}
          * @protected
          */
-        this._type = "text";
-    }
+    this._type = 'text';
+  }
 
-    TXTLoader.prototype.constructor = TXTLoader;
+  TXTLoader.prototype.constructor = TXTLoader;
 
-    inazumatv.extend( XMLLoader, TXTLoader );
+  inazumatv.extend( XMLLoader, TXTLoader );
 
-    /**
+  /**
      * TXTLoader へ jQuery object を設定。TXTLoader を使用する前に実行する必要があります。<br>
      * ExternalJQ.imports から実行されます。
      *
@@ -45,9 +45,9 @@
      * @param {jQuery} jQuery object
      * @static
      */
-    TXTLoader.activate = function ( jQuery ){
-        $ = jQuery;
-    };
+  TXTLoader.activate = function( jQuery ) {
+    $ = jQuery;
+  };
 
-    inazumatv.jq.TXTLoader = TXTLoader;
+  inazumatv.jq.TXTLoader = TXTLoader;
 }( this.inazumatv ) );

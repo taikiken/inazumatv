@@ -12,15 +12,15 @@
  *
  * require EventDispatcher, EventObject
  */
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    var EventDispatcher = inazumatv.EventDispatcher,
-        EventObject = inazumatv.EventObject,
+  var EventDispatcher = inazumatv.EventDispatcher,
+    EventObject = inazumatv.EventObject,
 
-        LoopManager = inazumatv.LoopManager;
+    LoopManager = inazumatv.LoopManager;
 
-    /**
+  /**
      * 経過時間を管理します
      * <h4>Example</h4>
      * [1]
@@ -80,155 +80,155 @@
      * @param {Number} ms milliseconds 指定
      * @constructor
      */
-    function PollingManager ( ms ) {
-      /**
+  function PollingManager( ms ) {
+    /**
        * @property _startTime
        * @type {number}
        * @default 0
        * @private
        */
-      this._startTime = 0;
-      /**
+    this._startTime = 0;
+    /**
        * @property _polling
        * @type {Number}
        * @private
        */
-      this._polling = ms;
-      /**
+    this._polling = ms;
+    /**
        * @property _eventObj
        * @type {inazumatv.EventObject}
        * @private
        */
-      this._eventObj = new EventObject( PollingManager.POLLING_PAST );
-      /**
+    this._eventObj = new EventObject( PollingManager.POLLING_PAST );
+    /**
        * @property _boundEnterFrame
        * @type {function(this:PollingManager)|*}
        * @private
        */
-      this._boundEnterFrame = this._onEnterFrame.bind( this );
-      /**
+    this._boundEnterFrame = this._onEnterFrame.bind( this );
+    /**
        * @property _loop
        */
-      this._loop = LoopManager.getInstance();
-      /**
+    this._loop = LoopManager.getInstance();
+    /**
        * @property _auto
        * @type {boolean}
        * @default false
        * @private
        */
-      this._auto = false;
-    }
+    this._auto = false;
+  }
 
-    /**
+  /**
      * event type
      * @const POLLING_PAST
      * @type {string}
      * @static
      */
-    PollingManager.POLLING_PAST = "pollingManagerPollingPast";
+  PollingManager.POLLING_PAST = 'pollingManagerPollingPast';
 
-    var p = PollingManager.prototype;
+  var p = PollingManager.prototype;
 
-    p.constructor = inazumatv.PollingManager;
+  p.constructor = inazumatv.PollingManager;
 
-    // mixin
-    EventDispatcher.initialize( p );
+  // mixin
+  EventDispatcher.initialize( p );
 
-    /**
+  /**
      * _startTime を初期化します
      * @method _resetTime
      * @private
      */
-    p._resetTime = function () {
-        this._startTime = new Date().getTime();
-    };
+  p._resetTime = function() {
+    this._startTime = new Date().getTime();
+  };
 
-    /**
+  /**
      * pollingを開始します
      * @method start
      * @param {boolean=false} [auto] automatic loop flag
      */
-    p.start = function ( auto ) {
-        auto = !!auto;
+  p.start = function( auto ) {
+    auto = !!auto;
 
-        this._auto = auto;
+    this._auto = auto;
 
-        if ( auto ) {
+    if ( auto ) {
 
-            var loop = this._loop;
+      var loop = this._loop;
 
-            loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-            loop.start();
-        }
+      loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+      loop.start();
+    }
 
-        this._resetTime();
-    };
+    this._resetTime();
+  };
 
-    /**
+  /**
      * @method stop
      */
-    p.stop = function () {
-        var loop = this._loop;
+  p.stop = function() {
+    var loop = this._loop;
 
-        if ( this._auto ) {
+    if ( this._auto ) {
 
-            loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-        }
+      loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+    }
 
-        this._startTime = Number.MAX_VALUE;
-    };
+    this._startTime = Number.MAX_VALUE;
+  };
 
-    /**
+  /**
      * polling間隔を変更します
      * @method change
      * @param {Number} ms milliseconds 指定
      */
-    p.change = function ( ms ){
-        this._startTime = 0;
-        this._polling = ms;
-        this._resetTime();
-    };
+  p.change = function( ms ) {
+    this._startTime = 0;
+    this._polling = ms;
+    this._resetTime();
+  };
 
-    /**
+  /**
      * pollingに達した場合は PollingManager.POLLING_PAST を発火します
      * @method update
      * @return {boolean} pollingに達した場合はtrueを返します
      */
-    p.update = function (){
-        var now = new Date().getTime(),
-            bool = false,
-            _this = this;
+  p.update = function() {
+    var now = new Date().getTime(),
+      bool = false,
+      _this = this;
 
-        if ( ( now - this._startTime ) >= this._polling ) {
+    if ( ( now - this._startTime ) >= this._polling ) {
 
-            this._startTime = now;
-            bool = true;
+      this._startTime = now;
+      bool = true;
 
-            setTimeout( function (){
-                _this.dispatchEvent( _this._eventObj, _this );
-            }, 0 );
-        }
+      setTimeout( function() {
+        _this.dispatchEvent( _this._eventObj, _this );
+      }, 0 );
+    }
 
-        return bool;
-    };
+    return bool;
+  };
 
-    /**
+  /**
      * update 関数を破棄します
      * @method destroy
      */
-    p.destroy = function (){
-        this.update = function (){};
-    };
+  p.destroy = function() {
+    this.update = function() {};
+  };
 
-    /**
+  /**
      * loop ENTER_FRAME Event Handler
      * @method _onEnterFrame
      * @private
      */
-    p._onEnterFrame = function (){
-        this.update();
-    };
+  p._onEnterFrame = function() {
+    this.update();
+  };
 
-    inazumatv.PollingManager = PollingManager;
+  inazumatv.PollingManager = PollingManager;
 
 }( this.inazumatv ) );

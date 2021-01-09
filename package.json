@@ -1,0 +1,40 @@
+{
+  "name": "inazumatv.util",
+  "version": "0.9.14",
+  "description": "ES5 utility",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "engines": {
+    "node": ">= 11.15.0",
+    "npm": ">= 6.7.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taikiken/inazumatv.util.js.git"
+  },
+  "author": "@taikiken",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/taikiken/inazumatv.util.js/issues"
+  },
+  "homepage": "https://github.com/taikiken/inazumatv.util.js#readme",
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^4.0.2",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace-task": "^0.11.0",
+    "gulp-size": "^2.1.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "run-sequence": "^2.2.1"
+  }
+}

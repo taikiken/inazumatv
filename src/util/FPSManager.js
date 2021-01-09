@@ -13,14 +13,14 @@
  * require EventDispatcher, EventObject
  */
 
-( function ( inazumatv ){
-    "use strict";
+( function( inazumatv ) {
+  'use strict';
 
-    var LoopManager = inazumatv.LoopManager,
-        EventDispatcher = inazumatv.EventDispatcher,
-        EventObject = inazumatv.EventObject;
+  var LoopManager = inazumatv.LoopManager,
+    EventDispatcher = inazumatv.EventDispatcher,
+    EventObject = inazumatv.EventObject;
 
-    /**
+  /**
      * FPSを管理します
      *
      *      // 1.auto
@@ -55,169 +55,169 @@
      * @param {Boolean=false} [manual] abort auto start, default: false
      * @constructor
      */
-    function FPSManager ( fps, manual ) {
-      this.setFPS( fps );
-      /**
+  function FPSManager( fps, manual ) {
+    this.setFPS( fps );
+    /**
        * @property _manualStart
        * @type {boolean}
        * @private
        */
-      this._manualStart = !!manual;
-      /**
+    this._manualStart = !!manual;
+    /**
        * @property _eventObj
        * @type {inazumatv.EventObject}
        * @private
        */
-      this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
-      /**
+    this._eventObj = new EventObject( FPSManager.FPS_FRAME, [] );
+    /**
        * @property _loop
        * @type {LoopManager} LoopManager instance
        */
-      this._loop = LoopManager.getInstance();
-      /**
+    this._loop = LoopManager.getInstance();
+    /**
        * @property _boundEnterFrame
        * @type {function(this:FPSManager)|*}
        * @private
        */
-      this._boundEnterFrame = this._onEnterFrame.bind( this );
-    }
+    this._boundEnterFrame = this._onEnterFrame.bind( this );
+  }
 
-    /**
+  /**
      * event type
      * @const FPS_FRAME
      * @type {string}
      * @static
      */
-    FPSManager.FPS_FRAME = "fpsManagerFpsFrame";
+  FPSManager.FPS_FRAME = 'fpsManagerFpsFrame';
 
-    var p = FPSManager.prototype;
+  var p = FPSManager.prototype;
 
-    p.constructor = inazumatv.FPSManager;
+  p.constructor = inazumatv.FPSManager;
 
-    // mixin
-    EventDispatcher.initialize( p );
+  // mixin
+  EventDispatcher.initialize( p );
 
-    /**
+  /**
      * @method getLoopManager
      * @return {LoopManager} LoopManager instance
      */
-    p.getLoopManager = function (){
-        return this._loop;
-    };
+  p.getLoopManager = function() {
+    return this._loop;
+  };
 
-    /**
+  /**
      * _startTime を初期化します
      * @method _resetTime
      * @private
      */
-    p._resetTime = function () {
-        this._startTime = new Date().getTime();
-    };
+  p._resetTime = function() {
+    this._startTime = new Date().getTime();
+  };
 
-    /**
+  /**
      * FPS監視を開始します
      * @method start
      */
-    p.start = function (){
-        if ( !this._manualStart ) {
-            // no manual
-            this.setFPS( this._fps );
-            this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-            this._loop.start();
-        }
+  p.start = function() {
+    if ( !this._manualStart ) {
+      // no manual
+      this.setFPS( this._fps );
+      this._loop.addEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+      this._loop.start();
+    }
 
-        this._resetTime();
-    };
+    this._resetTime();
+  };
 
-    /**
+  /**
      * FPS監視を停止します
      * @method stop
      */
-    p.stop = function (){
-        if ( !this._manualStart ) {
-            // no manual
-            this._loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
-        }
-        this._polling = Number.MAX_VALUE;
-    };
+  p.stop = function() {
+    if ( !this._manualStart ) {
+      // no manual
+      this._loop.removeEventListener( LoopManager.ENTER_FRAME, this._boundEnterFrame );
+    }
+    this._polling = Number.MAX_VALUE;
+  };
 
-    /**
+  /**
      * FPS監視を復活します
      * @method restore
      */
-    p.restore = function (){
-        this.changeFPS( this._fps );
-    };
+  p.restore = function() {
+    this.changeFPS( this._fps );
+  };
 
-    /**
+  /**
      * update 関数を破棄します
      * @method destroy
      */
-    p.destroy = function (){
-        this.update = function (){};
-    };
+  p.destroy = function() {
+    this.update = function() {};
+  };
 
-    /**
+  /**
      * FPS値を設定します
      * @method setFPS
      * @param {int} fps frame rate 指定（整数）
      */
-    p.setFPS = function ( fps ){
-        this._startTime = 0;
-        this._polling = 1000 / fps;
-        this._fps = fps;
-    };
+  p.setFPS = function( fps ) {
+    this._startTime = 0;
+    this._polling = 1000 / fps;
+    this._fps = fps;
+  };
 
-    /**
+  /**
      * FPS値を変更します
      * @method changeFPS
      * @param {int} fps frame rate 指定（整数）
      */
-    p.changeFPS = function ( fps ){
-        this.setFPS( fps );
-//        this.start();
-        this._resetTime();
-    };
+  p.changeFPS = function( fps ) {
+    this.setFPS( fps );
+    //        this.start();
+    this._resetTime();
+  };
 
-    /**
+  /**
      * @method getFPS
      * @return {int|*} 現在のFPSを返します
      */
-    p.getFPS = function (){
-        return this._fps;
-    };
+  p.getFPS = function() {
+    return this._fps;
+  };
 
-    /**
+  /**
      * @method update
      * @return {boolean} FPSに達した場合はtrueを返します
      */
-    p.update = function (){
-        var now = new Date().getTime(),
-            bool = false,
-            _this = this;
+  p.update = function() {
+    var now = new Date().getTime(),
+      bool = false,
+      _this = this;
 
-        if ( ( now - _this._startTime ) >= _this._polling ) {
+    if ( ( now - _this._startTime ) >= _this._polling ) {
 
-            _this._startTime = now;
-            bool = true;
+      _this._startTime = now;
+      bool = true;
 
-            setTimeout( function (){
-                _this.dispatchEvent( _this._eventObj );
-            }, 0 );
-        }
+      setTimeout( function() {
+        _this.dispatchEvent( _this._eventObj );
+      }, 0 );
+    }
 
-        return bool;
-    };
+    return bool;
+  };
 
-    /**
+  /**
      * loop ENTER_FRAME Event Handler
      * @method _onEnterFrame
      * @private
      */
-    p._onEnterFrame = function (){
-        this.update();
-    };
+  p._onEnterFrame = function() {
+    this.update();
+  };
 
-    inazumatv.FPSManager = FPSManager;
+  inazumatv.FPSManager = FPSManager;
 
 }( this.inazumatv ) );

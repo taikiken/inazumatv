@@ -10,8 +10,8 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-( function ( inazumatv ){
-  "use strict";
+( function( inazumatv ) {
+  'use strict';
   var
     EventObject = inazumatv.EventObject,
     AjaxEvent = inazumatv.AjaxEvent,
@@ -46,10 +46,10 @@
    * @default true
    * @constructor
    */
-  function XMLLoader ( url, nocache ) {
-    if ( typeof url === "undefined" || url === null ) {
+  function XMLLoader( url, nocache ) {
+    if ( typeof url === 'undefined' || url === null ) {
       // url undefined
-      throw new Error( "url required" );
+      throw new Error( 'url required' );
     }
 
     AjaxEvent.call( this );
@@ -72,7 +72,7 @@
      * @type {string}
      * @protected
      */
-    this._type = "xml";
+    this._type = 'xml';
     /**
      * @property _option
      * @type {{}}
@@ -91,7 +91,7 @@
    * @param {jQuery} jQuery object
    * @static
    */
-  XMLLoader.activate = function ( jQuery ){
+  XMLLoader.activate = function( jQuery ) {
     $ = jQuery;
   };
 
@@ -104,8 +104,8 @@
    * @method setType
    * @param {String} type
    */
-  p.setType = function ( type ){
-    if ( typeof type === "undefined" || type === null ) {
+  p.setType = function( type ) {
+    if ( typeof type === 'undefined' || type === null ) {
       // type defined
       return;
     }
@@ -118,8 +118,8 @@
    * @method setURL
    * @param {String} url
    */
-  p.setURL = function ( url ){
-    if ( typeof url === "undefined" || url === null ) {
+  p.setURL = function( url ) {
+    if ( typeof url === 'undefined' || url === null ) {
       // type defined
       return;
     }
@@ -132,8 +132,8 @@
    * @method setOption
    * @param {Object} option
    */
-  p.setOption = function ( option ){
-    if ( typeof option === "undefined" || option === null ) {
+  p.setOption = function( option ) {
+    if ( typeof option === 'undefined' || option === null ) {
       // type defined
       return;
     }
@@ -147,21 +147,21 @@
    * @method start
    * @deprecated
    */
-  p.start = function (){
+  p.start = function() {
     this.load();
   };
   /**
    * load 開始
    * @method load
    */
-  p.load = function () {
+  p.load = function() {
     var
       _this = this,
       url = _this._url,
       option = _this._option;
 
     if ( _this._nocache ) {
-      //url +=  "?" + new Date().getTime();
+      // url +=  "?" + new Date().getTime();
       option.cache = false;
     }
 
@@ -170,17 +170,17 @@
     option.dataType = _this._type;
 
     $.ajax( option ).
-      done( function ( data, textStatus, jqXHR ){
+      done( function( data, textStatus, jqXHR ) {
         // success
         _this.dispatchEvent( new EventObject( AjaxEvent.COMPLETE, [ data, jqXHR ] ), _this );
       } ).
-      fail(function ( jqXHR, textStatus, errorThrown ){
+      fail(function( jqXHR, textStatus, errorThrown ) {
         // error
         _this.dispatchEvent( new EventObject( AjaxEvent.ERROR, [ jqXHR, textStatus ] ), _this );
-        console.warn( "load error, " + jqXHR + ", " + errorThrown );
+        console.warn( 'load error, ' + jqXHR + ', ' + errorThrown );
       } );
   };
 
-    inazumatv.jq.XMLLoader = XMLLoader;
+  inazumatv.jq.XMLLoader = XMLLoader;
 
 }( this.inazumatv ) );
